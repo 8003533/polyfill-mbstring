@@ -1,0 +1,163 @@
+/*Generado en https://work.smarchal.com/twbscolor/css*/
+.navbar {
+ /* background-color: #a8ae68;*/
+  background-image: url('/images/header.jpg'); 
+  width: 100%;
+  height: 60px;
+}
+.navbar .navbar-brand {
+  color: #223e3c;
+}
+.navbar .navbar-brand:hover,
+.navbar .navbar-brand:focus {
+  color: #091412;
+}
+.navbar .navbar-text {
+  color: #223e3c;
+}
+.navbar .navbar-text a {
+  color: #091412;
+}
+.navbar .navbar-text a:hover,
+.navbar .navbar-text a:focus {
+  color: #091412; 
+}
+.navbar .navbar-nav .nav-link {
+  color: #223e3c;
+  border-radius: .25rem;
+  margin: 0 0.25em;
+}
+.navbar .navbar-nav .nav-link:not(.disabled):hover,
+.navbar .navbar-nav .nav-link:not(.disabled):focus {
+  color: #091412;
+}
+.navbar .navbar-nav .dropdown-menu {
+  background-color: #ffffff;
+  border-color: #EFEFEF;
+  opacity: 0.9;
+}
+.navbar .navbar-nav .dropdown-menu .dropdown-item {
+  color: #223e3c;
+}
+.navbar .navbar-nav .dropdown-menu .dropdown-item:hover,
+.navbar .navbar-nav .dropdown-menu .dropdown-item:focus,
+.navbar .navbar-nav .dropdown-menu .dropdown-item.active {
+  color: #091412;
+  background-color: #EFEFEF;
+}
+.navbar .navbar-nav .dropdown-menu .dropdown-divider {
+  border-top-color: #2d3937;
+}
+.navbar .navbar-nav .nav-item.active .nav-link,
+.navbar .navbar-nav .nav-item.active .nav-link:hover,
+.navbar .navbar-nav .nav-item.active .nav-link:focus,
+.navbar .navbar-nav .nav-item.show .nav-link,
+.navbar .navbar-nav .nav-item.show .nav-link:hover,
+.navbar .navbar-nav .nav-item.show .nav-link:focus {
+  color: #091412;
+  background-color: #EFEFEF;
+}
+.navbar .navbar-toggle {
+  border-color: #2d3937;
+}
+.navbar .navbar-toggle:hover,
+.navbar .navbar-toggle:focus {
+  background-color: #EFEFEF;
+}
+.navbar .navbar-toggle .navbar-toggler-icon {
+  color: #223e3c;
+}
+.navbar .navbar-collapse,
+.navbar .navbar-form {
+  border-color: #223e3c;
+}
+.navbar .navbar-link {
+  color: #223e3c;
+}
+.navbar .navbar-link:hover {
+  color: #091412;
+}
+
+/*CÓDIGO PERSONALIZADO PARA SUBMENÚS, LRIP MA 23ENE2024*/
+.dropdown-menu .sub-menu {
+    left: 100%;
+    position: absolute;
+    top: 0;
+    visibility: hidden;
+    margin-top: -1px;
+}
+.dropdown-menu li:hover .sub-menu {
+    visibility: visible;
+}
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+/*TERMINA CÓDIGO PERSONALIZADO PARA SUBMENÚS*/
+
+@media (max-width: 575px) {
+  .navbar-expand-sm .navbar-nav .show .dropdown-menu .dropdown-item {
+    color: #223e3c;
+  }
+  .navbar-expand-sm .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+  .navbar-expand-sm .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+    color: #091412;
+  }
+  .navbar-expand-sm .navbar-nav .show .dropdown-menu .dropdown-item.active {
+    color: #091412;
+    background-color: #EFEFEF;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-expand-md .navbar-nav .show .dropdown-menu .dropdown-item {
+    color: #223e3c;
+  }
+  .navbar-expand-md .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+  .navbar-expand-md .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+    color: #091412;
+  }
+  .navbar-expand-md .navbar-nav .show .dropdown-menu .dropdown-item.active {
+    color: #091412;
+    background-color: #EFEFEF;
+  }
+}
+
+@media (max-width: 991px) {
+  .navbar-expand-lg .navbar-nav .show .dropdown-menu .dropdown-item {
+    color: #223e3c;
+  }
+  .navbar-expand-lg .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+  .navbar-expand-lg .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+    color: #091412;
+  }
+  .navbar-expand-lg .navbar-nav .show .dropdown-menu .dropdown-item.active {
+    color: #091412;
+    background-color: #EFEFEF;
+  }
+}
+
+@media (max-width: 1199px) {
+  .navbar-expand-xl .navbar-nav .show .dropdown-menu .dropdown-item {
+    color: #223e3c;
+  }
+  .navbar-expand-xl .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+  .navbar-expand-xl .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+    color: #091412;
+  }
+  .navbar-expand-xl .navbar-nav .show .dropdown-menu .dropdown-item.active {
+    color: #091412;
+    background-color: #EFEFEF;
+  }
+}
+
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item {
+  color: #223e3c;
+}
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+  color: #091412;
+}
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item.active {
+  color: #091412;
+  background-color: #EFEFEF;
+}
