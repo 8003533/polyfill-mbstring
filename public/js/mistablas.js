@@ -20,7 +20,7 @@ $(document).ready(function() {
         buttons: botones
     } );
 
-    $('#MyTableTramites').DataTable( {
+    $('#MyTableServicios').DataTable( {
         language: {
              //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
              "url": idioma
@@ -63,7 +63,7 @@ $(document).ready(function() {
         buttons: botones,
     } );
 
-    $('#MyTableDelitos').DataTable( {
+    $('#MyTableTalleres').DataTable( {
         language: {
              //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
              "url": idioma
@@ -77,7 +77,7 @@ $(document).ready(function() {
         buttons: botones,
     } );
 
-    $('#MyTableJuzgados').DataTable( {
+    $('#MyTableEmpleados').DataTable( {
         language: {
              //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
              "url": idioma
@@ -91,7 +91,7 @@ $(document).ready(function() {
         buttons: botones,
     } );
 
-    $('#MyTableReclusorios').DataTable( {
+    $('#MyTableCuadrillas').DataTable( {
         language: {
              //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
              "url": idioma
@@ -105,7 +105,7 @@ $(document).ready(function() {
         buttons: botones
     } );
 
-    $('#MyTableEjecucion').DataTable( {
+    $('#MyTableAdministraciones').DataTable( {
         language: {
              //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
              "url": idioma
@@ -119,7 +119,7 @@ $(document).ready(function() {
         buttons: botones
     } );
 
-    $('#MyTableBeneficios').DataTable( {
+    $('#MyTableEdificios').DataTable( {
         language: {
              //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
              "url": idioma

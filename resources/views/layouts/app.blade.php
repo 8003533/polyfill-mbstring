@@ -52,7 +52,7 @@
                                     Servicios
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <li><a class="dropdown-item" href="{{ url('tramites/index') }}">
+                                    <li><a class="dropdown-item" href="{{ url('servicios/index') }}">
                                         <img src="{{ asset('bootstrap-icons-1.5.0/search.svg') }}" width="18" height="18"> Lista de Servicios
                                         </a>
                                     </li>
@@ -68,14 +68,14 @@
                             {{--@consultaTaller--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Talleres <span class="caret"></span></a>
+                                        <img src="{{ asset('bootstrap-icons-1.5.0/wrench-adjustable.svg') }}" width="18" height="18"> Talleres <span class="caret"></span></a>
                                     <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('delitos/index') }}" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Lista de Talleres
+                                        <li><a class="dropdown-item" href="{{ url('talleres/index') }}" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/wrench-adjustable.svg') }}" width="18" height="18"> Lista de Talleres
                                             </a>
                                         </li>
-                                        <li><a class="dropdown-item" href="{{ url('delitos/nuevo') }}" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-vcard-fill.svg') }}" width="18" height="18"> Nuevo Taller
+                                        <li><a class="dropdown-item" href="{{ url('talleres/nuevo') }}" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/tools.svg') }}" width="18" height="18"> Nuevo Taller
                                             </a>
                                         </li>
                                     </ul>
@@ -84,14 +84,14 @@
                             @consultaPersonal--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Personal <span class="caret"></span></a>
+                                        <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Personal <span class="caret"></span></a>
                                     <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('juzgados/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Lista de Personal
+                                        <li><a class="dropdown-item" href="{{ url('empleados/index') }}">
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Lista de Personal
                                             </a>
                                         </li>
-                                        <li><a class="dropdown-item" href="{{ url('juzgados/nuevo') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/building-add.svg') }}" width="18" height="18"> Nuevo Personal
+                                        <li><a class="dropdown-item" href="{{ url('empleados/nuevo') }}">
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-vcard-fill.svg') }}" width="18" height="18"> Nuevo Personal
                                             </a>
                                         </li>
                                     </ul>
@@ -102,45 +102,49 @@
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         <img src="{{ asset('bootstrap-icons-1.5.0/people-fill.svg') }}" width="18" height="18"> Cuadrillas <span class="caret"></span></a>
                                     <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('reclusorios/index') }}">
+                                        <li><a class="dropdown-item" href="{{ url('cuadrillas/index') }}">
                                             <img src="{{ asset('bootstrap-icons-1.5.0/people-fill.svg') }}" width="18" height="18"> Lista de Cuadrillas
                                             </a>
                                         </li>
-                                        <li><a class="dropdown-item" href="{{ url('reclusorios/nuevo') }}">
+                                        <li><a class="dropdown-item" href="{{ url('cuadrillas/nuevo') }}">
                                             <img src="{{ asset('bootstrap-icons-1.5.0/person-plus-fill.svg') }}" width="18" height="18"> Nueva Cuadrilla
                                             </a>
                                         </li>
                                     </ul>
                                 </li>
-                            {{--@endconsultaCuadrilla--}}
+                            {{--@endconsultaCuadrilla
+                            @consultaAdministracion--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/folder-fill.svg') }}" width="18" height="18"> Ejecución <span class="caret"></span></a>
+                                        <img src="{{ asset('bootstrap-icons-1.5.0/folder-fill.svg') }}" width="18" height="18"> Administraciones <span class="caret"></span></a>
                                     <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('ejecucion/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/people-fill.svg') }}" width="18" height="18"> Lista de Juzgados de Ejecución
+                                        <li><a class="dropdown-item" href="{{ url('administraciones/index') }}">
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/folder-fill.svg') }}" width="18" height="18"> Lista de Administraciones
                                             </a>
                                         </li>
-                                        <li><a class="dropdown-item" href="{{ url('ejecucion/nuevo') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-plus-fill.svg') }}" width="18" height="18"> Nuevo Juzgado de Ejecución
+                                        <li><a class="dropdown-item" href="{{ url('administraciones/nueva') }}">
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/folder-plus.svg') }}" width="18" height="18"> Nueva Administración
                                             </a>
                                         </li>
                                     </ul>
                                 </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/controller.svg') }}" width="18" height="18"> Beneficios <span class="caret"></span></a>
-                                <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('beneficios/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/people-fill.svg') }}" width="18" height="18"> Lista de Beneficios Penitenciarios
-                                            </a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="{{ url('beneficios/nuevo') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-plus-fill.svg') }}" width="18" height="18"> Nuevo Beneficio Penitenciario
-                                            </a>
-                                        </li>
-                                    </ul>
-                            </li>
+                            {{--@enconsultaAdministracion
+                            @consultaEdificio--}}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Edificios <span class="caret"></span></a>
+                                    <ul class="dropdown-menu sub-menu">
+                                            <li><a class="dropdown-item" href="{{ url('edificios/index') }}">
+                                                <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Lista de Edificios
+                                                </a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="{{ url('edificios/nuevo') }}">
+                                                <img src="{{ asset('bootstrap-icons-1.5.0/building-add.svg') }}" width="18" height="18"> Nuevo Edificio
+                                                </a>
+                                            </li>
+                                        </ul>
+                                </li>
+                            {{--@endconsultaEdificio--}}
                           </ul>
                         </div>
                     @endauth
