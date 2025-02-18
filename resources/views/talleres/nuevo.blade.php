@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('titulo')
-    <img src="{{ asset('bootstrap-icons-1.5.0/folder-plus.svg') }}" width="18" height="18"> Nueva Administración
+    <img src="{{ asset('bootstrap-icons-1.5.0/tools.svg') }}" width="18" height="18"> Nuevo Taller
 @endsection
 @section('panel')
-    <form method="POST" action="{{ url('/administraciones/guardar') }}" id="formNuevaAdministracion">
+    <form method="POST" action="{{ url('/talleres/guardar') }}" id="formNuevoTaller">
     	@csrf
 
         @if($errors->any())
@@ -20,8 +20,8 @@
                 </button>
             </div>
         @endif
-        <!--Inputs de Administración-->
-        @include('administraciones.datos_administracion')
+        <!--Inputs de Taller-->
+        @include('talleres.datos_taller')
     
         <div class="row text-center">
             <div class="col-6">                        
@@ -31,7 +31,7 @@
                 </button>
             </div>
             <div class="col-6">
-                <a href="{{ url('/administraciones/index') }}">
+                <a href="{{ url('/talleres/index') }}">
                     <!--<button type="button" class="btn btn-primary" onClick="history.back()">-->
                     <button type="button" class="btn btn-primary">
                         <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('titulo')
-    Nuevo Edificio
+    <img src="{{ asset('bootstrap-icons-1.5.0/building-add.svg') }}" width="18" height="18"> Nuevo Edificio
 @endsection
 @section('panel')
     <form method="POST" action="{{ url('/edificios/guardar') }}" id="formNuevoEdificio">

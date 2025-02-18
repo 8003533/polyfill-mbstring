@@ -14,6 +14,7 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ secure_asset('js/scripts.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/captura-domicilio.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}" defer></script>
     <script type="text/javascript" src="{{ asset('js/mistablas.js') }}" ></script>
 
@@ -81,22 +82,22 @@
                                     </ul>
                                 </li>
                             {{--@endconsultaTaller
-                            @consultaPersonal--}}
+                            @consultaEmpleado--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Personal <span class="caret"></span></a>
+                                        <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Empleados <span class="caret"></span></a>
                                     <ul class="dropdown-menu sub-menu">
                                         <li><a class="dropdown-item" href="{{ url('empleados/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Lista de Personal
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Lista de Empleados
                                             </a>
                                         </li>
                                         <li><a class="dropdown-item" href="{{ url('empleados/nuevo') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-vcard-fill.svg') }}" width="18" height="18"> Nuevo Personal
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-vcard-fill.svg') }}" width="18" height="18"> Nuevo Empleado
                                             </a>
                                         </li>
                                     </ul>
                                 </li>
-                            {{--@endconsultaPersonal
+                            {{--@endconsultaEmpleado
                             @consultaCuadrilla--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">

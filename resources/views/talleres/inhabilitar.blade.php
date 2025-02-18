@@ -1,11 +1,18 @@
 @extends('layouts.app')
 
 @section('titulo')
-    <img src="{{ asset('bootstrap-icons-1.5.0/folder-plus.svg') }}" width="18" height="18"> Nueva Administración
+    @if($taller->iestatus == 1)
+        Borrar Taller
+    @else
+        Recuperar Taller
+    @endif
 @endsection
 @section('panel')
-    <form method="POST" action="{{ url('/administraciones/guardar') }}" id="formNuevaAdministracion">
+    <form method="POST" action="{{ url('/talleres/actualizar') }}" id="formInhabilitarTaller">
     	@csrf
+
+        <input type="hidden" name="id_taller" id="id_taller" value="{{ $taller->iid_taller }}">
+        <input type="hidden" name="noeditar"  id="noeditar"  value="{{ $noeditar }}">
 
         @if($errors->any())
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -20,18 +27,23 @@
                 </button>
             </div>
         @endif
-        <!--Inputs de Administración-->
-        @include('administraciones.datos_administracion')
+        <!--Inputs de Taller-->
+        @include('talleres.datos_taller')
     
         <div class="row text-center">
             <div class="col-6">                        
-                <button id="btnGuarda" type="submit" class="btn btn-primary">
-                    <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18" height="18">
-                    <span>&nbsp;Guardar</span>
+                <button type="submit" class="btn btn-primary">
+                    @if($taller->iestatus == 1)
+                        <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="18" height="18">
+                        <span>&nbsp;Borrar</span>
+                    @else
+                        <img src="{{ asset('bootstrap-icons-1.5.0/check-lg.svg') }}" width="18" height="18">
+                        <span>&nbsp;Recuperar</span>
+                    @endif
                 </button>
             </div>
             <div class="col-6">
-                <a href="{{ url('/administraciones/index') }}">
+                <a href="{{ url('/talleres/index') }}">
                     <!--<button type="button" class="btn btn-primary" onClick="history.back()">-->
                     <button type="button" class="btn btn-primary">
                         <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">
