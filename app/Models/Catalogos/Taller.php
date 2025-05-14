@@ -11,4 +11,7 @@ class Taller extends Model
     protected $table = 'tctalleres';
     protected $primaryKey = 'iid_taller';
 
+    public function empleado_taller(){
+        return $this->belongsTo('App\Models\Catalogos\EmpladoTaller');
+    }
 }

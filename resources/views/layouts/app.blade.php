@@ -15,6 +15,8 @@
     <script src="{{ secure_asset('js/scripts.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/captura-domicilio.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/captura-puesto.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/captura-adscrip.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}" defer></script>
     <script type="text/javascript" src="{{ asset('js/mistablas.js') }}" ></script>
 
@@ -31,9 +33,6 @@
     <div id="app">
         <div>
             <header>
-                <!--
-                <img src="{{asset('/images/LOGO_GESTIONTEC_extendido.png')}}" srcset="{{asset('/images/LOGO_GESTIONTEC_extendido.png')}}" width="100%" height="170" sizes="(min-width: 1920px)" alt="Ejemplo">
-                -->
                 <img src="{{asset('/images/header1920.jpg')}}" srcset="{{asset('/images/header1920.jpg')}} 1920w, {{asset('/images/header1600.jpg')}} 1600w,  {{asset('/images/header800.jpg')}} 800w, {{asset('/images/header650.jpg')}} 650w, {{asset('/images/header450.jpg')}} 450w" sizes="(min-width: 1920px)" alt="Ejemplo">
             </header>
         </div>
@@ -108,7 +107,7 @@
                                             </a>
                                         </li>
                                         <li><a class="dropdown-item" href="{{ url('cuadrillas/nuevo') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-plus-fill.svg') }}" width="18" height="18"> Nueva Cuadrilla
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-fill-add.svg') }}" width="18" height="18"> Nueva Cuadrilla
                                             </a>
                                         </li>
                                     </ul>
@@ -133,19 +132,73 @@
                             @consultaEdificio--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Edificios <span class="caret"></span></a>
+                                        <img src="{{ asset('bootstrap-icons-1.5.0/buildings-fill.svg') }}" width="18" height="18"> Edificios <span class="caret"></span></a>
                                     <ul class="dropdown-menu sub-menu">
                                             <li><a class="dropdown-item" href="{{ url('edificios/index') }}">
-                                                <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Lista de Edificios
+                                                <img src="{{ asset('bootstrap-icons-1.5.0/buildings-fill.svg') }}" width="18" height="18"> Lista de Edificios
                                                 </a>
                                             </li>
                                             <li><a class="dropdown-item" href="{{ url('edificios/nuevo') }}">
-                                                <img src="{{ asset('bootstrap-icons-1.5.0/building-add.svg') }}" width="18" height="18"> Nuevo Edificio
+                                                <img src="{{ asset('bootstrap-icons-1.5.0/building-fill-add.svg') }}" width="18" height="18"> Nuevo Edificio
                                                 </a>
                                             </li>
                                         </ul>
                                 </li>
-                            {{--@endconsultaEdificio--}}
+                            {{--@endconsultaEdificio
+                            @consultaPuesto--}}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <img src="{{ asset('bootstrap-icons-1.5.0/diagram-3.svg') }}" width="18" height="18"> Puestos <span class="caret"></span></a>
+                                    <ul class="dropdown-menu sub-menu">
+                                        <li><a class="dropdown-item" href="{{ url('puestos/index') }}">
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/diagram-3.svg') }}" width="18" height="18"> Lista de Puestos
+                                            </a>
+                                        </li>
+                                        {{--@altaPuesto--}}
+                                            <li><a class="dropdown-item" href="{{ url('puestos/nuevo') }}">
+                                                <img src="{{ asset('bootstrap-icons-1.5.0/person-vcard.svg') }}" width="18" height="18"> Nuevo Puesto
+                                                </a>
+                                            </li>
+                                        {{--@endaltaPuesto--}}
+                                    </ul>
+                                </li>
+                            {{--@endconsultaPuesto
+                            @consultaAdscripcion--}}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Adscripciones <span class="caret"></span></a>
+                                    <ul class="dropdown-menu sub-menu">
+                                        <li><a class="dropdown-item" href="{{ url('adscripciones/index') }}">
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Lista de Adscripciones
+                                            </a>
+                                        </li>
+                                        {{--@altaAdscripcion--}}
+                                            <li><a class="dropdown-item" href="{{ url('adscripciones/nueva') }}">
+                                                <img src="{{ asset('bootstrap-icons-1.5.0/building-add.svg') }}" width="18" height="18"> Nueva Adscripción
+                                                </a>
+                                            </li>
+                                        {{--@endaltaAdscripcion--}}
+                                    </ul>
+                                </li>
+                            {{--@endconsultaAdscripcion
+                            @consultaPersonal--}}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <img src="{{ asset('bootstrap-icons-1.5.0/people.svg') }}" width="18" height="18"> Personal <span class="caret"></span></a>
+                                    <ul class="dropdown-menu sub-menu">
+                                        <li><a class="dropdown-item" href="{{ url('personal/index') }}">
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/people.svg') }}" width="18" height="18"> Lista de Personal
+                                            </a>
+                                        </li>
+                                        {{--@altaPersonal--}}
+                                            <li><a class="dropdown-item" href="{{ url('personal/nuevo') }}">
+                                                <img src="{{ asset('bootstrap-icons-1.5.0/person-add.svg') }}" width="18" height="18"> Nuevo Personal
+                                                </a>
+                                            </li>
+                                        {{--@endaltaPersonal--}}
+                                    </ul>
+                                </li>
+                            {{--@endconsultaPersonal--}}
                           </ul>
                         </div>
                     @endauth

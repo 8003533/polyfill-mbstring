@@ -6,6 +6,9 @@ use App\Http\Controllers\Catalogos\TalleresController;
 use App\Http\Controllers\Catalogos\CuadrillasController;
 use App\Http\Controllers\Catalogos\AdministracionesController;
 use App\Http\Controllers\Catalogos\EdificiosController;
+use App\Http\Controllers\Catalogos\PuestosController;
+use App\Http\Controllers\Catalogos\AdscripcionesController;
+use App\Http\Controllers\Catalogos\PersonalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,3 +61,37 @@ Route::get('edificios/editar/{id_edificio}',                [EdificiosController
 Route::post('edificios/actualizar',                         [EdificiosController::class, 'actualizar_edificio']);
 Route::get('edificios/inhabilitar/{id_edificio}',           [EdificiosController::class, 'confirmainhabilitar_edificio']);
 Route::post('buscaAlcaldiaColonia',                         [EdificiosController::class, 'buscaAlcaldiaColonia']);
+
+//Rutas de Puestos
+Route::get('puestos/index',                         [PuestosController::class, 'index'])->name('puestos.index');
+Route::get('puestos/nuevo',                         [PuestosController::class, 'nuevo_puesto'])->name('puestos.nuevo');
+Route::post('puestos/guardar',                      [PuestosController::class, 'guardar_puesto']);
+Route::get('puestos/editar/{id_puesto}',            [PuestosController::class, 'editar_puesto'])->name('puestos.editar');
+Route::post('puestos/actualizar',                   [PuestosController::class, 'actualizar_puesto']);
+Route::get('puestos/inhabilitar/{id_puesto}',       [PuestosController::class, 'confirmainhabilitar_puesto']);
+Route::post('buscaPuestos',                         [PuestosController::class, 'buscaPuestos']);
+
+//Rutas de Adscripciones
+Route::get('adscripciones/index',                   [AdscripcionesController::class, 'index'])->name('adscripciones.index');
+Route::get('adscripciones/nueva',                   [AdscripcionesController::class, 'nueva_adscripcion'])->name('adscripciones.nueva');
+Route::post('adscripciones/guardar',                [AdscripcionesController::class, 'guardar_adscripcion']);
+Route::get('adscripciones/editar/{id_adsc}',        [AdscripcionesController::class, 'editar_adscripcion'])->name('adscripciones.editar');
+Route::post('adscripciones/actualizar',             [AdscripcionesController::class, 'actualizar_adscripcion']);
+Route::get('adscripciones/inhabilitar/{id_adsc}',   [AdscripcionesController::class, 'confirmainhabilitar_adscripcion']);
+Route::post('buscaAdscripciones',                   [AdscripcionesController::class, 'buscaAdscripciones']);
+
+//Rutas de Personal
+Route::get('personal/index',                        [PersonalController::class, 'index'])->name('personal.index');
+Route::get('personal/nuevo',                        [PersonalController::class, 'nuevo_personal'])->name('personal.nuevo');
+Route::post('personal/guardar',                     [PersonalController::class, 'guardar_personal']);
+//CORRECCIÓN DE DATOS
+Route::get('personal/editar/{id_personal}',         [PersonalController::class, 'editar_personal'])->name('personal.editar');
+Route::post('personal/actualizar',                  [PersonalController::class, 'actualizar_personal']);
+//ACTUALIZAR PUESTO Y ADSCRIPCIÓN, CREANDO UN NUEVO REGISTRO.
+Route::get('personal/actualizar/{id_personal}',     [PersonalController::class, 'actualizar_personal_pstoads']);
+Route::post('personal/act_psto_adsc',               [PersonalController::class, 'actualizar_psto_adsc']);
+//BORRAR / RECUPERAR
+Route::get('personal/inhabilitar/{id_personal}',    [PersonalController::class, 'confirmainhabilitar_personal']);
+Route::post('buscaPuestoAdscrip',                   [PersonalController::class, 'buscaPuestoAdscrip']);
+Route::post('actualizaPuestoAdscrip',               [PersonalController::class, 'actualizaPuestoAdscrip']);
+Route::post('buscaOtroNombre',                      [PersonalController::class, 'buscaOtroNombre']);
