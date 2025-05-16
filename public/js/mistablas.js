@@ -147,4 +147,31 @@ $(document).ready(function() {
         buttons: botones
     } );
 
+    $('#MyTableAdscripciones').DataTable( {
+        language: {
+             //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+             "url": idioma
+             },
+        responsive: "true",
+        //dom: 'Bfrtip',
+        lengthMenu: [
+        numFilas,
+        filas
+       ],
+        buttons: botones
+    } );
+
+    $('#MyTablePersonal').DataTable( {
+        language: {
+             //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+             "url": idioma
+             },
+        responsive: "true",
+        //dom: 'Bfrtip',
+        lengthMenu: [
+        numFilas,
+        filas
+       ],
+        buttons: botones
+    } );
 } );
