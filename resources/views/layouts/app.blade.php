@@ -33,7 +33,8 @@
     <div id="app">
         <div>
             <header>
-                <img src="{{asset('/images/header1920.jpg')}}" srcset="{{asset('/images/header1920.jpg')}} 1920w, {{asset('/images/header1600.jpg')}} 1600w,  {{asset('/images/header800.jpg')}} 800w, {{asset('/images/header650.jpg')}} 650w, {{asset('/images/header450.jpg')}} 450w" sizes="(min-width: 1920px)" alt="Ejemplo">
+                <img src="{{asset('/images/header450.jpg')}}" srcset="{{asset('/images/header450.jpg')}} 1920w, {{asset('/images/header450.jpg')}} 1600w,  {{asset('/images/header450.jpg')}} 800w, {{asset('/images/header450.jpg')}} 650w, {{asset('/images/header450.jpg')}} 450w" sizes="(min-width: 1920px)" alt="Ejemplo" height="120px" align="left">
+                <img src="{{asset('/images/LOGO_GESTIONTEC_extendido.png')}}" srcset="{{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 1920w, {{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 1600w,  {{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 800w, {{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 650w, {{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 450w" sizes="(min-width: 1920px)" alt="Ejemplo" height="120px" align="right">
             </header>
         </div>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
