@@ -148,7 +148,7 @@ class PersonalController extends Controller
         $now                               = new \DateTime();
         $personal                          = Personal::where('iid_personal','=',$request->id_personal)->first();
         $jsonBefore                        = json_encode($personal);
-        //Se Habilita o Inhabilita el Puesto
+        //Se Habilita o Inhabilita el Personal
         if ($request->noeditar == "disabled") {
             if ($personal->iestatus == 0) {
                 $operacion                 = "RECUPERADO";
@@ -158,7 +158,7 @@ class PersonalController extends Controller
                 $personal->iestatus        = 0;
             }
         } else {
-            //Se actualizan los datos del Puesto
+            //Se actualizan los datos del Personal
             $operacion                     = "ACTUALIZADO";
             $personal->cnombre_personal    = $request->nombre_personal;
             $personal->cpaterno_personal   = $request->paterno_personal;

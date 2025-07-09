@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('titulo')
-    <img src="{{ asset('bootstrap-icons-1.5.0/person-add.svg') }}" width="18" height="18"> Nuevo Personal
+    <img src="{{ asset('bootstrap-icons-1.5.0/person-vcard-fill.svg') }}" width="18" height="18"> Nuevo Empleado de Taller
 @endsection
 @section('panel')
-    <form method="POST" action="{{ url('/personal/guardar') }}" id="formNuevoPersonal">
+    <form method="POST" action="{{ url('/empleados/guardar') }}" id="formNuevoEmpleado">
     	@csrf
 
         @if($errors->any())
@@ -20,8 +20,8 @@
                 </button>
             </div>
         @endif
-        <!--Inputs de Personal-->
-        @include('personal.datos_personal')
+        <!--Inputs de Empleado-->
+        @include('empleados.datos_empleado')
     
         <div class="row text-center">
             <div class="col-6">                        
@@ -31,7 +31,7 @@
                 </button>
             </div>
             <div class="col-6">
-                <a href="{{ url('/personal/index') }}">
+                <a href="{{ url('/empleados/index') }}">
                     <!--<button type="button" class="btn btn-primary" onClick="history.back()">-->
                     <button type="button" class="btn btn-primary">
                         <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">

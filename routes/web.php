@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Catalogos\TalleresController;
+use App\Http\Controllers\Catalogos\EmpleadosController;
 use App\Http\Controllers\Catalogos\CuadrillasController;
 use App\Http\Controllers\Catalogos\AdministracionesController;
 use App\Http\Controllers\Catalogos\EdificiosController;
@@ -36,6 +37,16 @@ Route::post('talleres/guardar',                             [TalleresController:
 Route::get('talleres/editar/{id_taller}',                   [TalleresController::class, 'editar_taller'])->name('talleres.editar');
 Route::post('talleres/actualizar',                          [TalleresController::class, 'actualizar_taller']);
 Route::get('talleres/inhabilitar/{id_taller}',              [TalleresController::class, 'confirmainhabilitar_taller']);
+
+//Rutas de Empleados Talleres
+Route::get('empleados/index',                               [EmpleadosController::class, 'index'])->name('empleados.index');
+Route::get('empleados/nuevo',                               [EmpleadosController::class, 'nuevo_empleado'])->name('empleados.nuevo');
+Route::post('empleados/guardar',                            [EmpleadosController::class, 'guardar_empleado']);
+//CORRECCIÓN DE DATOS
+Route::get('empleados/editar/{id_empleado}',                [EmpleadosController::class, 'editar_empleado'])->name('empleados.editar');
+Route::post('empleados/actualizar',                         [EmpleadosController::class, 'actualizar_empleado']);
+//BORRAR / RECUPERAR
+Route::get('empleados/inhabilitar/{id_empleado}',           [EmpleadosController::class, 'confirmainhabilitar_empleado']);
 
 //Rutas de Cuadrillas
 Route::get('cuadrillas/index',                              [CuadrillasController::class, 'index'])->name('cuadrillas.index');

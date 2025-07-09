@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('titulo')
-    Nueva Adscripción
+    <img src="{{ asset('bootstrap-icons-1.5.0/building-add.svg') }}" width="18" height="18"> Nueva Adscripción
 @endsection
 @section('panel')
     <form method="POST" action="{{ url('/adscripciones/guardar') }}" id="formNuevaAdscripcion">

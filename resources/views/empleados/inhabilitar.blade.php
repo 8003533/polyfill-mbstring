@@ -1,11 +1,18 @@
 @extends('layouts.app')
 
 @section('titulo')
-    <img src="{{ asset('bootstrap-icons-1.5.0/person-add.svg') }}" width="18" height="18"> Nuevo Personal
+    @if($empleado->iestatus == 1)
+        Borrar Empleado de Taller
+    @else
+        Recuperar Empleado de Taller
+    @endif
 @endsection
 @section('panel')
-    <form method="POST" action="{{ url('/personal/guardar') }}" id="formNuevoPersonal">
+    <form method="POST" action="{{ url('/empleados/actualizar') }}" id="formInhabilitarEmpleado">
     	@csrf
+
+        <input type="hidden" name="id_empleado" id="id_empleado" value="{{ $empleado->iid_empleado_taller }}">
+        <input type="hidden" name="noeditar"    id="noeditar"    value="{{ $noeditar }}">
 
         @if($errors->any())
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -20,18 +27,23 @@
                 </button>
             </div>
         @endif
-        <!--Inputs de Personal-->
-        @include('personal.datos_personal')
+        <!--Inputs de Empleado-->
+        @include('empleados.datos_empleado')
     
         <div class="row text-center">
             <div class="col-6">                        
                 <button type="submit" class="btn btn-primary">
-                    <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18" height="18">
-                    <span>&nbsp;Guardar</span>
+                    @if($empleado->iestatus == 1)
+                        <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="18" height="18">
+                        <span>&nbsp;Borrar</span>
+                    @else
+                        <img src="{{ asset('bootstrap-icons-1.5.0/check-lg.svg') }}" width="18" height="18">
+                        <span>&nbsp;Recuperar</span>
+                    @endif
                 </button>
             </div>
             <div class="col-6">
-                <a href="{{ url('/personal/index') }}">
+                <a href="{{ url('/empleados/index') }}">
                     <!--<button type="button" class="btn btn-primary" onClick="history.back()">-->
                     <button type="button" class="btn btn-primary">
                         <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">

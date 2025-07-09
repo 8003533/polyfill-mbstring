@@ -88,11 +88,11 @@
                                         <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Empleados <span class="caret"></span></a>
                                     <ul class="dropdown-menu sub-menu">
                                         <li><a class="dropdown-item" href="{{ url('empleados/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Lista de Empleados
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Lista de Empleados de Talleres
                                             </a>
                                         </li>
                                         <li><a class="dropdown-item" href="{{ url('empleados/nuevo') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-vcard-fill.svg') }}" width="18" height="18"> Nuevo Empleado
+                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-vcard-fill.svg') }}" width="18" height="18"> Nuevo Empleado de Taller
                                             </a>
                                         </li>
                                     </ul>
@@ -107,7 +107,7 @@
                                             <img src="{{ asset('bootstrap-icons-1.5.0/people-fill.svg') }}" width="18" height="18"> Lista de Cuadrillas
                                             </a>
                                         </li>
-                                        <li><a class="dropdown-item" href="{{ url('cuadrillas/nuevo') }}">
+                                        <li><a class="dropdown-item" href="{{ url('cuadrillas/nueva') }}">
                                             <img src="{{ asset('bootstrap-icons-1.5.0/person-fill-add.svg') }}" width="18" height="18"> Nueva Cuadrilla
                                             </a>
                                         </li>
