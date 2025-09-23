@@ -1,63 +1,64 @@
-'use strict'
+'use strict';
 
-window.addEventListener('load', function(){
+(function () {
+    window.addEventListener('load', function () {
+        const buscaPuesto = document.querySelector('#busca_puesto');
+        const nvoPsto = document.querySelector('#nuevo_puesto');
 
-	function buscarPuesto() {
-		$.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+        if (buscaPuesto) {
+            buscaPuesto.addEventListener('change', function () {
+                buscarPuesto();
+            });
+        }
 
-        $.ajax({
-        	type: 'POST',
-        	url: '/buscaPuestos',
-        	data: {
-        		bp: $('#busca_puesto').val(),
-        	},
-        	success: function (respuesta) {
-        		console.log(respuesta);
-        		if(respuesta.exito == 1){
-        			var selectPsto;
-        			for(let i in respuesta.listaPstos){
-                        selectPsto+= '<option value="'+respuesta.listaPstos[i].iid_puesto +'">'+respuesta.listaPstos[i].cdescripcion_puesto+'</option>';
+        if (nvoPsto) {
+            nvoPsto.addEventListener('change', function () {
+                cambiaPstoReq();
+            });
+        }
+
+        function buscarPuesto() {
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            $.ajaxSetup({
+                headers: { 'X-CSRF-TOKEN': token }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/buscaPuestos',
+                data: {
+                    bp: buscaPuesto.value,
+                },
+                success: function (respuesta) {
+                    console.log(respuesta);
+                    if (respuesta.exito == 1) {
+                        let selectPsto = '';
+                        for (let i in respuesta.listaPstos) {
+                            selectPsto += `<option value="${respuesta.listaPstos[i].iid_puesto}">${respuesta.listaPstos[i].cdescripcion_puesto}</option>`;
+                        }
+                        document.querySelector('#puesto').innerHTML = selectPsto;
+                        document.querySelector('#validaPuestoAdsc').innerHTML = "";
+                    } else {
+                        document.querySelector('#puesto').innerHTML = `<option value="">Capture un Puesto en Buscar Puesto, o un Nuevo Puesto...</option>`;
+                        const error = `<label><font style='color: red;'>*El Puesto que busca NO Existe en el catálogo, verifique; o capturelo en Nuevo Puesto.</font></label><br/>`;
+                        document.querySelector('#validaPuestoAdsc').innerHTML = error;
                     }
-                    document.querySelector('#puesto').innerHTML = selectPsto;
-                    document.querySelector('#validaPuestoAdsc').innerHTML = "";
-        		}else{
-        			var selectPsto = "<option value=''>Capture un Puesto en Buscar Puesto, o un Nuevo Puesto...</option>";
-        			var error="";
-        			document.querySelector('#puesto').innerHTML = selectPsto;
-                    error+="<label><font style='color: red;'>*El Puesto que busca NO Existe en el catálogo, verifique; o capturelo en Nuevo Puesto.<font style='color: red;'></label><br/>"
-        			document.querySelector('#validaPuestoAdsc').innerHTML = error;
-                    return false;
-        		}
-        	},
-        	error: function (jqXHR, textStatus, errorThrown) {
-        		alert('Ocurrio un errror, intente de nuevo.' + jqXHR.responseText );
-        	}
-        });
-	}
+                },
+                error: function (jqXHR) {
+                    alert('Ocurrió un error, intente de nuevo.' + jqXHR.responseText);
+                }
+            });
+        }
 
-	function cambiaPstoReq() {
-		var nvoPsto = document.querySelector('#nuevo_puesto');
-		if (nvoPsto!="") {
-			$('#puesto').removeAttr('required');
-			$('#nuevo_puesto').prop('required',true);
-		} else {
-			$('#puesto').prop('required',true);
-			$('#nuevo_puesto').removeAttr('required');
-		}
-	}
-
-//VARIABLES
-	var buscaPuesto = document.querySelector('#busca_puesto');
-	var nvoPsto 	= document.querySelector('#nuevo_puesto');
-
-	buscaPuesto.addEventListener('change', function(){
-		buscarPuesto();
-	});
-	nvoPsto.addEventListener('change', function(){
-		cambiaPstoReq();
-	});
-});
+        function cambiaPstoReq() {
+            if (nvoPsto && nvoPsto.value.trim() !== "") {
+                $('#puesto').removeAttr('required');
+                $('#nuevo_puesto').prop('required', true);
+            } else {
+                $('#puesto').prop('required', true);
+                $('#nuevo_puesto').removeAttr('required');
+            }
+        }
+    });
+})();

@@ -10,15 +10,18 @@
     <title>Órdenes de Servicio</title>
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <!--@vite(['resources/sass/app.scss', 'resources/js/app.js']) -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ secure_asset('js/scripts.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/captura-domicilio.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/captura-puesto.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/captura-adscrip.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/modales.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}" defer></script>
     <script type="text/javascript" src="{{ asset('js/mistablas.js') }}" ></script>
+    <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -28,6 +31,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{{asset('css/customize-navbar.css')}}}">
     <link rel="stylesheet" type="text/css" href="{{{asset('css/datatables.min.css')}}}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
     <div id="app">
@@ -53,7 +58,7 @@
                                     Servicios
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <li><a class="dropdown-item" href="{{ url('servicios/index') }}">
+                                    <li><a class="dropdown-item" href="{{ url('registro/index') }}">
                                         <img src="{{ asset('bootstrap-icons-1.5.0/search.svg') }}" width="18" height="18"> Lista de Servicios
                                         </a>
                                     </li>

@@ -10,6 +10,7 @@ use App\Http\Controllers\Catalogos\EdificiosController;
 use App\Http\Controllers\Catalogos\PuestosController;
 use App\Http\Controllers\Catalogos\AdscripcionesController;
 use App\Http\Controllers\Catalogos\PersonalController;
+use App\Http\Controllers\Servicios\RegistroController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,3 +107,10 @@ Route::get('personal/inhabilitar/{id_personal}',    [PersonalController::class, 
 Route::post('buscaPuestoAdscrip',                   [PersonalController::class, 'buscaPuestoAdscrip']);
 Route::post('actualizaPuestoAdscrip',               [PersonalController::class, 'actualizaPuestoAdscrip']);
 Route::post('buscaOtroNombre',                      [PersonalController::class, 'buscaOtroNombre']);
+
+//Rutas de Servicio
+Route::get('registro/index',                        [RegistroController::class, 'index'])->name('registro.index');
+Route::get('registro/nuevo',                        [RegistroController::class, 'nuevo'])->name('registro.nuevo');
+
+
+

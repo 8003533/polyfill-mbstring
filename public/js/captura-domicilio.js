@@ -2,6 +2,13 @@
 
 window.addEventListener('load', function(){
 
+    let cpInput = document.querySelector("#codigo_postal");
+
+    if (!cpInput) {
+        console.warn("⚠️ No se encontró el input con id 'codigo_postal'.");
+        return;
+    }
+
 	function buscaAlcaldiaColonia(){
         $.ajaxSetup({
             headers: {

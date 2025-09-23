@@ -34,7 +34,7 @@
                         <span>&nbsp;Buscar</span>
                     </button>
                 </div>
-             </div>
+            </div>
         </form>
         <div class="row">
             <div class="col col-form-label text-md-right">
