@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use Carbon\Carbon; // Importa la clase Carbon
+
 return new class extends Migration
 {
     /**
@@ -12,8 +14,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('taservicios', function (Blueprint $table) {
-            $table->increments('iid_servicio');
-            $table->string('cfolio',10);
+            $table->id('iid_servicio');
+            $table->integer('cfolio')->nullable(); 
+            $table->year('anio')->default(date('Y'));
             $table->integer('iid_administracion');
             $table->dateTime('dfecha_solicitud', precision: 0);
             $table->dateTime('dfecha_conclusion', precision: 0);

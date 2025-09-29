@@ -8,6 +8,8 @@
     });
 });*/
 
+
+
 document.addEventListener('DOMContentLoaded', function () {
     // Coloca fecha y hora actual al abrir el modal
     $('#newOrdenModal').on('show.bs.modal', function () {
@@ -21,6 +23,13 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('folio').value = ''; // Puedes dejarlo vacío, o colocar "Auto"
         document.getElementById('conclusion').value = '';
         document.getElementById('observaciones').value = '';
+
+        // Inicializar Select2 en el select con id "area" cuando se abre el modal
+        $('#area').select2({
+            placeholder: "Seleccione área", // Puedes poner un placeholder
+            allowClear: true                // Permite limpiar la selección
+        });
+        
     });
 
     // Enviar el formulario
@@ -28,13 +37,17 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
 
         $.ajax({
-            url: '/taservicios/guardar',
+            url: '/registro/guardar',
             method: 'POST',
             data: $(this).serialize(),
             success: function (response) {
-                // Mostrar modal de éxito
-                $('#newOrdenModal').modal('hide');
-                mostrarModalExito(response.folio);
+                // Validar que el folio esté presente en la respuesta
+            if (response.folio) {
+                    $('#newOrdenModal').modal('hide');
+                    mostrarModalExito(response.folio);
+                } else {
+                    alert('No se generó el folio correctamente.');
+                }
             },
             error: function (xhr) {
                 alert('Error al guardar: ' + xhr.responseText);
@@ -43,26 +56,31 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function mostrarModalExito(folio) {
-        let modalHtml = `
-        <div class="modal fade" id="modalExito" tabindex="-1" role="dialog">
-          <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-body text-center">
-                <h5 class="text-success">Orden guardada correctamente</h5>
-                <p>Folio generado: <strong>${folio}</strong></p>
-                <button class="btn btn-primary" data-dismiss="modal">Aceptar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        `;
-        $('body').append(modalHtml);
-        $('#modalExito').modal('show');
+            // Verificar si el modal ya existe en el DOM
+            if ($('#modalExito').length === 0) {
+                let modalHtml = `
+                <div class="modal fade" id="modalExito" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <h5 class="text-success">Orden guardada correctamente</h5>
+                        <p>Folio generado: <strong>${folio}</strong></p>
+                        <button class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                `;
+                $('body').append(modalHtml);
+            }
 
-        // Limpiar después de cerrar
-        $('#modalExito').on('hidden.bs.modal', function () {
-            $(this).remove();
-        });
+            $('#modalExito').modal('show');
+
+            // Limpiar después de cerrar
+            $('#modalExito').on('hidden.bs.modal', function () {
+                $(this).remove();
+            });
     }
+
 });
 
