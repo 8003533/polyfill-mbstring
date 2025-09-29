@@ -62,7 +62,7 @@
 
           <!-- Renglon: Conclusión alineado a la derecha -->
           <div class="form-row mb-3 justify-content-end">
-            <div class="col-md-6 text-right">
+            <div class="col-md-6">
               <label for="conclusion">Conclusión</label>
               <input type="text" class="form-control" id="conclusion" name="conclusion" readonly>
             </div>
@@ -72,30 +72,31 @@
           <div class="form-row mb-3">
             <div class="col-md-4">
               <label for="area">Área Solicitante</label>
-              <select id="area" name="area" class="form-control" required>
+              <select id="area" name="area" class="js-example-basic-multiple" required>
                 <option value="">Seleccione área</option>
-                @foreach($administracion as $area)
-                  <option value="{{ $area->id }}">{{ $area->nombre }}</option>
-                @endforeach
+                    @foreach($administracion as $area)
+                <option value="{{ $area->iid_administracion }}">{{ $area->cdescripcion_administracion }}</option>
+                    @endforeach
               </select>
+
             </div>
 
-            <div class="col-md-4">
+          <div class="col-md-4">
               <label for="solicitante">Solicitante</label>
               <select id="solicitante" name="solicitante" class="form-control" required>
                 <option value="">Seleccione solicitante</option>
                 @foreach($personal_solicitante as $sol)
-                  <option value="{{ $sol->id }}">{{ $sol->nombre }}</option>
+                  <option value="{{ $sol->iid_personal}}">{{ $sol->cnombre_personal }} {{ $sol->cpaterno_personal }}</option>
                 @endforeach
               </select>
-            </div>
+         </div>
 
-            <div class="col-md-4">
+         <div class="col-md-4">
               <label for="taller">Taller</label>
               <select id="taller" name="taller" class="form-control" required>
                 <option value="">Seleccione taller</option>
-                @foreach($taller as $taller)
-                  <option value="{{ $taller->id }}">{{ $taller->nombre }}</option>
+                @foreach($talleres as $taller)
+                  <option value="{{ $taller->iid_taller}}">{{ $taller->cdescripcion_taller}}</option>
                 @endforeach
               </select>
             </div>
@@ -106,18 +107,18 @@
             <label for="descripcion_servicio">Descripción del servicio</label>
             <textarea id="descripcion_servicio" name="descripcion_servicio" class="form-control" rows="4" required></textarea>
           </div>
-
+        
           <!-- Personal o cuadrilla -->
           <div class="form-group">
             <label for="personal">Personal / Cuadrilla</label>
             <select id="personal" name="personal" class="form-control" required>
               <option value="">Seleccione personal o cuadrilla</option>
               @foreach($cuadrilla as $p)
-                <option value="{{ $p->id }}">{{ $p->nombre }}</option>
+                <option value="{{ $p->iid_cuadrilla }}">{{ $p->cnombre_cuadrilla }}</option>
               @endforeach
             </select>
           </div>
-
+          
           <!-- Observaciones -->
           <div class="form-group">
             <label for="observaciones">Observaciones</label>
