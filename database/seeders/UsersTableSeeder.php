@@ -14,7 +14,17 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        DB::table('users')->insert(['name'=>'Luis Ibarra','email'=>'luis.ibarra@tsjcdmx.gob.mx','password'=>bcrypt('sistemas'),'iid_rol'=>1,'iestatus'=>1,'iid_usuario'=>1,'created_at'=>Carbon::now()->format('Y-m-d H:i:s')]);
+        DB::table('users')->updateOrInsert(
+            ['email' => 'luis.ibarra@tsjcdmx.gob.mx'], // condición única
+            [
+                'name'       => 'Luis Ibarra',
+                'password'   => bcrypt('sistemas'),
+                'iid_rol'    => 1,
+                'iestatus'   => 1,
+                'iid_usuario'=> 1,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]
+        );
     }
 }

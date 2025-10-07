@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -15,25 +14,25 @@ class PuestosTableSeeder extends Seeder
      */
     public function run(): void
     {
-        if (!ini_get("auto_detect_line_endings")) 
-        {
+        if (!ini_get("auto_detect_line_endings")) {
             ini_set("auto_detect_line_endings", '1');     
         }   
 
-        $readDirectory = 'database/seeders/csv/PuestosM4.csv';
-        $stream = fopen($readDirectory, 'r');
+        $csvPath = database_path('seeders/csv/PuestosM4.csv'); // ruta absoluta
+        $stream = fopen($csvPath, 'r');
 
-        $reader = Reader::createFromStream($stream, 'r')->setHeaderOffset(0);
-        // Indicamos el índice de la fila de nombres de columnas
-        foreach ($reader as $r) {
-            DB::table('tcpuestos')->insert([
-                'iid_puesto'            => $r['iid_puesto'],
-                'cdescripcion_puesto'   => utf8_encode($r['cdescripcion_puesto']),
-                'iestatus'              => $r['iestatus'],
-                'iid_usuario'           => $r['iid_usuario'],
-                'created_at'            => Carbon::now()->format('Y-m-d H:i:s')
-            ]);
-          
+        $reader = Reader::createFromStream($stream)->setHeaderOffset(0);
+
+        foreach ($reader as $row) {
+            DB::table('tcpuestos')->updateOrInsert(
+                ['cdescripcion_puesto' => utf8_encode($row['cdescripcion_puesto'])], // condición única
+                [
+                    'iestatus'    => $row['iestatus'] ?? 1,
+                    'iid_usuario' => $row['iid_usuario'] ?? 1,
+                    'created_at'  => Carbon::now(),
+                    'updated_at'  => Carbon::now(),
+                ]
+            );
         }
     }
 }

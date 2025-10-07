@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tcadscripciones', function (Blueprint $table) {
-            $table->increments('iid_adscripcion');
+            $table->increments('iid_adscripcion',1);
             $table->string('cdescripcion_adscripcion',300);
             $table->string('csiglas',20)->nullable();
             $table->integer('iid_tipo_area')->default(9);

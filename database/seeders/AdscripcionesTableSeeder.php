@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -15,25 +14,29 @@ class AdscripcionesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        if (!ini_get("auto_detect_line_endings")) 
-        {
+        // Detectar correctamente finales de línea en CSV
+        if (!ini_get("auto_detect_line_endings")) {
             ini_set("auto_detect_line_endings", '1');     
         }   
 
-        $readDirectory = 'database/seeders/csv/AreasM4.csv';
-        $stream = fopen($readDirectory, 'r');
+        $csvPath = database_path('seeders/csv/AreasM4.csv'); // ruta absoluta recomendada
+        $stream = fopen($csvPath, 'r');
 
-        $reader = Reader::createFromStream($stream, 'r')->setHeaderOffset(0);
-        // Indicamos el índice de la fila de nombres de columnas
-        foreach ($reader as $r) {
-            DB::table('tcadscripciones')->insert([
-                'iid_adscripcion'           => $r['iid_adscripcion'],
-                'cdescripcion_adscripcion'  => utf8_encode($r['cdescripcion_adscripcion']),
-                'iestatus'           => $r['iestatus'],
-                'iid_usuario'        => $r['iid_usuario'],
-                'created_at'         => Carbon::now()->format('Y-m-d H:i:s')
-            ]);
-          
+        $reader = Reader::createFromStream($stream)->setHeaderOffset(0);
+
+        foreach ($reader as $row) {
+            // Usamos updateOrInsert para evitar duplicados
+            DB::table('tcadscripciones')->updateOrInsert(
+                ['cdescripcion_adscripcion' => utf8_encode($row['cdescripcion_adscripcion'])], // condición única
+                [
+                    'csiglas' => isset($row['csiglas']) ? $row['csiglas'] : null,
+                    'iid_tipo_area' => isset($row['iid_tipo_area']) ? $row['iid_tipo_area'] : 9,
+                    'iestatus' => $row['iestatus'] ?? 1,
+                    'iid_usuario' => $row['iid_usuario'] ?? 1,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]
+            );
         }
     }
 }
