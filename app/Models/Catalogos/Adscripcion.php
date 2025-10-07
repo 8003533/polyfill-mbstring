@@ -15,6 +15,7 @@ class Adscripcion extends Model
         return $this->belongsTo('App\Models\Catalogos\Personal');
     }
 
+
     public function empleado_taller(){
         return $this->belongsTo('App\Models\Catalogos\EmpladoTaller');
     }
