@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id('id_bien');
             $table->string('nombre');
             $table->text('descripcion')->nullable();
-            $table->integer('stock_minimo')->default();
-            $table->integer('stock_maximo')->default();
+            $table->integer('stock_minimo')->default(0);
+            $table->integer('stock_maximo')->default(0);
             $table->unsignedBigInteger('id_unidad');
             $table->unsignedBigInteger('id_categoria');
             $table->timestamps();
