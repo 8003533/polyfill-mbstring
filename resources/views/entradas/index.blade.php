@@ -15,7 +15,7 @@
     <!-- Nueva Entrada -->
     <div class="row">
         <div class="col col-form-label text-md-right">
-            <a href="{{ url('entradas.nuevo') }}" data-toggle="tooltip" title="Nueva Entrada">
+            <a href="{{ url('entradas/nuevo') }}" data-toggle="tooltip" title="Nueva Entrada">
                 + Nueva Entrada
             </a>
         </div>
@@ -27,7 +27,7 @@
             <tr>
                 <th class="text-center">ID</th>
                 <th class="text-center">Proveedor</th>
-                <th class="text-center">Bien</th>
+                <th class="text-center">Folio</th>
                 <th class="text-center">Cantidad</th>
                 <th class="text-center">Fecha Entrada</th>
                 <th class="text-center">Acciones</th>
@@ -39,7 +39,6 @@
             <tr>
                 <td class="text-center">{{ $ent->id_entrada }}</td>
                 <td class="text-center">{{ $ent->proveedor->nombre }}</td>
-                <td class="text-center">{{ $ent->bien->descripcion }}</td>
                 <td class="text-center">{{ $ent->cantidad }}</td>
                 <td class="text-center">{{ $ent->fecha_entrada }}</td>
 
@@ -51,7 +50,6 @@
                         data-target="#editarModal"
                         data-id="{{ $ent->id_entrada }}"
                         data-proveedor="{{ $ent->proveedor->nombre }}"
-                        data-bien="{{ $ent->bien->descripcion }}"
                         data-cantidad="{{ $ent->cantidad }}"
                         data-fecha="{{ $ent->fecha_entrada }}"
                     >

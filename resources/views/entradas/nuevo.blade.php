@@ -8,7 +8,7 @@
 
 @section('panel')
 <div class="container mt-4">
-    <form action="{{ route('entradas.guardar') }}" method="POST">
+    <form action="{{ url('entradas/crear.index') }}" method="POST">
         @csrf
 
         <div class="mb-3">
@@ -37,8 +37,15 @@
             <input type="text" name="tipo" class="form-control" required>
         </div>
 
+                <div class="mb-3">
+            <label class="form-label">Cantidad</label>
+            <input type="text" name="tipo" class="form-control" required>
+        </div>
+
+        
+
         <div class="d-flex justify-content-between">
-            <a href="{{ route('entradas/index') }}" class="btn btn-primary">
+            <a class="btn btn-primary">
                 Cancelar
             </a>
             <button class="btn btn-success">

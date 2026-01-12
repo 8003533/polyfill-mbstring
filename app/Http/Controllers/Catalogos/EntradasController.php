@@ -5,24 +5,22 @@ namespace App\Http\Controllers\Catalogos;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Catalogos\Entrada;
-use App\Models\Catalogos\Proveedor;
+use App\Models\Catalogos\DetalleEntrada;
 use App\Models\Catalogos\Bien;
+use App\Models\Catalogos\Proveedor;
 
 class EntradasController extends Controller
 {
-    /**
-     * Listado de entradas
-     */
     public function index()
     {
-        $entradas = Entrada::orderBy('id_entrada', 'desc')->paginate(10);
-        return view('entradas.index', compact('entradas'));
+        $entradas = Entrada::with(['proveedor'])
+            ->orderByDesc('id_entrada')
+            ->get();
+
+        return view('entradas/index', compact('entradas'));
     }
 
-    /**
-     * Formulario nueva entrada
-     */
-    public function crear()
+    public function nuevo()
     {
         $proveedores = Proveedor::all();
         $bienes = Bien::all();
@@ -30,27 +28,52 @@ class EntradasController extends Controller
         return view('entradas.nuevo', compact('proveedores', 'bienes'));
     }
 
-    /**
-     * Guardar entrada
-     */
     public function guardar(Request $request)
     {
         $request->validate([
-            'fecha' => 'required|date',
-            'id_proveedor' => 'required|exists:tcproveedores,id_proveedor',
-            'tipo' => 'required|string',
-            'folio' => 'nullable|string',
+            'id_proveedor' => 'required',
+            'fecha_entrada' => 'required|date'
         ]);
 
-        Entrada::create([
-            'fecha' => $request->fecha,
+        $entrada = Entrada::create([
             'id_proveedor' => $request->id_proveedor,
-            'tipo' => $request->tipo,
-            'folio' => $request->folio,
+            'fecha_entrada' => $request->fecha_entrada
+
         ]);
 
-        return redirect()
-            ->route('entradas.index')
-            ->with('success', 'Entrada registrada correctamente.');
+        if ($request->bienes) {
+            foreach ($request->bienes as $bien) {
+                if ($bien['cantidad'] > 0) {
+                    DetalleEntrada::create([
+                        'id_entrada' => $entrada->id_entrada,
+                        'id_bien' => $bien['id_bien'],
+                        'cantidad' => $bien['cantidad']
+                    ]);
+
+                    Bien::where('id_bien', $bien['id_bien'])
+                        ->increment('stock', $bien['cantidad']);
+                }
+            }
+        }
+
+        return redirect()->route('entradas.index');
+    }
+
+    public function actualizar(Request $request)
+    {
+        Entrada::where('id_entrada', $request->id_entrada)
+            ->update([
+                'fecha_entrada' => $request->fecha_entrada
+            ]);
+
+        return redirect()->route('entradas.index');
+    }
+
+    public function eliminar($id)
+    {
+        DetalleEntrada::where('id_entrada', $id)->delete();
+        Entrada::where('id_entrada', $id)->delete();
+
+        return redirect()->route('entradas.index');
     }
 }

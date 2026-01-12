@@ -189,27 +189,13 @@ Route::delete('unidades/{id_unidad}', [UnidadesController::class, 'eliminar'])->
 /** ENTRADAS */
 
 
-Route::get('/entradas', [EntradasController::class, 'index'])
-    ->name('entradas.index');
-// crear nueva entrada
-Route::get('/entradas.nuevo', [EntradasController::class, 'crear'])
-    ->name('entradas.nuevo');
-
-Route::post('/entradas', [EntradasController::class, 'guardar'])
-    ->name('entradas.guardar');
-
-Route::get('/entradas/editar/{id}', [EntradasController::class, 'editar'])
-    ->whereNumber('id')
-    ->name('entradas.editar');
-
-Route::post('/entradas/actualizar', [EntradasController::class, 'actualizar'])
-    ->name('entradas.actualizar');
-
-Route::delete('/entradas/{id}', [EntradasController::class, 'inhabilitar'])
-    ->whereNumber('id')
-    ->name('entradas.inhabilitar');
-
-
+Route::prefix('entradas')->group(function () {
+    Route::get('/', [EntradasController::class, 'index'])->name('entradas.index');
+    Route::get('/nuevo', [EntradasController::class, 'nuevo'])->name('entradas.nuevo');
+    Route::post('/crear', [EntradasController::class, 'crear'])->name('crear.index');
+    Route::post('/actualizar', [EntradasController::class, 'actualizar'])->name('entradas.actualizar');
+    Route::delete('/{id}', [EntradasController::class, 'inhabilitar'])->name('entradas.inhabilitar');
+});
 
 
 

@@ -8,22 +8,24 @@ class Entrada extends Model
 {
     protected $table = 'tcentradas';
     protected $primaryKey = 'id_entrada';
+    public $timestamps = false;
 
     protected $fillable = [
-        'fecha',
         'id_proveedor',
-        'tipo',
-        'folio'
+        'fecha_entrada'
+    ];
+
+    protected $casts = [
+        'fecha_entrada' => 'date'
     ];
 
     public function proveedor()
     {
-        return $this->belongsTo(Proveedor::class, 'id_proveedor', 'id_proveedor');
+        return $this->belongsTo(Proveedor::class, 'id_proveedor');
     }
 
     public function detalles()
     {
-        return $this->hasMany(DetalleEntrada::class, 'id_entrada', 'id_entrada');
+        return $this->hasMany(DetalleEntrada::class, 'id_entrada');
     }
 }
-
