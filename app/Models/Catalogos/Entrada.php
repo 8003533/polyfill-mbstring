@@ -2,31 +2,28 @@
 
 namespace App\Models\Catalogos;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Catalogos\Bien;
 
 class Entrada extends Model
 {
-    use HasFactory;
-
-    // 👇 Debe coincidir exactamente con el nombre de la tabla
-    protected $table = 'taentradas';
+    protected $table = 'tcentradas';
     protected $primaryKey = 'id_entrada';
-    public $timestamps = true;
 
     protected $fillable = [
-        'id_bien',
-        'cantidad',
         'fecha',
+        'id_proveedor',
+        'tipo',
+        'folio'
     ];
 
-    /**
-     * Relación con Bien
-     * Una entrada pertenece a un bien
-     */
-    public function bien()
+    public function proveedor()
     {
-        return $this->belongsTo(Bien::class, 'id_bien', 'id_bien');
+        return $this->belongsTo(Proveedor::class, 'id_proveedor', 'id_proveedor');
+    }
+
+    public function detalles()
+    {
+        return $this->hasMany(DetalleEntrada::class, 'id_entrada', 'id_entrada');
     }
 }
+

@@ -6,31 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
     {
         Schema::create('tcbienes', function (Blueprint $table) {
             $table->id('id_bien');
+            $table->string('codigo')->unique();
             $table->string('nombre');
-            $table->text('descripcion')->nullable();
-            $table->integer('stock_minimo')->default(0);
-            $table->integer('stock_maximo')->default(0);
             $table->unsignedBigInteger('id_unidad');
             $table->unsignedBigInteger('id_categoria');
+            $table->integer('stock_minimo')->default(0);
+            $table->integer('stock_maximo')->default(0);
             $table->timestamps();
 
-            //Llave foranea
-
-            $table->foreign('id_unidad')->references('id_unidad')->on('tcunidades')->onDelete('cascade');
-            $table->foreign('id_categoria')->references('id_categoria')->on('tccategorias')->onDelete('cascade');
+            $table->foreign('id_unidad')->references('id_unidad')->on('tcunidades');
+            $table->foreign('id_categoria')->references('id_categoria')->on('tccategorias');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down()
     {
         Schema::dropIfExists('tcbienes');

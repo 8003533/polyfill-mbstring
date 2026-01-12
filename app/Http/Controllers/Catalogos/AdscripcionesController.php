@@ -56,7 +56,7 @@ class AdscripcionesController extends Controller
                 $adscripcion->csiglas                  = $request->siglas;
                 $adscripcion->iid_tipo_area            = $request->tipo_adscripcion;
                 $adscripcion->iestatus                 = 1;
-                $adscripcion->iid_usuario              = auth()->user()->id;
+                $adscripcion->iid_usuario              = auth()->id;
                 $adscripcion->save();
                 $jsonAfter                             = json_encode($adscripcion);
                 AdscripcionesController::bitacora($jsonBefore,$jsonAfter);
@@ -101,7 +101,7 @@ class AdscripcionesController extends Controller
             $adscripcion->iid_tipo_area            = $request->tipo_adscripcion;
             $adscripcion->iestatus                 = 1;
         }
-        $adscripcion->iid_usuario                  = auth()->user()->id;
+        $adscripcion->iid_usuario                  = auth()->id;
         $adscripcion->save();
         $jsonAfter                                 = $operacion.' '.json_encode($adscripcion);
         AdscripcionesController::bitacora($jsonBefore,$jsonAfter);
@@ -124,7 +124,7 @@ class AdscripcionesController extends Controller
         $bitacora = new Bitacora();
         $bitacora->cjson_antes   = ($jsonBefore==null ? 'NEW INSERT': $jsonBefore);
         $bitacora->cjson_despues = $jsonAfter;
-        $bitacora->iid_usuario   = auth()->user()->id;
+        $bitacora->iid_usuario   = auth()->id;
         $bitacora->save();
     }
 

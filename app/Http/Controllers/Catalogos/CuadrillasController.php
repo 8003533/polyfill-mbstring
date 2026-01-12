@@ -52,7 +52,7 @@ class CuadrillasController extends Controller
                 $jsonBefore                             = "NEW INSERT CUADRILLA";
                 $cuadrilla->cnombre_cuadrilla           = $request->nombre_cuadrilla;
                 $cuadrilla->iestatus                    = 1;
-                $cuadrilla->iid_usuario                 = auth()->user()->id;
+                $cuadrilla->iid_usuario                 = auth()->id;
                 $cuadrilla->save();
                 $jsonAfter                              = json_encode($cuadrilla);
                 CuadrillasController::bitacora($jsonBefore,$jsonAfter);
@@ -95,7 +95,7 @@ class CuadrillasController extends Controller
             $cuadrilla->cnombre_cuadrilla   = $request->nombre_cuadrilla;
             $cuadrilla->iestatus            = 1;
         }
-        $cuadrilla->iid_usuario             = auth()->user()->id;
+        $cuadrilla->iid_usuario             = auth()->id;
         $cuadrilla->save();
         $jsonAfter                          = $operacion.' '.json_encode($cuadrilla);
         CuadrillasController::bitacora($jsonBefore,$jsonAfter);
@@ -117,7 +117,7 @@ class CuadrillasController extends Controller
         $bitacora = new Bitacora();
         $bitacora->cjson_antes   = ($jsonBefore==null ? 'NEW INSERT': $jsonBefore);
         $bitacora->cjson_despues = $jsonAfter;
-        $bitacora->iid_usuario   = auth()->user()->id;
+        $bitacora->iid_usuario   = auth()->id;
         $bitacora->save();
     }
 

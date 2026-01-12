@@ -85,7 +85,7 @@ class EmpleadosController extends Controller
                         $jsonBefore2                     = "NEW INSERT PUESTO";
                         $nvo_puesto->cdescripcion_puesto = $request->nuevo_puesto;
                         $nvo_puesto->iestatus            = 1;
-                        $nvo_puesto->iid_usuario         = auth()->user()->id;
+                        $nvo_puesto->iid_usuario         = auth()->id;
                         $nvo_puesto->save();
                         $jsonAfter                       = json_encode($nvo_puesto);
                         PuestosController::bitacora($jsonBefore2,$jsonAfter);
@@ -112,7 +112,7 @@ class EmpleadosController extends Controller
                         $nva_adscripcion->csiglas                   = "";
                         $nva_adscripcion->iid_tipo_area             = 9;
                         $nva_adscripcion->iestatus                  = 1;
-                        $nva_adscripcion->iid_usuario               = auth()->user()->id;
+                        $nva_adscripcion->iid_usuario               = auth()->id;
                         $nva_adscripcion->save();
                         $jsonAfter                                  = json_encode($nva_adscripcion);
                         AdscripcionesController::bitacora($jsonBefore3,$jsonAfter);
@@ -127,7 +127,7 @@ class EmpleadosController extends Controller
                 $empleado->iid_cuadrilla        = $request->cuadrilla;
                 $empleado->ccorreo_electronico  = $request->correo_electronico;
                 $empleado->iestatus             = 1;
-                $empleado->iid_usuario          = auth()->user()->id;
+                $empleado->iid_usuario          = auth()->id;
                 $empleado->save();
                 $jsonAfter                      = json_encode($empleado);
                 EmpleadosController::bitacora($jsonBefore1,$jsonAfter);
@@ -187,7 +187,7 @@ class EmpleadosController extends Controller
                     $jsonBefore2                     = "NEW INSERT PUESTO";
                     $nvo_puesto->cdescripcion_puesto = $request->nuevo_puesto;
                     $nvo_puesto->iestatus            = 1;
-                    $nvo_puesto->iid_usuario         = auth()->user()->id;
+                    $nvo_puesto->iid_usuario         = auth()->id;
                     $nvo_puesto->save();
                     $jsonAfter                       = json_encode($nvo_puesto);
                     PuestosController::bitacora($jsonBefore2,$jsonAfter);
@@ -214,7 +214,7 @@ class EmpleadosController extends Controller
                     $nva_adscripcion->csiglas                   = "";
                     $nva_adscripcion->iid_tipo_area             = 9;
                     $nva_adscripcion->iestatus                  = 1;
-                    $nva_adscripcion->iid_usuario               = auth()->user()->id;
+                    $nva_adscripcion->iid_usuario               = auth()->id;
                     $nva_adscripcion->save();
                     $jsonAfter                                  = json_encode($nva_adscripcion);
                     AdscripcionesController::bitacora($jsonBefore3,$jsonAfter);
@@ -230,7 +230,7 @@ class EmpleadosController extends Controller
             $empleado->ccorreo_electronico  = $request->correo_electronico;
             $empleado->iestatus             = 1;
         }
-        $empleado->iid_usuario              = auth()->user()->id;
+        $empleado->iid_usuario              = auth()->id;
         $empleado->save();
         $jsonAfter                          = $operacion.' '.json_encode($empleado);
         EmpleadosController::bitacora($jsonBefore,$jsonAfter);
@@ -261,7 +261,7 @@ class EmpleadosController extends Controller
         $bitacora = new Bitacora();
         $bitacora->cjson_antes   = ($jsonBefore==null ? 'NEW INSERT': $jsonBefore);
         $bitacora->cjson_despues = $jsonAfter;
-        $bitacora->iid_usuario   = auth()->user()->id;
+        $bitacora->iid_usuario   = auth()->id;
         $bitacora->save();
     }
 

@@ -9,11 +9,11 @@ class Area extends Model
 {
     use HasFactory;
 
-    protected $table = 'tcareas';
-    protected $primaryKey = 'id_areas';
+    protected $table = 'tcareas'; // tabla
+    protected $primaryKey = 'id'; // ID 
     public $timestamps = true;
 
     protected $fillable = [
-        'nombre',
+        'nombre'
     ];
 }

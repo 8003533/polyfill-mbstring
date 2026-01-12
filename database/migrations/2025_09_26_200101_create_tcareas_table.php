@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tcareas', function (Blueprint $table) {
             $table->id('id_areas');
             $table->string('nombre');
+            $table->string('estatus')->default('activo');
             $table->timestamps();
         });
     }

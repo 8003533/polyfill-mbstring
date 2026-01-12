@@ -52,7 +52,7 @@ class TalleresController extends Controller
                 $jsonBefore                             = "NEW INSERT TALLER";
                 $taller->cdescripcion_taller            = $request->descripcion_taller;
                 $taller->iestatus                       = 1;
-                $taller->iid_usuario                    = auth()->user()->id;
+                $taller->iid_usuario                    = auth()->id;
                 $taller->save();
                 $jsonAfter                              = json_encode($taller);
                 TalleresController::bitacora($jsonBefore,$jsonAfter);
@@ -95,7 +95,7 @@ class TalleresController extends Controller
             $taller->cdescripcion_taller    = $request->descripcion_taller;
             $taller->iestatus               = 1;
         }
-        $taller->iid_usuario                = auth()->user()->id;
+        $taller->iid_usuario                = auth()->id;
         $taller->save();
         $jsonAfter                          = $operacion.' '.json_encode($taller);
         TalleresController::bitacora($jsonBefore,$jsonAfter);
@@ -117,7 +117,7 @@ class TalleresController extends Controller
         $bitacora = new Bitacora();
         $bitacora->cjson_antes   = ($jsonBefore==null ? 'NEW INSERT': $jsonBefore);
         $bitacora->cjson_despues = $jsonAfter;
-        $bitacora->iid_usuario   = auth()->user()->id;
+        $bitacora->iid_usuario   = auth()->id;
         $bitacora->save();
     }
 

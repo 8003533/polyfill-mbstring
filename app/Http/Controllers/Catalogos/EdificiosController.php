@@ -72,7 +72,7 @@ class EdificiosController extends Controller
                 $edificio->ilatitud                     = $request->latitud;
                 $edificio->ilongitud                    = $request->longitud;
                 $edificio->iestatus                     = 1;
-                $edificio->iid_usuario                  = auth()->user()->id;
+                $edificio->iid_usuario                  = auth()->id;
                 $edificio->save();
                 $jsonAfter                              = json_encode($edificio);
                 EdificiosController::bitacora($jsonBefore,$jsonAfter);
@@ -130,7 +130,7 @@ class EdificiosController extends Controller
             $edificio->ilongitud                    = $request->longitud;
             $edificio->iestatus                     = 1;
         }
-        $edificio->iid_usuario                      = auth()->user()->id;
+        $edificio->iid_usuario                      = auth()->id;
         $edificio->save();
         $jsonAfter                                  = $operacion.' '.json_encode($edificio);
         EdificiosController::bitacora($jsonBefore,$jsonAfter);
@@ -158,7 +158,7 @@ class EdificiosController extends Controller
         $bitacora = new Bitacora();
         $bitacora->cjson_antes   = ($jsonBefore==null ? 'NEW INSERT': $jsonBefore);
         $bitacora->cjson_despues = $jsonAfter;
-        $bitacora->iid_usuario   = auth()->user()->id;
+        $bitacora->iid_usuario   = auth()->id;
         $bitacora->save();
     }
 

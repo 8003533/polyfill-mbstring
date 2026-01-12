@@ -52,7 +52,7 @@ class PuestosController extends Controller
                 $jsonBefore                  = "NEW INSERT PUESTO";
                 $puesto->cdescripcion_puesto = $request->descripcion_puesto;
                 $puesto->iestatus            = 1;
-                $puesto->iid_usuario         = auth()->user()->id;
+                $puesto->iid_usuario         = auth()->id;
                 $puesto->save();
                 $jsonAfter                   = json_encode($puesto);
                 PuestosController::bitacora($jsonBefore,$jsonAfter);
@@ -94,7 +94,7 @@ class PuestosController extends Controller
             $puesto->cdescripcion_puesto = $request->descripcion_puesto;
             $puesto->iestatus            = 1;
         }
-        $puesto->iid_usuario             = auth()->user()->id;
+        $puesto->iid_usuario             = auth()->id;
         $puesto->save();
         $jsonAfter                       = $operacion.' '.json_encode($puesto);
         PuestosController::bitacora($jsonBefore,$jsonAfter);
@@ -116,7 +116,7 @@ class PuestosController extends Controller
         $bitacora = new Bitacora();
         $bitacora->cjson_antes   = ($jsonBefore==null ? 'NEW INSERT': $jsonBefore);
         $bitacora->cjson_despues = $jsonAfter;
-        $bitacora->iid_usuario   = auth()->user()->id;
+        $bitacora->iid_usuario   = auth()->id;
         $bitacora->save();
     }
 

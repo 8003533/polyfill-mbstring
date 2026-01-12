@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Catalogos;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Catalogos\Personal;
@@ -79,7 +80,7 @@ class PersonalController extends Controller
                         $jsonBefore2                     = "NEW INSERT PUESTO";
                         $nvo_puesto->cdescripcion_puesto = $request->nuevo_puesto;
                         $nvo_puesto->iestatus            = 1;
-                        $nvo_puesto->iid_usuario         = auth()->user()->id;
+                        $nvo_puesto->iid_usuario         = auth()->id;
                         $nvo_puesto->save();
                         $jsonAfter                       = json_encode($nvo_puesto);
                         PuestosController::bitacora($jsonBefore2,$jsonAfter);
@@ -106,7 +107,7 @@ class PersonalController extends Controller
                         $nva_adscripcion->csiglas                   = "";
                         $nva_adscripcion->iid_tipo_area             = 9;
                         $nva_adscripcion->iestatus                  = 1;
-                        $nva_adscripcion->iid_usuario               = auth()->user()->id;
+                        $nva_adscripcion->iid_usuario               = auth()->id;
                         $nva_adscripcion->save();
                         $jsonAfter                                  = json_encode($nva_adscripcion);
                         AdscripcionesController::bitacora($jsonBefore3,$jsonAfter);
@@ -119,7 +120,7 @@ class PersonalController extends Controller
                 }
                 $personal->ccorreo_electronico  = $request->correo_electronico;
                 $personal->iestatus             = 1;
-                $personal->iid_usuario          = auth()->user()->id;
+                $personal->iid_usuario          = auth()->id;
                 $personal->save();
                 $jsonAfter                      = json_encode($personal);
                 PersonalController::bitacora($jsonBefore1,$jsonAfter);
@@ -177,7 +178,7 @@ class PersonalController extends Controller
                     $jsonBefore2                     = "NEW INSERT PUESTO";
                     $nvo_puesto->cdescripcion_puesto = $request->nuevo_puesto;
                     $nvo_puesto->iestatus            = 1;
-                    $nvo_puesto->iid_usuario         = auth()->user()->id;
+                    $nvo_puesto->iid_usuario         = auth()->id;
                     $nvo_puesto->save();
                     $jsonAfter                       = json_encode($nvo_puesto);
                     PuestosController::bitacora($jsonBefore2,$jsonAfter);
@@ -204,7 +205,7 @@ class PersonalController extends Controller
                     $nva_adscripcion->csiglas                   = "";
                     $nva_adscripcion->iid_tipo_area             = 9;
                     $nva_adscripcion->iestatus                  = 1;
-                    $nva_adscripcion->iid_usuario               = auth()->user()->id;
+                    $nva_adscripcion->iid_usuario               = auth()->id;
                     $nva_adscripcion->save();
                     $jsonAfter                                  = json_encode($nva_adscripcion);
                     AdscripcionesController::bitacora($jsonBefore3,$jsonAfter);
@@ -218,7 +219,7 @@ class PersonalController extends Controller
             $personal->ccorreo_electronico = $request->correo_electronico;
             $personal->iestatus            = 1;
         }
-        $personal->iid_usuario             = auth()->user()->id;
+        $personal->iid_usuario             = auth()->id;
         $personal->save();
         $jsonAfter                         = $operacion.' '.json_encode($personal);
         PersonalController::bitacora($jsonBefore,$jsonAfter);
@@ -265,7 +266,7 @@ class PersonalController extends Controller
                 $jsonBefore2                     = "NEW INSERT PUESTO";
                 $nvo_puesto->cdescripcion_puesto = $request->nuevo_puesto;
                 $nvo_puesto->iestatus            = 1;
-                $nvo_puesto->iid_usuario         = auth()->user()->id;
+                $nvo_puesto->iid_usuario         = auth()->id;
                 $nvo_puesto->save();
                 $jsonAfter                       = json_encode($nvo_puesto);
                 PuestosController::bitacora($jsonBefore2,$jsonAfter);
@@ -292,7 +293,7 @@ class PersonalController extends Controller
                 $nva_adscripcion->csiglas                   = "";
                 $nva_adscripcion->iid_tipo_area             = 9;
                 $nva_adscripcion->iestatus                  = 1;
-                $nva_adscripcion->iid_usuario               = auth()->user()->id;
+                $nva_adscripcion->iid_usuario               = auth()->id;
                 $nva_adscripcion->save();
                 $jsonAfter                                  = json_encode($nva_adscripcion);
                 AdscripcionesController::bitacora($jsonBefore3,$jsonAfter);
@@ -305,7 +306,7 @@ class PersonalController extends Controller
         }
         $personal->ccorreo_electronico  = $request->correo_electronico;
         $personal->iestatus             = 1;
-        $personal->iid_usuario          = auth()->user()->id;
+        $personal->iid_usuario          = auth()->id;
         $personal->save();
         $jsonAfter                      = json_encode($personal);
         PersonalController::bitacora($jsonBefore,$jsonAfter);
@@ -313,7 +314,7 @@ class PersonalController extends Controller
         $personal_anterior              = Personal::where('iid_personal','=',$request->id_personal)->first();
         $jsonBefore                     = "BORRADO LÓGICO DE PERSONAL POR ACTUALIZACION DE PSTO / ADSC ".json_encode($personal_anterior);
         $personal_anterior->iestatus    = 0;
-        $personal_anterior->iid_usuario = auth()->user()->id;
+        $personal_anterior->iid_usuario = auth()->id;
         $personal_anterior->save();
         $jsonAfter                      = json_encode($personal_anterior);
         PersonalController::bitacora($jsonBefore,$jsonAfter);
@@ -395,7 +396,7 @@ class PersonalController extends Controller
         $bitacora = new Bitacora();
         $bitacora->cjson_antes   = ($jsonBefore==null ? 'NEW INSERT': $jsonBefore);
         $bitacora->cjson_despues = $jsonAfter;
-        $bitacora->iid_usuario   = auth()->user()->id;
+        $bitacora->iid_usuario   = auth()->id;
         $bitacora->save();
     }
 

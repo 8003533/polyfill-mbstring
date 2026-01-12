@@ -146,4 +146,81 @@ $(document).ready(function() {
        ],
         buttons: botones
     } );
+    $('#MyTableAreas').DataTable( {
+        language: {
+            // "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
+            "url": idioma
+        },
+        responsive: true,
+        lengthMenu: [
+        numFilas,
+        filas
+        ],
+        buttons: botones
+    });
+        $('#MyTableProveedores').DataTable( {
+        language: {
+            // "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
+            "url": idioma
+        },
+        responsive: true,
+        lengthMenu: [
+        numFilas,
+        filas
+        ],
+        buttons: botones
+    });
+
+            $('#MyTableBienes').DataTable( {
+        language: {
+            // "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
+            "url": idioma
+        },
+        responsive: true,
+        lengthMenu: [
+        numFilas,
+        filas
+        ],
+        buttons: botones
+    });
+
+    
+            $('#MyTableEntradas').DataTable( {
+        language: {
+            // "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
+            "url": idioma
+        },
+        responsive: true,
+        lengthMenu: [
+        numFilas,
+        filas
+        ],
+        buttons: botones
+    });
+
+                $('#MyTableSalidas').DataTable( {
+        language: {
+            // "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
+            "url": idioma
+        },
+        responsive: true,
+        lengthMenu: [
+        numFilas,
+        filas
+        ],
+        buttons: botones
+    });
+
+                    $('#MyTableUnidades').DataTable( {
+        language: {
+            // "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
+            "url": idioma
+        },
+        responsive: true,
+        lengthMenu: [
+        numFilas,
+        filas
+        ],
+        buttons: botones
+    });
 } );

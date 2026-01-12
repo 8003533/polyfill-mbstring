@@ -4,29 +4,26 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateTccategoriasTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
     {
         Schema::create('tccategorias', function (Blueprint $table) {
             $table->id('id_categoria');
-            $table->string('nombre');
-            $table->text('descripcion')->nullable();
+            $table->string('nombre', 50);
             $table->timestamps();
-
-            //foranea
-
         });
+
+        DB::table('tccategorias')->insert([
+            ['nombre'=>'Cable'],
+            ['nombre'=>'Computo'],
+            ['nombre'=>'Muebles'],
+            ['nombre'=>'Papelería'],
+        ]);
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down()
     {
         Schema::dropIfExists('tccategorias');
     }
-};
+}

@@ -6,22 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('tcunidades', function (Blueprint $table) {
             $table->id('id_unidad');
             $table->string('nombre');
+            $table->string('abreviatura')->nullable();
+            $table->string('descripcion')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('tcunidades');
     }

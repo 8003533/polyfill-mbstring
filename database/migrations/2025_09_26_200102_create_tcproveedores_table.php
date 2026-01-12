@@ -6,24 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up()
+    public function up(): void
     {
         Schema::create('tcproveedores', function (Blueprint $table) {
-            $table->id('id_proveedor');
+            $table->id('id_proveedor'); // id por defecto con nombre específico
             $table->string('nombre');
+            $table->string('contacto')->nullable(); // correo o nombre contacto
             $table->string('telefono')->nullable();
             $table->string('direccion')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('tcproveedores');
     }

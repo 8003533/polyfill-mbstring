@@ -17,7 +17,7 @@ class Adscripcion extends Model
 
 
     public function empleado_taller(){
-        return $this->belongsTo('App\Models\Catalogos\EmpladoTaller');
+                                                                                                        return $this->belongsTo('App\Models\Catalogos\EmpladoTaller');
     }
 
     public function tipoarea(){

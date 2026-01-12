@@ -15,6 +15,7 @@ class Unidad extends Model
 
     protected $fillable = [
         'nombre',
-        'descripcion',
+        'abreviatura',
+        'descripcion'
     ];
 }

@@ -11,10 +11,5 @@ class Categoria extends Model
 
     protected $table = 'tccategorias';
     protected $primaryKey = 'id_categoria';
-    public $timestamps = true;
-
-    protected $fillable = [
-        'nombre',
-        'descripcion',
-    ];
+    protected $fillable = ['nombre'];
 }

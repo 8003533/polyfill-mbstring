@@ -1,4 +1,4 @@
-<!doctype html>
+ <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -12,7 +12,7 @@
     <!-- Scripts -->
     <!--@vite(['resources/sass/app.scss', 'resources/js/app.js']) -->
     <script src="{{asset('js/app.js')}}" defer></script>
-    <script src="{{ secure_asset('js/scripts.js') }}"></script>
+    <scriptrc="{{ secure_asset('js/scripts.js') }}"></script>
     <!--<script src="{{asset('js/scripts.js')}}"></script>-->
     <!--<script type="text/javascript" src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -221,6 +221,55 @@
                                         {{--@endaltaPersonal--}}
                                     </ul>
                                 </li>
+                                {{--@consultaArea--}}
+
+<li>
+    <a class="dropdown-item" href="{{ url('areas/index') }}">
+        <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Áreas
+    </a>
+</li>
+{{--@endconsultaArea--}}
+
+{{--@consultaBien--}}
+<li>
+    <a class="dropdown-item" href="{{ url('bienes/index') }}">
+        <img src="{{ asset('bootstrap-icons-1.5.0/box-seam.svg') }}" width="18" height="18"> Bienes
+    </a>
+</li>
+{{--@endconsultaBien--}}
+
+{{--@consultaProveedor--}}
+<li>
+    <a class="dropdown-item" href="{{ url('proveedores/index') }}">
+        <img src="{{ asset('bootstrap-icons-1.5.0/truck.svg') }}" width="18" height="18"> Proveedores
+    </a>
+</li>
+{{--@endconsultaProveedor--}}
+
+{{--@consultaEntrada--}}
+<li>
+    <a class="dropdown-item" href="{{ url('entradas') }}">
+        <img src="{{ asset('bootstrap-icons-1.5.0/box-arrow-in-down.svg') }}" width="18" height="18"> Entradas
+    </a>
+</li>
+{{--@endconsultaEntrada--}}
+
+{{--@consultaSalida--}}
+<li>
+    <a class="dropdown-item" href="{{ url('salidas/index') }}">
+        <img src="{{ asset('bootstrap-icons-1.5.0/box-arrow-up.svg') }}" width="18" height="18"> Salidas
+    </a>
+</li>
+
+{{--@consultaUnidad--}}
+<li>
+    <a class="dropdown-item" href="{{ url('unidades/index') }}">
+        <img src="{{ asset('bootstrap-icons-1.5.0/bounding-box-circles.svg') }}" width="18" height="18"> Unidades
+    </a>
+</li>
+{{--@endconsultaUnidad--}}
+
+
                             {{--@endconsultaPersonal--}}
                           </ul>
                         </div>
@@ -258,7 +307,7 @@
                                         @csrf
                                     </form>
                                 </div>
-                            </li>
+                            </li> 
                         @endguest
                     </ul>
                 </div>

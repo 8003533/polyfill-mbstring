@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Catalogos\Adscripcion;
 use App\Models\Catalogos\Usuario;
+use App\Models\User;
 
 class Personal extends Model
 {
@@ -41,6 +42,6 @@ class Personal extends Model
     // Relación con Salidas
     public function salidas()
     {
-        return $this->hasMany(\App\Models\Salida::class, 'id_personal');
+        return $this->hasMany(\App\Models\Catalogos\Salida::class, 'id_personal');
     }
 }
