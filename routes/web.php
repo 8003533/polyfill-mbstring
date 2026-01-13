@@ -145,25 +145,29 @@ Route::delete('areas/{id_areas}', [AreasController::class, 'eliminar'])->name('a
 
 // -------------------- BIENES --------------------
 
+Route::get('bienes/index',
+    [BienesController::class, 'index']
+)->name('bienes.index');
 
+Route::get('bienes/nuevo',
+    [BienesController::class, 'nuevo_bien']
+)->name('bienes.nuevo');
 
+Route::post('bienes/guardar',
+    [BienesController::class, 'guardar']
+)->name('bienes.guardar');
 
+Route::get('bienes/editar/{id}',
+    [BienesController::class, 'editar']
+)->name('bienes.editar');
 
-Route::get('/bienes/index', [BienesController::class, 'index'])->name('bienes.index');
-Route::get('/bienes/nuevo', [BienesController::class, 'nuevo_bien'])->name('bienes.nuevo');
-Route::post('/bienes/guardar', [BienesController::class, 'guardar'])->name('bienes.guardar');
-Route::get('/bienes/editar/{id}', [BienesController::class, 'editar'])->name('bienes.editar');
-Route::post('/bienes/actualizar', [BienesController::class, 'actualizar'])->name('bienes.actualizar');
-Route::delete('/bienes/{id}', [BienesController::class, 'inhabilitar'])->name('bienes.inhabilitar');
-Route::get('bienes/inhabilitar/{id_bien}', [BienesController::class, 'confirmainhabilitar'])->name('bienes.inhabilitar');
+Route::post('bienes/actualizar',
+    [BienesController::class, 'actualizar']
+)->name('bienes.actualizar');
 
-Route::get('/bienes/index', [BienesController::class, 'index'])->name('bienes.index');
-Route::get('/bienes/nuevo', [BienesController::class, 'nuevo_bien'])->name('bienes.nuevo');
-Route::post('/bienes/guardar', [BienesController::class, 'guardar'])->name('bienes.guardar');
-Route::post('/bienes/actualizar', [BienesController::class, 'actualizar'])->name('bienes.actualizar');
-Route::delete('/bienes/{id}', [BienesController::class, 'eliminar'])->name('bienes.eliminar');
-
-
+Route::delete('bienes/{id}',
+    [BienesController::class, 'eliminar']
+)->name('bienes.eliminar');
 
 
 /** PROVEEDORES */

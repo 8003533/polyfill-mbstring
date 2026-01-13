@@ -10,13 +10,14 @@
 @section('panel')
 <div class="table-responsive">
 
-
-
-    <!-- nueva area -->
-    <div class="row">
+    <!-- NUEVO BIEN -->
+    <div class="row mb-2">
         <div class="col col-form-label text-md-right">
-            <a href="{{ route('bienes.nuevo') }}" data-toggel="tooltip" data-html="true" tittel="Nueva Bien">
-              + Nuevo Bien </a>
+            <a href="{{ route('bienes.nuevo') }}"
+               data-toggle="tooltip"
+               title="Nuevo Bien">
+                + Nuevo Bien
+            </a>
         </div>
     </div>
 
@@ -36,6 +37,7 @@
         </thead>
 
         <tbody>
+        @if(isset($bienes) && $bienes->count())
             @foreach($bienes as $bien)
                 <tr>
                     <td class="text-center">{{ $bien->id_bien }}</td>
@@ -43,28 +45,55 @@
                     <td class="text-center">{{ $bien->nombre }}</td>
                     <td class="text-center">{{ $bien->unidad->nombre ?? '-' }}</td>
                     <td class="text-center">{{ $bien->categoria->nombre ?? '-' }}</td>
-                    <td class="text-center">{{ $bien->stock_minimo }}</td>
-                    <td class="text-center">{{ $bien->stock_maximo }}</td>
+                    <td class="text-center">{{ $bien->stock_min }}</td>
+                    <td class="text-center">{{ $bien->stock_max }}</td>
 
                     <td class="text-center col-actions">
-                        <!-- Botón Editar -->
-                        <a href="{{ route('bienes.editar', $bien->id_bien) }}" class="btn">
-                            <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
+
+                        <!-- EDITAR -->
+                        <a href="{{ route('bienes.editar', $bien->id_bien) }}"
+                           class="btn"
+                           data-toggle="tooltip"
+                           title="Editar">
+                            <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}"
+                                 width="18" height="18">
                         </a>
 
-                        <!-- Botón Eliminar -->
-                        <form method="POST" action="{{ route('bienes.inhabilitar', $bien->id_bien) }}" style="display:inline;">
+                        <!-- ELIMINAR -->
+                        <form method="POST"
+                              action="{{ route('bienes.eliminar', $bien->id_bien) }}"
+                              style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn">
-                                <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
+                            <button type="submit"
+                                    class="btn"
+                                    data-toggle="tooltip"
+                                    title="Eliminar"
+                                    onclick="return confirm('¿Deseas eliminar este bien?')">
+                                <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}"
+                                     width="16" height="16">
                             </button>
                         </form>
+
                     </td>
                 </tr>
             @endforeach
+        @else
+            <tr>
+                <td colspan="8" class="text-center text-muted">
+                    No hay bienes registrados
+                </td>
+            </tr>
+        @endif
         </tbody>
     </table>
 
+    <!-- PAGINACIÓN -->
+    @if(isset($bienes))
+        <div class="mt-3 d-flex justify-content-end">
+            {{ $bienes->links('pagination::bootstrap-4') }}
+        </div>
+    @endif
 
+</div>
 @endsection

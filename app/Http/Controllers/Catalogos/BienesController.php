@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Catalogos;
 
 use App\Http\Controllers\Controller;
@@ -9,82 +10,98 @@ use App\Models\Catalogos\Categoria;
 
 class BienesController extends Controller
 {
-    // Listado de bienes
-    public function index(Request $request)
-    {
-        $buscar = $request->input('buscar');
 
-        $bienes = Bien::with(['unidad', 'categoria'])
-            ->when($buscar, function($query, $buscar) {
-                $query->where('nombre', 'like', "%$buscar%");
-            })
-            ->paginate(10);
+public function index(Request $request)
+{
+    $buscar = $request->get('buscar');
 
-        $unidades = Unidad::all();
-        $categorias = Categoria::all();
+    $bienes = Bien::with(['unidad', 'categoria'])
+        ->paginate(10);
 
-        return view('bienes.index', compact('bienes', 'unidades', 'categorias'));
+    // 🔥 FORZAMOS QUE SIEMPRE EXISTA
+    if (!isset($bienes)) {
+        $bienes = collect();
     }
 
-    // Mostrar formulario de nuevo bien
+    return view('bienes.index', [
+        'bienes' => $bienes
+    ]);
+}
+
+    // ==========================
+    // NUEVO
+    // ==========================
     public function nuevo_bien()
     {
-        $unidades = Unidad::all();
+        $unidades   = Unidad::all();
         $categorias = Categoria::all();
+
         return view('bienes.nuevo', compact('unidades', 'categorias'));
     }
 
-    // Guardar un bien nuevo
+    // ==========================
+    // GUARDAR
+    // ==========================
     public function guardar(Request $request)
     {
         $request->validate([
-            'codigo' => 'required',
-            'nombre' => 'required',
-            'id_unidad' => 'required|exists:tcunidades,id_unidad',
-            'id_categoria' => 'required|exists:tcategorias,id_categoria',
-            'stock_minimo' => 'required|numeric',
-            'stock_maximo' => 'required|numeric',
+            'codigo'       => 'required',
+            'nombre'       => 'required',
+            'id_unidad'    => 'required',
+            'id_categoria' => 'required',
+            'stock_min'    => 'required|numeric',
+            'stock_max'    => 'required|numeric',
         ]);
 
         Bien::create($request->all());
 
-        return redirect()->route('bienes.index')->with('success', 'Bien creado correctamente.');
+        return redirect()->route('bienes.index')
+            ->with('success', 'Bien creado correctamente');
     }
 
-    // Mostrar formulario de edición de un bien
+    // ==========================
+    // EDITAR
+    // ==========================
     public function editar($id)
     {
-        $bien = Bien::findOrFail($id);
-        $unidades = Unidad::all();
+        $bien       = Bien::findOrFail($id);
+        $unidades   = Unidad::all();
         $categorias = Categoria::all();
+
         return view('bienes.editar', compact('bien', 'unidades', 'categorias'));
     }
 
-    // Actualizar un bien
+    // ==========================
+    // ACTUALIZAR
+    // ==========================
     public function actualizar(Request $request)
     {
         $request->validate([
-            'id_bien' => 'required|exists:bienes,id_bien',
-            'codigo' => 'required',
-            'nombre' => 'required',
-            'id_unidad' => 'required|exists:tcunidades,id_unidad',
-            'id_categoria' => 'required|exists:tcategorias,id_categoria',
-            'stock_minimo' => 'required|numeric',
-            'stock_maximo' => 'required|numeric',
+            'id_bien'      => 'required',
+            'codigo'       => 'required',
+            'nombre'       => 'required',
+            'id_unidad'    => 'required',
+            'id_categoria' => 'required',
+            'stock_min'    => 'required|numeric',
+            'stock_max'    => 'required|numeric',
         ]);
 
         $bien = Bien::findOrFail($request->id_bien);
         $bien->update($request->all());
 
-        return redirect()->route('bienes.index')->with('success', 'Bien actualizado correctamente.');
+        return redirect()->route('bienes.index')
+            ->with('success', 'Bien actualizado correctamente');
     }
 
-    // Eliminar un bien
+    // ==========================
+    // ELIMINAR
+    // ==========================
     public function eliminar($id)
     {
         $bien = Bien::findOrFail($id);
         $bien->delete();
 
-        return redirect()->route('bienes.inhabilitar')->with('success', 'Bien eliminado correctamente.');
+        return redirect()->route('bienes.index')
+            ->with('success', 'Bien eliminado correctamente');
     }
 }
