@@ -34,7 +34,7 @@
                 </button>
             </div>
             <div class="col-6">
-                <a href="{{ url('/administraciones/index') }}">
+<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalCerrar">
                 <!--<button type="button" class="btn btn-primary" onClick="history.back()">-->
                     <button type="button" class="btn btn-primary">
                         <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">
@@ -43,5 +43,31 @@
                 </a>
             </div>
         </div>
-    </form>   
+    </form>
+
+    <div class="modal fade" id="modalActualizar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Confirmar actualización</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                ¿Deseas guardar los cambios de esta administración?
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('formEditarAdministracion').submit();">
+                    Sí, actualizar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @endsection

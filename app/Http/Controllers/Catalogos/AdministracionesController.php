@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Catalogos;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -52,7 +53,7 @@ class AdministracionesController extends Controller
                 $jsonBefore                                     = "NEW INSERT ADMINISTRACIÓN";
                 $administracion->cdescripcion_administracion    = $request->descripcion_administracion;
                 $administracion->iestatus                       = 1;
-                $administracion->iid_usuario                    = auth()->id;
+                $administracion->iid_usuario                    = Auth::id();
                 $administracion->save();
                 $jsonAfter                                      = json_encode($administracion);
                 AdministracionesController::bitacora($jsonBefore,$jsonAfter);
@@ -95,7 +96,7 @@ class AdministracionesController extends Controller
             $administracion->cdescripcion_administracion    = $request->descripcion_administracion;
             $administracion->iestatus                       = 1;
         }
-        $administracion->iid_usuario                        = auth()->id;
+        $administracion->iid_usuario                        = auth()->id();
         $administracion->save();
         $jsonAfter                                          = $operacion.' '.json_encode($administracion);
         AdministracionesController::bitacora($jsonBefore,$jsonAfter);
@@ -117,7 +118,7 @@ class AdministracionesController extends Controller
         $bitacora = new Bitacora();
         $bitacora->cjson_antes   = ($jsonBefore==null ? 'NEW INSERT': $jsonBefore);
         $bitacora->cjson_despues = $jsonAfter;
-        $bitacora->iid_usuario   = auth()->id;
+        $bitacora->iid_usuario   = Auth::id();
         $bitacora->save();
     }
 

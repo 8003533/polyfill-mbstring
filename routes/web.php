@@ -70,7 +70,7 @@ Route::get('cuadrillas/inhabilitar/{id_cuadrilla}',         [CuadrillasControlle
 
 //Rutas de Administraciones
 Route::get('administraciones/index',                        [AdministracionesController::class, 'index'])->name('administraciones.index');
-Route::get('administraciones/nueva',                        [AdministracionesController::class, 'nueva_administracion'])->name('administraciones.nuevo');
+Route::get('administraciones/nueva',                        [AdministracionesController::class, 'nueva_administracion'])->name('administraciones.nueva');
 Route::post('administraciones/guardar',                     [AdministracionesController::class, 'guardar_administracion']);
 Route::get('administraciones/editar/{id_administracion}',   [AdministracionesController::class, 'editar_administracion'])->name('administraciones.editar');
 Route::post('administraciones/actualizar',                  [AdministracionesController::class, 'actualizar_administracion']);

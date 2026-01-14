@@ -11,8 +11,8 @@
     <form method="POST" action="{{ url('/administraciones/actualizar') }}" id="formInhabilitarAdministracion">
     	@csrf
 
-        <input type="hidden" name="id_administracion" id="id_administracion" value="{{ $administracion->iid_administracion }}">
-        <input type="hidden" name="noeditar"          id="noeditar"          value="{{ $noeditar }}">
+        <input type="" name="id_administracion" id="id_administracion" value="{{ $administracion->iid_administracion }}">
+        <input type="" name="noeditar"          id="noeditar"          value="{{ $noeditar }}">
 
         @if($errors->any())
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
