@@ -88,136 +88,80 @@
                             Catálogos
                           </a>
                           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
                             {{--@consultaTaller--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <a class="dropdow-item" href="{{ url('taller/index')}}">
                                         <img src="{{ asset('bootstrap-icons-1.5.0/wrench-adjustable.svg') }}" width="18" height="18"> Talleres <span class="caret"></span></a>
                                     <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('talleres/index') }}" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/wrench-adjustable.svg') }}" width="18" height="18"> Lista de Talleres
                                             </a>
                                         </li>
-                                        <li><a class="dropdown-item" href="{{ url('talleres/nuevo') }}" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/tools.svg') }}" width="18" height="18"> Nuevo Taller
-                                            </a>
-                                        </li>
+                    
                                     </ul>
                                 </li>
                             {{--@endconsultaTaller
+
                             @consultaEmpleado--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <a class="dropdow-item" href="{{ url('empleados/index')}}">
                                         <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Empleados <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('empleados/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Lista de Empleados de Talleres
-                                            </a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="{{ url('empleados/nuevo') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-vcard-fill.svg') }}" width="18" height="18"> Nuevo Empleado de Taller
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
                             {{--@endconsultaEmpleado
+
+                            
                             @consultaCuadrilla--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <a class="dropdow-item" href="{{ url('cuadrillas/index')}}">
                                         <img src="{{ asset('bootstrap-icons-1.5.0/people-fill.svg') }}" width="18" height="18"> Cuadrillas <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('cuadrillas/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/people-fill.svg') }}" width="18" height="18"> Lista de Cuadrillas
-                                            </a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="{{ url('cuadrillas/nueva') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-fill-add.svg') }}" width="18" height="18"> Nueva Cuadrilla
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </li>
                             {{--@endconsultaCuadrilla
+
+
                             @consultaAdministracion--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <a class="dropdow-item" href="{{ url('administraciones/index')}}">
                                         <img src="{{ asset('bootstrap-icons-1.5.0/folder-fill.svg') }}" width="18" height="18"> Administraciones <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('administraciones/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/folder-fill.svg') }}" width="18" height="18"> Lista de Administraciones
-                                            </a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="{{ url('administraciones/nueva') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/folder-plus.svg') }}" width="18" height="18"> Nueva Administración
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </li>
                             {{--@enconsultaAdministracion
+
+
+
                             @consultaEdificio--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <a class="dropdow-item" href="{{ url('edificios/index')}}">
                                         <img src="{{ asset('bootstrap-icons-1.5.0/buildings-fill.svg') }}" width="18" height="18"> Edificios <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                            <li><a class="dropdown-item" href="{{ url('edificios/index') }}">
-                                                <img src="{{ asset('bootstrap-icons-1.5.0/buildings-fill.svg') }}" width="18" height="18"> Lista de Edificios
-                                                </a>
-                                            </li>
-                                            <li><a class="dropdown-item" href="{{ url('edificios/nuevo') }}">
-                                                <img src="{{ asset('bootstrap-icons-1.5.0/building-fill-add.svg') }}" width="18" height="18"> Nuevo Edificio
-                                                </a>
-                                            </li>
-                                        </ul>
                                 </li>
                             {{--@endconsultaEdificio
+
+
                             @consultaPuesto--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <a class="dropdow-item" href="{{ url('puestos/index')}}">
                                         <img src="{{ asset('bootstrap-icons-1.5.0/diagram-3.svg') }}" width="18" height="18"> Puestos <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('puestos/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/diagram-3.svg') }}" width="18" height="18"> Lista de Puestos
-                                            </a>
-                                        </li>
-                                        {{--@altaPuesto--}}
-                                            <li><a class="dropdown-item" href="{{ url('puestos/nuevo') }}">
-                                                <img src="{{ asset('bootstrap-icons-1.5.0/person-vcard.svg') }}" width="18" height="18"> Nuevo Puesto
-                                                </a>
-                                            </li>
-                                        {{--@endaltaPuesto--}}
-                                    </ul>
                                 </li>
                             {{--@endconsultaPuesto
+
+                            
                             @consultaAdscripcion--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <a class="dropdow-item" href="{{ url('adscripciones/index')}}">
                                         <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Adscripciones <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('adscripciones/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Lista de Adscripciones
-                                            </a>
-                                        </li>
-                                        {{--@altaAdscripcion--}}
-                                            <li><a class="dropdown-item" href="{{ url('adscripciones/nueva') }}">
-                                                <img src="{{ asset('bootstrap-icons-1.5.0/building-add.svg') }}" width="18" height="18"> Nueva Adscripción
-                                                </a>
-                                            </li>
-                                        {{--@endaltaAdscripcion--}}
-                                    </ul>
                                 </li>
                             {{--@endconsultaAdscripcion
+
                             @consultaPersonal--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <a class="dropdow-item" href="{{ url('personal/index')}}">
                                         <img src="{{ asset('bootstrap-icons-1.5.0/people.svg') }}" width="18" height="18"> Personal <span class="caret"></span></a>
                                     <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('personal/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/people.svg') }}" width="18" height="18"> Lista de Personal
-                                            </a>
-                                        </li>
-                                        {{--@altaPersonal--}}
-                                            <li><a class="dropdown-item" href="{{ url('personal/nuevo') }}">
-                                                <img src="{{ asset('bootstrap-icons-1.5.0/person-add.svg') }}" width="18" height="18"> Nuevo Personal
-                                                </a>
-                                            </li>
+                                        
                                         {{--@endaltaPersonal--}}
                                     </ul>
                                 </li>

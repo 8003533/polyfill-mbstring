@@ -4,76 +4,101 @@ namespace App\Http\Controllers\Catalogos;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Catalogos\Entrada;
 use App\Models\Catalogos\DetalleEntrada;
-use App\Models\Catalogos\Bien;
 use App\Models\Catalogos\Proveedor;
+use App\Models\Catalogos\Bien;
 
 class EntradasController extends Controller
 {
     public function index()
     {
-        $entradas = Entrada::with(['proveedor'])
+        // Entradas con proveedor + suma de cantidades del detalle
+        $entradas = Entrada::with('proveedor')
+            ->withSum('detalles as total_cantidad', 'cantidad')
             ->orderByDesc('id_entrada')
             ->get();
 
-        return view('entradas/index', compact('entradas'));
+        $proveedores = Proveedor::orderBy('nombre')->get();
+
+        return view('entradas.index', compact('entradas', 'proveedores'));
     }
 
     public function nuevo()
     {
-        $proveedores = Proveedor::all();
-        $bienes = Bien::all();
+        $proveedores = Proveedor::orderBy('nombre')->get();
+        $bienes = Bien::orderBy('codigo')->get();
 
         return view('entradas.nuevo', compact('proveedores', 'bienes'));
     }
 
-    public function guardar(Request $request)
+    public function crear(Request $request)
     {
         $request->validate([
-            'id_proveedor' => 'required',
-            'fecha_entrada' => 'required|date'
+            // Cabecera (tcentradas)
+            'id_proveedor' => 'required|integer',
+            'fecha'        => 'required|date',
+            'tipo'         => 'required|string|max:100',
+            'folio'        => 'nullable|string|max:100',
+
+            // Detalle (detalle_entrada)
+            'anio'     => 'required|integer|min:2000|max:2100',
+            'id_bien'  => 'required|integer',
+            'cantidad' => 'required|integer|min:1',
         ]);
 
-        $entrada = Entrada::create([
-            'id_proveedor' => $request->id_proveedor,
-            'fecha_entrada' => $request->fecha_entrada
+        DB::transaction(function () use ($request) {
 
-        ]);
+            // 1) CABECERA
+            $entrada = Entrada::create([
+                'fecha'        => $request->fecha,
+                'id_proveedor' => $request->id_proveedor,
+                'tipo'         => $request->tipo,
+                'folio'        => $request->folio,
+            ]);
 
-        if ($request->bienes) {
-            foreach ($request->bienes as $bien) {
-                if ($bien['cantidad'] > 0) {
-                    DetalleEntrada::create([
-                        'id_entrada' => $entrada->id_entrada,
-                        'id_bien' => $bien['id_bien'],
-                        'cantidad' => $bien['cantidad']
-                    ]);
+            // 2) DETALLE
+            DB::table('detalle_entrada')->insert([
+                'id_entrada' => $entrada->id_entrada,
+                'anio'       => $request->anio,
+                'id_bien'    => $request->id_bien,
+                'cantidad'   => $request->cantidad,
+            ]);
+        });
 
-                    Bien::where('id_bien', $bien['id_bien'])
-                        ->increment('stock', $bien['cantidad']);
-                }
-            }
-        }
-
-        return redirect()->route('entradas.index');
+        return redirect()->route('entradas.index')->with('success', 'Entrada creada correctamente.');
     }
 
     public function actualizar(Request $request)
     {
-        Entrada::where('id_entrada', $request->id_entrada)
-            ->update([
-                'fecha_entrada' => $request->fecha_entrada
-            ]);
+        $request->validate([
+            'id_entrada'   => 'required|integer',
+            'id_proveedor' => 'required|integer',
+            'folio'        => 'nullable|string|max:100',
+            'fecha'        => 'required|date',
+            'tipo'         => 'required|string|max:100',
+        ]);
 
-        return redirect()->route('entradas.index');
+        $entrada = Entrada::where('id_entrada', $request->id_entrada)->firstOrFail();
+
+        $entrada->id_proveedor = $request->id_proveedor;
+        $entrada->folio        = $request->folio;
+        $entrada->fecha        = $request->fecha;
+        $entrada->tipo         = $request->tipo;
+        $entrada->save();
+
+        return redirect()->route('entradas.index')->with('success', 'Entrada actualizada correctamente.');
     }
 
-    public function eliminar($id)
+    public function inhabilitar($id)
     {
-        DetalleEntrada::where('id_entrada', $id)->delete();
-        Entrada::where('id_entrada', $id)->delete();
+        DB::transaction(function () use ($id) {
+            DB::table('detalle_entrada')->where('id_entrada', $id)->delete();
+            Entrada::where('id_entrada', $id)->delete();
+        });
 
-        return redirect()->route('entradas.index');
+        return redirect()->route('entradas.index')->with('success', 'Entrada eliminada correctamente.');
     }
 }

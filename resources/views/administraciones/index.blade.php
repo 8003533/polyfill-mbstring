@@ -20,22 +20,7 @@
                     </button>
                 </div>
             @endif
-            <div class="row">
-                <div class="col-6" id="divadministracion">
-                    <label for="administracion" class="col-form-label text-md-right">Administración:</label>
-                    <input type="text" id="administracion" name="administracion" class="form-control" data-target="#administracion" value="{{ old('administracion',null) }}"/>
-                </div>
-            </div>
-            <br>
-            <div class="form-group form-row text-center">
-                <div class="col-12">                        
-                    <button type="submit" class="btn btn-primary">
-                        <img src="{{ asset('bootstrap-icons-1.5.0/search.svg') }}" width="18" height="18">
-                        <span>&nbsp;Buscar</span>
-                    </button>
-                </div>
-             </div>
-        </form>
+
         <div class="row">
             <div class="col col-form-label text-md-right">
                 {{--@altaAdministracion--}}

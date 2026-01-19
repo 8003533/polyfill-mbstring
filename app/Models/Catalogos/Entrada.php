@@ -11,21 +11,19 @@ class Entrada extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'fecha',
         'id_proveedor',
-        'fecha_entrada'
-    ];
-
-    protected $casts = [
-        'fecha_entrada' => 'date'
+        'tipo',
+        'folio',
     ];
 
     public function proveedor()
     {
-        return $this->belongsTo(Proveedor::class, 'id_proveedor');
+        return $this->belongsTo(Proveedor::class, 'id_proveedor', 'id_proveedor');
     }
 
     public function detalles()
     {
-        return $this->hasMany(DetalleEntrada::class, 'id_entrada');
+        return $this->hasMany(DetalleEntrada::class, 'id_entrada', 'id_entrada');
     }
 }

@@ -50,15 +50,14 @@ Route::get('talleres/editar/{id_taller}',                   [TalleresController:
 Route::post('talleres/actualizar',                          [TalleresController::class, 'actualizar_taller']);
 Route::get('talleres/inhabilitar/{id_taller}',              [TalleresController::class, 'confirmainhabilitar_taller']);
 
-//Rutas de Empleados Talleres
-Route::get('empleados/index',                               [EmpleadosController::class, 'index'])->name('empleados.index');
-Route::get('empleados/nuevo',                               [EmpleadosController::class, 'nuevo_empleado'])->name('empleados.nuevo');
-Route::post('empleados/guardar',                            [EmpleadosController::class, 'guardar_empleado']);
-//CORRECCIÓN DE DATOS
-Route::get('empleados/editar/{id_empleado}',                [EmpleadosController::class, 'editar_empleado'])->name('empleados.editar');
-Route::post('empleados/actualizar',                         [EmpleadosController::class, 'actualizar_empleado']);
-//BORRAR / RECUPERAR
-Route::get('empleados/inhabilitar/{id_empleado}',           [EmpleadosController::class, 'confirmainhabilitar_empleado']);
+
+// Rutas de empleados
+Route::get('empleados/index', [EmpleadosController::class, 'index'])->name('empleados.index');
+Route::get('empleados/nuevo', [EmpleadosController::class, 'nuevo_empleado'])->name('empleados.nuevo');
+Route::post('empleados/guardar', [EmpleadosController::class, 'guardar_empleado'])->name('empleados.guardar');
+Route::get('empleados/editar/{id_empleado}', [EmpleadosController::class, 'editar_empleado'])->name('empleados.editar');
+Route::post('empleados/actualizar', [EmpleadosController::class, 'actualizar_empleado'])->name('empleados.actualizar');
+Route::get('empleados/inhabilitar/{id_empleado}', [EmpleadosController::class, 'confirmainhabilitar_empleado'])->name('empleados.inhabilitar');
 
 //Rutas de Cuadrillas
 Route::get('cuadrillas/index',                              [CuadrillasController::class, 'index'])->name('cuadrillas.index');
@@ -94,14 +93,13 @@ Route::post('puestos/actualizar',                   [PuestosController::class, '
 Route::get('puestos/inhabilitar/{id_puesto}',       [PuestosController::class, 'confirmainhabilitar_puesto']);
 Route::post('buscaPuestos',                         [PuestosController::class, 'buscaPuestos']);
 
-//Rutas de Adscripciones
-Route::get('adscripciones/index',                   [AdscripcionesController::class, 'index'])->name('adscripciones.index');
-Route::get('adscripciones/nueva',                   [AdscripcionesController::class, 'nueva_adscripcion'])->name('adscripciones.nueva');
-Route::post('adscripciones/guardar',                [AdscripcionesController::class, 'guardar_adscripcion']);
-Route::get('adscripciones/editar/{id_adsc}',        [AdscripcionesController::class, 'editar_adscripcion'])->name('adscripciones.editar');
-Route::post('adscripciones/actualizar',             [AdscripcionesController::class, 'actualizar_adscripcion']);
-Route::get('adscripciones/inhabilitar/{id_adsc}',   [AdscripcionesController::class, 'confirmainhabilitar_adscripcion']);
-Route::post('buscaAdscripciones',                   [AdscripcionesController::class, 'buscaAdscripciones']);
+
+// Rutas de adscripciones
+Route::get('adscripciones/index', [AdscripcionesController::class, 'index'])->name('adscripciones.index');
+Route::post('adscripciones/guardar', [AdscripcionesController::class, 'guardar'])->name('adscripciones.guardar');
+Route::get('adscripciones/editar/{id_adscripcion}', [AdscripcionesController::class, 'editar'])->name('adscripciones.editar');
+Route::post('adscripciones/actualizar', [AdscripcionesController::class, 'actualizar'])->name('adscripciones.actualizar');
+Route::get('adscripciones/inhabilitar/{id_adscripcion}', [AdscripcionesController::class, 'inhabilitar'])->name('adscripciones.inhabilitar');
 
 //Rutas de Personal
 Route::get('personal/index',                        [PersonalController::class, 'index'])->name('personal.index');
@@ -193,13 +191,24 @@ Route::delete('unidades/{id_unidad}', [UnidadesController::class, 'eliminar'])->
 /** ENTRADAS */
 
 
+
+
 Route::prefix('entradas')->group(function () {
     Route::get('/', [EntradasController::class, 'index'])->name('entradas.index');
     Route::get('/nuevo', [EntradasController::class, 'nuevo'])->name('entradas.nuevo');
-    Route::post('/crear', [EntradasController::class, 'crear'])->name('crear.index');
+
+    // Crear (tcentradas + detalle_entrada)
+    Route::post('/crear', [EntradasController::class, 'crear'])->name('entradas.crear');
+
+    // Actualizar cabecera (tcentradas)
     Route::post('/actualizar', [EntradasController::class, 'actualizar'])->name('entradas.actualizar');
+
+    // Eliminar (detalle_entrada + tcentradas)
     Route::delete('/{id}', [EntradasController::class, 'inhabilitar'])->name('entradas.inhabilitar');
 });
+
+
+
 
 
 
