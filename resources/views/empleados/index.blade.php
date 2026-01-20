@@ -10,41 +10,32 @@
 @section('panel')
 <div class="table-responsive">
 
-    {{-- Mensaje de éxito --}}
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
             </button>
         </div>
     @endif
 
-    {{-- ERRORES --}}
     @if($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show">
             <p>Corrige los errores para continuar</p>
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
             </button>
         </div>
     @endif
 
-    {{-- FORM GET (si lo usas para filtros/búsquedas). Si no lo usas, puedes quitarlo. --}}
-    <form method="GET" action="{{ url('/empleados/index') }}" id="formIndexEmpleados">
-        {{-- aquí irían filtros si tienes --}}
-    </form>
-
     <div class="row mb-2">
-        <div class="col col-form-label text-md-right">
-            <a href="#" data-toggle="modal" data-target="#modalNuevoEmpleado" title="Nuevo">
-                + Nuevo Empleado Taller
-            </a>
+        <div class="col text-right">
+            <a href="#" data-toggle="modal" data-target="#modalNuevoEmpleado">+ Nuevo Empleado Taller</a>
         </div>
     </div>
 
@@ -58,103 +49,91 @@
                 <th class="text-center">Adscripción</th>
                 <th class="text-center">Taller</th>
                 <th class="text-center">Cuadrilla</th>
-                <th class="text-center">Correo Electrónico</th>
+                <th class="text-center">Correo</th>
                 <th class="text-center">Acciones</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($empleados as $indice=>$empleado)
-                <tr>
-                    <td class="text-center">{{ $empleado->cnombre_empleado_taller }}</td>
-                    <td class="text-center">{{ $empleado->cpaterno_empleado_taller }}</td>
-                    <td class="text-center">{{ $empleado->cmaterno_empleado_taller }}</td>
-                    <td class="text-center">{{ $empleado->cdescripcion_puesto }}</td>
-                    <td class="text-center">{{ $empleado->cdescripcion_adscripcion }}</td>
-                    <td class="text-center">{{ $empleado->cdescripcion_taller }}</td>
-                    <td class="text-center">{{ $empleado->cnombre_cuadrilla }}</td>
-                    <td class="text-center">{{ $empleado->ccorreo_electronico }}</td>
-                    <td class="text-center col-actions">
-                        @if ($empleado->iestatus == 1)
-                            <a href="{{ url('empleados/editar/'.$empleado->iid_empleado_taller) }}" title="Corrección de datos">
-                                <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
-                            </a>
-                            <a href="{{ url('empleados/inhabilitar/'.$empleado->iid_empleado_taller) }}" title="Borrar">
-                                <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="18" height="18">
-                            </a>
-                        @else
-                            <a href="{{ url('empleados/inhabilitar/'.$empleado->iid_empleado_taller) }}" title="Recuperar">
-                                <img src="{{ asset('bootstrap-icons-1.5.0/check-lg.svg') }}" width="18" height="18">
-                            </a>
-                        @endif
-                    </td>
-                </tr>
+            @foreach($empleados as $empleado)
+            <tr>
+                <td class="text-center">{{ $empleado->cnombre_empleado_taller }}</td>
+                <td class="text-center">{{ $empleado->cpaterno_empleado_taller }}</td>
+                <td class="text-center">{{ $empleado->cmaterno_empleado_taller }}</td>
+                <td class="text-center">{{ $empleado->cdescripcion_puesto }}</td>
+                <td class="text-center">{{ $empleado->cdescripcion_adscripcion }}</td>
+                <td class="text-center">{{ $empleado->cdescripcion_taller }}</td>
+                <td class="text-center">{{ $empleado->cnombre_cuadrilla }}</td>
+                <td class="text-center">{{ $empleado->ccorreo_electronico }}</td>
+                <td class="text-center">
+                    <a href="{{ url('empleados/editar/'.$empleado->iid_empleado_taller) }}">
+                        <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18">
+                    </a>
+                    <a href="{{ url('empleados/inhabilitar/'.$empleado->iid_empleado_taller) }}">
+                        <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="18">
+                    </a>
+                </td>
+            </tr>
             @endforeach
         </tbody>
     </table>
 </div>
 
-<!-- ===================== MODAL NUEVO EMPLEADO ===================== -->
-<div class="modal fade" id="modalNuevoEmpleado" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+<!-- MODAL NUEVO -->
+<div class="modal fade" id="modalNuevoEmpleado">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title">
-          <img src="{{ asset('bootstrap-icons-1.5.0/person-plus-fill.svg') }}" width="18" height="18">
-          Nuevo Empleado de Taller
-        </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <h5>Nuevo Empleado de Taller</h5>
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
       </div>
 
       <form method="POST" action="{{ url('empleados/guardar') }}">
         @csrf
-
         <div class="modal-body">
+
           <div class="form-row">
             <div class="form-group col-md-4">
               <label>Nombre</label>
-              <input type="text" name="cnombre_empleado_taller" class="form-control" required value="{{ old('cnombre_empleado_taller') }}">
+              <input type="text" name="cnombre_empleado_taller" class="form-control" required>
             </div>
             <div class="form-group col-md-4">
               <label>Paterno</label>
-              <input type="text" name="cpaterno_empleado_taller" class="form-control" required value="{{ old('cpaterno_empleado_taller') }}">
+              <input type="text" name="cpaterno_empleado_taller" class="form-control" required>
             </div>
             <div class="form-group col-md-4">
               <label>Materno</label>
-              <input type="text" name="cmaterno_empleado_taller" class="form-control" value="{{ old('cmaterno_empleado_taller') }}">
+              <input type="text" name="cmaterno_empleado_taller" class="form-control">
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group col-md-6">
               <label>Puesto (ID)</label>
-              <input type="number" name="iid_puesto" class="form-control" value="{{ old('iid_puesto') }}">
+              <input type="number" name="iid_puesto" class="form-control">
             </div>
             <div class="form-group col-md-6">
               <label>Adscripción (ID)</label>
-              <input type="number" name="iid_adscripcion" class="form-control" value="{{ old('iid_adscripcion') }}">
+              <input type="number" name="iid_adscripcion" class="form-control">
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group col-md-6">
               <label>Taller (ID)</label>
-              <input type="number" name="iid_taller" class="form-control" value="{{ old('iid_taller') }}">
+              <input type="number" name="iid_taller" class="form-control">
             </div>
             <div class="form-group col-md-6">
               <label>Cuadrilla (ID)</label>
-              <input type="number" name="iid_cuadrilla" class="form-control" value="{{ old('iid_cuadrilla') }}">
+              <input type="number" name="iid_cuadrilla" class="form-control">
             </div>
           </div>
 
-          <div class="form-row">
-            <div class="form-group col-md-12">
-              <label>Correo Electrónico</label>
-              <input type="email" name="ccorreo_electronico" class="form-control" value="{{ old('ccorreo_electronico') }}">
-            </div>
+          <div class="form-group">
+            <label>Correo</label>
+            <input type="email" name="ccorreo_electronico" class="form-control">
           </div>
+
         </div>
 
         <div class="modal-footer">
@@ -167,11 +146,10 @@
   </div>
 </div>
 
-{{-- Reabrir modal si hubo errores de validación --}}
 @if($errors->any())
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    $('#modalNuevoEmpleado').modal('show');
+  $('#modalNuevoEmpleado').modal('show');
 });
 </script>
 @endif
