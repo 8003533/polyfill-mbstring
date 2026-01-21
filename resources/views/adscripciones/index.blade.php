@@ -31,7 +31,7 @@
         </div>
     @endif
 
-    {{-- Nueva adscripción (modal) --}}
+  <!-- Nueva adscripción  -->
     <div class="row">
         <div class="col col-form-label text-md-right">
             <a href="#" data-toggle="modal" data-target="#modalNuevaAdscripcion"
@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    {{-- Tabla --}}
+   <!-- Tabla -->
     <table class="table table-striped shadow-lg" id="MyTableAdscripciones">
         <thead>
             <tr>
@@ -95,7 +95,7 @@
                                 <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
                             </button>
 
-                            {{-- Botón Inhabilitar (modal confirm) --}}
+                            <!-- Botón Inhabilitar  -->
                             <button class="btn"
                                 data-toggle="modal"
                                 data-target="#confirmarInhabilitarModal"
@@ -105,7 +105,7 @@
                                 <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
                             </button>
                         @else
-                            {{-- Botón Recuperar (modal confirm) --}}
+                           <!-- Botón Recuperar  -->
                             <button class="btn"
                                 data-toggle="modal"
                                 data-target="#confirmarInhabilitarModal"
@@ -123,9 +123,8 @@
     </table>
 </div>
 
-{{-- =========================
-    MODAL: NUEVA ADSCRIPCIÓN
-========================= --}}
+ <!-- NUEVA ADSCRIPCIÓN -->
+
 <div class="modal fade" id="modalNuevaAdscripcion" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
@@ -210,9 +209,8 @@
   </div>
 </div>
 
-{{-- =========================
-    MODAL: EDITAR ADSCRIPCIÓN
-========================= --}}
+ <!-- EDITAR ADSCRIPCIÓN -->
+
 <div class="modal fade" id="editarModalAdscripcion" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
@@ -275,9 +273,8 @@
   </div>
 </div>
 
-{{-- =========================
-    MODAL: INHABILITAR / RECUPERAR
-========================= --}}
+    <!-- MODAL: INHABILITAR / RECUPERAR -->
+
 <div class="modal fade" id="confirmarInhabilitarModal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -314,7 +311,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ✅ Modal Editar
+    //  Modal Editar
     $('#editarModalAdscripcion').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
 
@@ -324,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#edit_iid_tipo_area').val(button.data('tipo'));
     });
 
-    // ✅ Modal Inhabilitar / Recuperar
+    //  Modal Inhabilitar / Recuperar
     $('#confirmarInhabilitarModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
 
@@ -334,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         $('#nombreAccion').text(nombre);
 
-        // Ruta que ya tienes (GET)
+        // Ruta
         $('#btnConfirmarAccion').attr('href', '/adscripciones/inhabilitar/' + id);
 
         if (estatus == 1) {
@@ -355,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-{{-- Reabrir modal NUEVO si hubo errores al guardar --}}
+<!-- Reabrir modal NUEVO si hubo errores al guardar  -->
 @if($errors->has('cdescripcion_adscripcion') || $errors->has('csiglas') || $errors->has('iid_tipo_area'))
 <script>
 document.addEventListener("DOMContentLoaded", function () {
