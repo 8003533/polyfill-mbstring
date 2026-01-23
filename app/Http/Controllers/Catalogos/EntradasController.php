@@ -15,15 +15,15 @@ class EntradasController extends Controller
 {
     public function index()
     {
-        // Entradas con proveedor + suma de cantidades del detalle
         $entradas = Entrada::with('proveedor')
             ->withSum('detalles as total_cantidad', 'cantidad')
             ->orderByDesc('id_entrada')
             ->get();
 
         $proveedores = Proveedor::orderBy('nombre')->get();
+        $bienes = Bien::orderBy('codigo')->get(); // ✅ para modal nuevo si lo ocupas
 
-        return view('entradas.index', compact('entradas', 'proveedores'));
+        return view('entradas.index', compact('entradas', 'proveedores', 'bienes'));
     }
 
     public function nuevo()
@@ -37,13 +37,12 @@ class EntradasController extends Controller
     public function crear(Request $request)
     {
         $request->validate([
-            // Cabecera (tcentradas)
             'id_proveedor' => 'required|integer',
             'fecha'        => 'required|date',
             'tipo'         => 'required|string|max:100',
             'folio'        => 'nullable|string|max:100',
 
-            // Detalle (detalle_entrada)
+            // Detalle
             'anio'     => 'required|integer|min:2000|max:2100',
             'id_bien'  => 'required|integer',
             'cantidad' => 'required|integer|min:1',
@@ -51,7 +50,6 @@ class EntradasController extends Controller
 
         DB::transaction(function () use ($request) {
 
-            // 1) CABECERA
             $entrada = Entrada::create([
                 'fecha'        => $request->fecha,
                 'id_proveedor' => $request->id_proveedor,
@@ -59,8 +57,7 @@ class EntradasController extends Controller
                 'folio'        => $request->folio,
             ]);
 
-            // 2) DETALLE
-            DB::table('detalle_entrada')->insert([
+            DetalleEntrada::create([
                 'id_entrada' => $entrada->id_entrada,
                 'anio'       => $request->anio,
                 'id_bien'    => $request->id_bien,
@@ -95,6 +92,7 @@ class EntradasController extends Controller
     public function inhabilitar($id)
     {
         DB::transaction(function () use ($id) {
+            // Borra detalles y cabecera
             DB::table('detalle_entrada')->where('id_entrada', $id)->delete();
             Entrada::where('id_entrada', $id)->delete();
         });

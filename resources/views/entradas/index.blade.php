@@ -10,20 +10,43 @@
 @section('panel')
 <div class="table-responsive">
 
+    {{-- Mensajes --}}
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        </div>
     @endif
 
-    <!-- Nueva Entrada -->
-    <div class="row">
+    @if(session('danger'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('danger') }}
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <p>Corrige los errores para continuar</p>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        </div>
+    @endif
+
+    {{-- Nueva Entrada (modal) --}}
+    <div class="row mb-2">
         <div class="col col-form-label text-md-right">
-            <a href="{{ route('entradas.nuevo') }}" data-toggle="tooltip" title="Nueva Entrada">
+            <a href="#" data-toggle="modal" data-target="#modalNuevaEntrada" title="Nueva Entrada">
                 + Nueva Entrada
             </a>
         </div>
     </div>
 
-    <!-- TABLA -->
+    {{-- TABLA --}}
     <table class="table table-striped shadow-lg" id="MyTableEntradas">
         <thead>
             <tr>
@@ -38,68 +61,73 @@
         </thead>
 
         <tbody>
-            @foreach($entradas as $ent)
-            <tr>
-                <td class="text-center">{{ $ent->id_entrada }}</td>
-                <td class="text-center">{{ $ent->proveedor->nombre ?? '' }}</td>
-                <td class="text-center">{{ $ent->folio }}</td>
-                <td class="text-center">{{ $ent->tipo }}</td>
-                <td class="text-center">{{ $ent->fecha }}</td>
-                <td class="text-center">{{ $ent->total_cantidad ?? 0 }}</td>
+            @if(isset($entradas) && $entradas->count())
+                @foreach($entradas as $ent)
+                <tr>
+                    <td class="text-center">{{ $ent->id_entrada }}</td>
+                    <td class="text-center">{{ $ent->proveedor->nombre ?? '' }}</td>
+                    <td class="text-center">{{ $ent->folio }}</td>
+                    <td class="text-center">{{ $ent->tipo }}</td>
+                    <td class="text-center">{{ $ent->fecha }}</td>
+                    <td class="text-center">{{ $ent->total_cantidad ?? 0 }}</td>
 
-                <td class="text-center col-actions">
+                    <td class="text-center col-actions">
 
-                    <!-- EDITAR -->
-                    <button class="btn"
-                        data-toggle="modal"
-                        data-target="#editarModal"
-                        data-id="{{ $ent->id_entrada }}"
-                        data-idproveedor="{{ $ent->id_proveedor }}"
-                        data-folio="{{ $ent->folio }}"
-                        data-tipo="{{ $ent->tipo }}"
-                        data-fecha="{{ $ent->fecha }}"
-                    >
-                        <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
-                    </button>
+                        {{-- EDITAR (modal) --}}
+                        <button class="btn"
+                            data-toggle="modal"
+                            data-target="#modalEditarEntrada"
+                            data-id="{{ $ent->id_entrada }}"
+                            data-idproveedor="{{ $ent->id_proveedor }}"
+                            data-folio="{{ $ent->folio }}"
+                            data-tipo="{{ $ent->tipo }}"
+                            data-fecha="{{ $ent->fecha }}"
+                            title="Editar">
+                            <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
+                        </button>
 
-                    <!-- ELIMINAR -->
-                    <button class="btn"
-                        data-toggle="modal"
-                        data-target="#confirmarEliminarModal"
-                        data-id="{{ $ent->id_entrada }}"
-                        data-proveedor="{{ $ent->proveedor->nombre ?? '' }}"
-                    >
-                        <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
-                    </button>
+                        {{-- ELIMINAR (modal) --}}
+                        <button class="btn"
+                            data-toggle="modal"
+                            data-target="#modalEliminarEntrada"
+                            data-id="{{ $ent->id_entrada }}"
+                            data-proveedor="{{ $ent->proveedor->nombre ?? '' }}"
+                            title="Eliminar">
+                            <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
+                        </button>
 
-                </td>
-            </tr>
-            @endforeach
+                    </td>
+                </tr>
+                @endforeach
+            @else
+                <tr>
+                    <td colspan="7" class="text-center text-muted">No hay entradas registradas</td>
+                </tr>
+            @endif
         </tbody>
 
     </table>
 </div>
 
 
-<!-- MODAL EDITAR -->
-<div class="modal fade" id="editarModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+{{-- ================= MODAL: NUEVA ENTRADA ================= --}}
+<div class="modal fade" id="modalNuevaEntrada" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
 
             <div class="modal-header bg-light">
-                <h5 class="modal-title">Editar Entrada</h5>
+                <h5 class="modal-title">Nueva Entrada</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
 
             <div class="modal-body">
-                <form method="POST" action="{{ route('entradas.actualizar') }}">
+                <form method="POST" action="{{ route('entradas.crear') }}" id="formNuevaEntrada">
                     @csrf
 
-                    <input type="hidden" id="id_entrada_edit" name="id_entrada">
-
                     <div class="form-group">
-                        <label>Proveedor:</label>
-                        <select id="id_proveedor_edit" name="id_proveedor" class="form-control" required>
+                        <label><b>Proveedor:</b></label>
+                        <select name="id_proveedor" class="form-control" required>
+                            <option value="">Seleccione</option>
                             @foreach($proveedores as $prov)
                                 <option value="{{ $prov->id_proveedor }}">{{ $prov->nombre }}</option>
                             @endforeach
@@ -107,18 +135,41 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Folio:</label>
-                        <input type="text" id="folio_edit" name="folio" class="form-control">
+                        <label><b>Folio:</b></label>
+                        <input type="text" name="folio" class="form-control">
                     </div>
 
                     <div class="form-group">
-                        <label>Tipo:</label>
-                        <input type="text" id="tipo_edit" name="tipo" class="form-control" required>
+                        <label><b>Tipo:</b></label>
+                        <input type="text" name="tipo" class="form-control" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Fecha:</label>
-                        <input type="date" id="fecha_edit" name="fecha" class="form-control" required>
+                        <label><b>Fecha:</b></label>
+                        <input type="date" name="fecha" class="form-control" required>
+                    </div>
+
+                    <hr>
+
+                    {{-- DETALLE (porque tu controller lo exige) --}}
+                    <div class="form-group">
+                        <label><b>Año:</b></label>
+                        <input type="number" name="anio" class="form-control" min="2000" max="2100" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label><b>Bien:</b></label>
+                        <select name="id_bien" class="form-control" required>
+                            <option value="">Seleccione</option>
+                            @foreach($bienes as $b)
+                                <option value="{{ $b->id_bien }}">{{ $b->codigo }} - {{ $b->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><b>Cantidad:</b></label>
+                        <input type="number" name="cantidad" class="form-control" min="1" required>
                     </div>
 
                     <div class="row text-center mt-3">
@@ -127,8 +178,8 @@
                                 <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18"> Guardar
                             </button>
 
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">
-                                <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18"> Cancelar
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                Cancelar
                             </button>
                         </div>
                     </div>
@@ -141,9 +192,69 @@
 </div>
 
 
-<!-- MODAL ELIMINAR -->
-<div class="modal fade" id="confirmarEliminarModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+{{-- ================= MODAL: EDITAR ENTRADA ================= --}}
+<div class="modal fade" id="modalEditarEntrada" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header bg-light">
+                <h5 class="modal-title">Editar Entrada</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="POST" action="{{ route('entradas.actualizar') }}" id="formEditarEntrada">
+                    @csrf
+                    <input type="hidden" id="edit_id_entrada" name="id_entrada">
+
+                    <div class="form-group">
+                        <label><b>Proveedor:</b></label>
+                        <select id="edit_id_proveedor" name="id_proveedor" class="form-control" required>
+                            <option value="">Seleccione</option>
+                            @foreach($proveedores as $prov)
+                                <option value="{{ $prov->id_proveedor }}">{{ $prov->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><b>Folio:</b></label>
+                        <input type="text" id="edit_folio" name="folio" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label><b>Tipo:</b></label>
+                        <input type="text" id="edit_tipo" name="tipo" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label><b>Fecha:</b></label>
+                        <input type="date" id="edit_fecha" name="fecha" class="form-control" required>
+                    </div>
+
+                    <div class="row text-center mt-3">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">
+                                <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18"> Guardar
+                            </button>
+
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{{-- ================= MODAL: ELIMINAR ENTRADA ================= --}}
+<div class="modal fade" id="modalEliminarEntrada" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
 
             <div class="modal-header bg-light">
@@ -152,11 +263,12 @@
             </div>
 
             <div class="modal-body text-center">
-                <p>¿Deseas eliminar la entrada del proveedor <strong id="proveedorEliminar"></strong>?</p>
+                <p>¿Deseas eliminar la entrada del proveedor?</p>
+                <strong id="proveedorEliminar"></strong>
             </div>
 
             <div class="modal-footer justify-content-center">
-                <form id="formEliminar" method="POST" action="">
+                <form id="formEliminarEntrada" method="POST" action="">
                     @csrf
                     @method('DELETE')
 
@@ -166,8 +278,7 @@
                     </button>
                 </form>
 
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
-                    <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     Cancelar
                 </button>
             </div>
@@ -177,27 +288,28 @@
 </div>
 
 
-<!-- SCRIPTS -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
     // EDITAR
-    $('#editarModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
+    $('#modalEditarEntrada').on('show.bs.modal', function (event) {
+        var b = $(event.relatedTarget);
 
-        $('#id_entrada_edit').val(button.data('id'));
-        $('#folio_edit').val(button.data('folio'));
-        $('#tipo_edit').val(button.data('tipo'));
-        $('#fecha_edit').val(button.data('fecha'));
-        $('#id_proveedor_edit').val(button.data('idproveedor'));
+        $('#edit_id_entrada').val(b.data('id'));
+        $('#edit_folio').val(b.data('folio'));
+        $('#edit_tipo').val(b.data('tipo'));
+        $('#edit_fecha').val(b.data('fecha'));
+        $('#edit_id_proveedor').val(String(b.data('idproveedor')));
     });
 
     // ELIMINAR
-    $('#confirmarEliminarModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
+    $('#modalEliminarEntrada').on('show.bs.modal', function (event) {
+        var b = $(event.relatedTarget);
 
-        $('#proveedorEliminar').text(button.data('proveedor'));
-        $('#formEliminar').attr('action', '/entradas/' + button.data('id'));
+        $('#proveedorEliminar').text(b.data('proveedor'));
+
+        // DELETE /entradas/{id}
+        $('#formEliminarEntrada').attr('action', "{{ url('entradas') }}/" + b.data('id'));
     });
 
 });

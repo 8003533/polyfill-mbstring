@@ -4,104 +4,87 @@ namespace App\Http\Controllers\Catalogos;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Catalogos\Bien;
-use App\Models\Catalogos\Unidad;
-use App\Models\Catalogos\Categoria;
+use Illuminate\Support\Facades\DB;
 
 class BienesController extends Controller
 {
-
-public function index(Request $request)
-{
-    $buscar = $request->get('buscar');
-
-    $bienes = Bien::with(['unidad', 'categoria'])
-        ->paginate(10);
-
-    // 🔥 FORZAMOS QUE SIEMPRE EXISTA
-    if (!isset($bienes)) {
-        $bienes = collect();
-    }
-
-    return view('bienes.index', [
-        'bienes' => $bienes
-    ]);
-}
-
-    // ==========================
-    // NUEVO
-    // ==========================
-    public function nuevo_bien()
+    public function index()
     {
-        $unidades   = Unidad::all();
-        $categorias = Categoria::all();
+        $unidades   = DB::table('tcunidades')->orderBy('nombre')->get();
+        $categorias = DB::table('tccategorias')->orderBy('nombre')->get();
 
-        return view('bienes.nuevo', compact('unidades', 'categorias'));
+        $bienes = DB::table('tcbienes as b')
+            ->leftJoin('tcunidades as u', 'u.id_unidad', '=', 'b.id_unidad')
+            ->leftJoin('tccategorias as c', 'c.id_categoria', '=', 'b.id_categoria')
+            ->select(
+                'b.id_bien',
+                'b.codigo',
+                'b.nombre',
+                'b.id_unidad',
+                'b.id_categoria',
+                'b.stok_min',
+                'b.stok_max',
+                DB::raw('IFNULL(u.nombre,"-") as unidad_nombre'),
+                DB::raw('IFNULL(c.nombre,"-") as categoria_nombre')
+            )
+            ->orderByDesc('b.id_bien')
+            ->paginate(10);
+
+        return view('bienes.index', compact('bienes','unidades','categorias'));
     }
 
-    // ==========================
-    // GUARDAR
-    // ==========================
     public function guardar(Request $request)
     {
         $request->validate([
-            'codigo'       => 'required',
-            'nombre'       => 'required',
-            'id_unidad'    => 'required',
-            'id_categoria' => 'required',
-            'stock_min'    => 'required|numeric',
-            'stock_max'    => 'required|numeric',
+            'codigo'       => 'required|string|max:100',
+            'nombre'       => 'required|string|max:255',
+            'id_unidad'    => 'required|integer',
+            'id_categoria' => 'required|integer',
+            'stok_min'     => 'nullable|numeric',
+            'stok_max'     => 'nullable|numeric',
         ]);
 
-        Bien::create($request->all());
+        DB::table('tcbienes')->insert([
+            'codigo'       => $request->codigo,
+            'nombre'       => $request->nombre,
+            'id_unidad'    => $request->id_unidad,
+            'id_categoria' => $request->id_categoria,
+            'stok_min'     => $request->stok_min ?? 0,
+            'stok_max'     => $request->stok_max ?? 0,
+        ]);
 
-        return redirect()->route('bienes.index')
-            ->with('success', 'Bien creado correctamente');
+        return redirect()->route('bienes.index')->with('success','Bien guardado correctamente.');
     }
 
-    // ==========================
-    // EDITAR
-    // ==========================
-    public function editar($id)
-    {
-        $bien       = Bien::findOrFail($id);
-        $unidades   = Unidad::all();
-        $categorias = Categoria::all();
-
-        return view('bienes.editar', compact('bien', 'unidades', 'categorias'));
-    }
-
-    // ==========================
-    // ACTUALIZAR
-    // ==========================
     public function actualizar(Request $request)
     {
         $request->validate([
-            'id_bien'      => 'required',
-            'codigo'       => 'required',
-            'nombre'       => 'required',
-            'id_unidad'    => 'required',
-            'id_categoria' => 'required',
-            'stock_min'    => 'required|numeric',
-            'stock_max'    => 'required|numeric',
+            'id_bien'      => 'required|integer',
+            'codigo'       => 'required|string|max:100',
+            'nombre'       => 'required|string|max:255',
+            'id_unidad'    => 'required|integer',
+            'id_categoria' => 'required|integer',
+            'stok_min'     => 'nullable|numeric',
+            'stok_max'     => 'nullable|numeric',
         ]);
 
-        $bien = Bien::findOrFail($request->id_bien);
-        $bien->update($request->all());
+        DB::table('tcbienes')
+            ->where('id_bien', $request->id_bien)
+            ->update([
+                'codigo'       => $request->codigo,
+                'nombre'       => $request->nombre,
+                'id_unidad'    => $request->id_unidad,
+                'id_categoria' => $request->id_categoria,
+                'stok_min'     => $request->stok_min ?? 0,
+                'stok_max'     => $request->stok_max ?? 0,
+            ]);
 
-        return redirect()->route('bienes.index')
-            ->with('success', 'Bien actualizado correctamente');
+        return redirect()->route('bienes.index')->with('success','Bien actualizado correctamente.');
     }
 
-    // ==========================
-    // ELIMINAR
-    // ==========================
-    public function eliminar($id)
+    public function eliminar($id_bien)
     {
-        $bien = Bien::findOrFail($id);
-        $bien->delete();
-
-        return redirect()->route('bienes.index')
-            ->with('success', 'Bien eliminado correctamente');
+        DB::table('tcbienes')->where('id_bien', $id_bien)->delete();
+        return redirect()->route('bienes.index')->with('success','Bien eliminado correctamente.');
     }
 }

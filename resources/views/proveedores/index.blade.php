@@ -10,19 +10,43 @@
 @section('panel')
 <div class="table-responsive">
 
+    {{-- Mensajes --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        </div>
+    @endif
 
+    @if(session('danger'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('danger') }}
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        </div>
+    @endif
 
-    <!-- Crear un Proveedor -->
-    <div class="row">
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <p>Corrige los errores para continuar</p>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        </div>
+    @endif
+
+    {{-- Nuevo Proveedor (MODAL) --}}
+    <div class="row mb-2">
         <div class="col col-form-label text-md-right">
-            <a href="{{ url('proveedores/nuevo') }}" data-toggle="tooltip" title="Nuevo Proveedor">
+            <a href="#" data-toggle="modal" data-target="#modalNuevoProveedor" title="Nuevo Proveedor">
                 + Nuevo Proveedor
             </a>
         </div>
     </div>
 
-
-    <!-- TABLA -->
+    {{-- TABLA --}}
     <table class="table table-striped shadow-lg" id="MyTableProveedores">
         <thead>
             <tr>
@@ -36,47 +60,109 @@
         </thead>
 
         <tbody>
-            @foreach($proveedores as $prov)
+            @if(isset($proveedores) && $proveedores->count())
+                @foreach($proveedores as $prov)
+                    <tr>
+                        <td class="text-center">{{ $prov->id_proveedor }}</td>
+                        <td class="text-center">{{ $prov->nombre }}</td>
+                        <td class="text-center">{{ $prov->contacto }}</td>
+                        <td class="text-center">{{ $prov->direccion }}</td>
+                        <td class="text-center">{{ $prov->telefono }}</td>
+
+                        <td class="text-center col-actions">
+
+                            {{-- Editar (modal) --}}
+                            <button class="btn"
+                                data-toggle="modal"
+                                data-target="#modalEditarProveedor"
+                                data-id="{{ $prov->id_proveedor }}"
+                                data-nombre="{{ $prov->nombre }}"
+                                data-contacto="{{ $prov->contacto }}"
+                                data-direccion="{{ $prov->direccion }}"
+                                data-telefono="{{ $prov->telefono }}"
+                                title="Editar">
+                                <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
+                            </button>
+
+                            {{-- Eliminar (modal) --}}
+                            <button class="btn"
+                                data-toggle="modal"
+                                data-target="#modalEliminarProveedor"
+                                data-id="{{ $prov->id_proveedor }}"
+                                data-nombre="{{ $prov->nombre }}"
+                                title="Eliminar">
+                                <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
+                            </button>
+
+                        </td>
+                    </tr>
+                @endforeach
+            @else
                 <tr>
-                    <td class="text-center">{{ $prov->id_proveedor }}</td>
-                    <td class="text-center">{{ $prov->nombre }}</td>
-                    <td class="text-center">{{ $prov->contacto }}</td>
-                    <td class="text-center">{{ $prov->direccion }}</td>
-                    <td class="text-center">{{ $prov->telefono }}</td>
-                    
-
-                    <td class="text-center col-actions">
-
-                        <!-- Botón Editar -->
-                        <button class="btn"
-                            data-toggle="modal"
-                            data-target="#editarModal"
-                            data-id="{{ $prov->id_proveedor }}"
-                            data-nombre="{{ $prov->nombre }}"
-                            data-contacto="{{ $prov->contacto }}"
-                            data-telefono="{{ $prov->telefono }}">
-                            <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
-                        </button>
-
-                        <!-- Botón Eliminar -->
-                        <button class="btn"
-                            data-toggle="modal"
-                            data-target="#confirmarEliminarModal"
-                            data-id="{{ $prov->id_proveedor }}"
-                            data-nombre="{{ $prov->nombre }}">
-                            <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
-                        </button>
-
-                    </td>
+                    <td colspan="6" class="text-center text-muted">No hay proveedores registrados</td>
                 </tr>
-            @endforeach
+            @endif
         </tbody>
     </table>
 
+</div>
 
-<!-- MODAL EDITAR -->
-<div class="modal fade" id="editarModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
+
+{{-- ================= MODAL: NUEVO PROVEEDOR ================= --}}
+<div class="modal fade" id="modalNuevoProveedor" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header bg-light">
+        <h5 class="modal-title">Nuevo Proveedor</h5>
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+
+      <div class="modal-body">
+        <form method="POST" action="{{ route('proveedores.guardar') }}" id="formNuevoProveedor">
+          @csrf
+
+          <div class="form-group">
+            <label><b>Nombre</b></label>
+            <input type="text" name="nombre" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label><b>Contacto</b></label>
+            <input type="text" name="contacto" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label><b>Dirección</b></label>
+            <input type="text" name="direccion" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label><b>Teléfono</b></label>
+            <input type="text" name="telefono" class="form-control">
+          </div>
+
+          <div class="row text-center mt-3">
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">
+                    <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18" height="18">
+                    Guardar
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+{{-- ================= MODAL: EDITAR PROVEEDOR ================= --}}
+<div class="modal fade" id="modalEditarProveedor" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
 
       <div class="modal-header bg-light">
@@ -85,41 +171,41 @@
       </div>
 
       <div class="modal-body">
-        <form method="POST" action="{{ route('proveedores.actualizar') }}">
+        <form method="POST" action="{{ route('proveedores.actualizar') }}" id="formEditarProveedor">
           @csrf
-          <input type="hidden" id="id_proveedor" name="id_proveedor">
+
+          <input type="hidden" id="edit_id_proveedor" name="id_proveedor">
 
           <div class="form-group">
-            <label for="nombre">Proveedor:</label>
-            <input type="text" id="nombre" name="nombre" class="form-control" required>
+            <label><b>Nombre</b></label>
+            <input type="text" id="edit_nombre" name="nombre" class="form-control" required>
           </div>
 
           <div class="form-group">
-            <label for="contacto">Contacto:</label>
-            <input type="text" id="contacto" name="contacto" class="form-control">
+            <label><b>Contacto</b></label>
+            <input type="text" id="edit_contacto" name="contacto" class="form-control">
           </div>
 
           <div class="form-group">
-            <label for="telefono">Teléfono:</label>
-            <input type="text" id="telefono" name="telefono" class="form-control">
+            <label><b>Dirección</b></label>
+            <input type="text" id="edit_direccion" name="direccion" class="form-control">
           </div>
 
-          <div class="form-froup">
-            <label for="dirección">Dirección:</label>
-            <input type="text" id="direccion" name="direccion" class="form-control">
+          <div class="form-group">
+            <label><b>Teléfono</b></label>
+            <input type="text" id="edit_telefono" name="telefono" class="form-control">
           </div>
 
           <div class="row text-center mt-3">
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">
-                    <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18" height="18"> Guardar
+                    <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18" height="18">
+                    Guardar
                 </button>
-
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
-                    <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18"> Cancelar
-                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
             </div>
           </div>
+
         </form>
       </div>
 
@@ -127,9 +213,10 @@
   </div>
 </div>
 
-<!-- MODAL ELIMINAR -->
-<div class="modal fade" id="confirmarEliminarModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
+
+{{-- ================= MODAL: ELIMINAR PROVEEDOR ================= --}}
+<div class="modal fade" id="modalEliminarProveedor" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
 
       <div class="modal-header bg-light">
@@ -138,11 +225,12 @@
       </div>
 
       <div class="modal-body text-center">
-        <p>¿Deseas eliminar al proveedor <strong id="nombreEliminar"></strong>?</p>
+        <p>¿Deseas eliminar al proveedor?</p>
+        <strong id="nombreEliminarProveedor"></strong>
       </div>
 
       <div class="modal-footer justify-content-center">
-        <form id="formEliminar" method="POST" action="">
+        <form id="formEliminarProveedor" method="POST" action="">
           @csrf
           @method('DELETE')
 
@@ -152,33 +240,36 @@
           </button>
         </form>
 
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-            <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18"> Cancelar
-        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
       </div>
 
     </div>
   </div>
 </div>
 
-<!-- SCRIPTS -->
+
+{{-- SCRIPTS --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Modal Editar
-    $('#editarModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        $('#id_proveedor').val(button.data('id'));
-        $('#nombre').val(button.data('nombre'));
-        $('#contacto').val(button.data('contacto'));
-        $('#telefono').val(button.data('telefono'));
+    // Editar
+    $('#modalEditarProveedor').on('show.bs.modal', function (event) {
+        var b = $(event.relatedTarget);
+
+        $('#edit_id_proveedor').val(b.data('id'));
+        $('#edit_nombre').val(b.data('nombre'));
+        $('#edit_contacto').val(b.data('contacto'));
+        $('#edit_direccion').val(b.data('direccion'));
+        $('#edit_telefono').val(b.data('telefono'));
     });
 
-    // Modal Eliminar
-    $('#confirmarEliminarModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        $('#nombreEliminar').text(button.data('nombre'));
-        $('#formEliminar').attr('action', '/proveedores/' + button.data('id'));
+    // Eliminar
+    $('#modalEliminarProveedor').on('show.bs.modal', function (event) {
+        var b = $(event.relatedTarget);
+        $('#nombreEliminarProveedor').text(b.data('nombre'));
+
+        // DELETE /proveedores/{id}
+        $('#formEliminarProveedor').attr('action', "{{ url('proveedores') }}/" + b.data('id'));
     });
 
 });
