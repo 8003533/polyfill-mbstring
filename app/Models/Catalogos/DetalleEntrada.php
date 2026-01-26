@@ -9,7 +9,9 @@ class DetalleEntrada extends Model
     protected $table = 'detalle_entrada';
     public $timestamps = false;
 
-    protected $primaryKey = null;
+    // si NO tienes id autoincrement, NO pongas primaryKey
+    // si sí tienes uno, ponlo aquí.
+    // protected $primaryKey = 'id_detalle_entrada';
 
     protected $fillable = [
         'id_entrada',

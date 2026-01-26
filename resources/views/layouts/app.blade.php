@@ -92,7 +92,7 @@
                             {{--@consultaTaller--}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <a class="dropdow-item" href="{{ url('taller/index')}}">
+                                        <a class="dropdow-item" href="{{ url('talleres/index')}}">
                                         <img src="{{ asset('bootstrap-icons-1.5.0/wrench-adjustable.svg') }}" width="18" height="18"> Talleres <span class="caret"></span></a>
                                     <ul class="dropdown-menu sub-menu">
                                             </a>

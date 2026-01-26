@@ -15,13 +15,18 @@ class EntradasController extends Controller
 {
     public function index()
     {
-        $entradas = Entrada::with('proveedor')
-            ->withSum('detalles as total_cantidad', 'cantidad')
+        // DER:
+        // tcentradas (id_entrada, fecha, id_proveedor, tipo, folio)
+        // detalle_entrada (id_entrada, anio, id_bien, cantidad)
+
+        $entradas = Entrada::query()
+            ->with(['proveedor']) // tcproveedores
+            ->withSum('detalles as total_cantidad', 'cantidad') // SUM(detalle_entrada.cantidad)
             ->orderByDesc('id_entrada')
             ->get();
 
         $proveedores = Proveedor::orderBy('nombre')->get();
-        $bienes = Bien::orderBy('codigo')->get(); // ✅ para modal nuevo si lo ocupas
+        $bienes      = Bien::orderBy('codigo')->get();
 
         return view('entradas.index', compact('entradas', 'proveedores', 'bienes'));
     }
@@ -29,7 +34,7 @@ class EntradasController extends Controller
     public function nuevo()
     {
         $proveedores = Proveedor::orderBy('nombre')->get();
-        $bienes = Bien::orderBy('codigo')->get();
+        $bienes      = Bien::orderBy('codigo')->get();
 
         return view('entradas.nuevo', compact('proveedores', 'bienes'));
     }
@@ -37,14 +42,14 @@ class EntradasController extends Controller
     public function crear(Request $request)
     {
         $request->validate([
-            'id_proveedor' => 'required|integer',
+            'id_proveedor' => 'required|integer|exists:tcproveedores,id_proveedor',
             'fecha'        => 'required|date',
             'tipo'         => 'required|string|max:100',
             'folio'        => 'nullable|string|max:100',
 
-            // Detalle
+            // Detalle (detalle_entrada)
             'anio'     => 'required|integer|min:2000|max:2100',
-            'id_bien'  => 'required|integer',
+            'id_bien'  => 'required|integer|exists:tcbienes,id_bien',
             'cantidad' => 'required|integer|min:1',
         ]);
 
@@ -71,8 +76,8 @@ class EntradasController extends Controller
     public function actualizar(Request $request)
     {
         $request->validate([
-            'id_entrada'   => 'required|integer',
-            'id_proveedor' => 'required|integer',
+            'id_entrada'   => 'required|integer|exists:tcentradas,id_entrada',
+            'id_proveedor' => 'required|integer|exists:tcproveedores,id_proveedor',
             'folio'        => 'nullable|string|max:100',
             'fecha'        => 'required|date',
             'tipo'         => 'required|string|max:100',
@@ -80,11 +85,12 @@ class EntradasController extends Controller
 
         $entrada = Entrada::where('id_entrada', $request->id_entrada)->firstOrFail();
 
-        $entrada->id_proveedor = $request->id_proveedor;
-        $entrada->folio        = $request->folio;
-        $entrada->fecha        = $request->fecha;
-        $entrada->tipo         = $request->tipo;
-        $entrada->save();
+        $entrada->update([
+            'id_proveedor' => $request->id_proveedor,
+            'folio'        => $request->folio,
+            'fecha'        => $request->fecha,
+            'tipo'         => $request->tipo,
+        ]);
 
         return redirect()->route('entradas.index')->with('success', 'Entrada actualizada correctamente.');
     }
@@ -92,8 +98,11 @@ class EntradasController extends Controller
     public function inhabilitar($id)
     {
         DB::transaction(function () use ($id) {
-            // Borra detalles y cabecera
-            DB::table('detalle_entrada')->where('id_entrada', $id)->delete();
+
+            // borra detalle_entrada primero (FK)
+            DetalleEntrada::where('id_entrada', $id)->delete();
+
+            // borra tcentradas
             Entrada::where('id_entrada', $id)->delete();
         });
 

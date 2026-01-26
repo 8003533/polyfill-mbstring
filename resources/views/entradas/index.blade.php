@@ -63,41 +63,51 @@
         <tbody>
             @if(isset($entradas) && $entradas->count())
                 @foreach($entradas as $ent)
-                <tr>
-                    <td class="text-center">{{ $ent->id_entrada }}</td>
-                    <td class="text-center">{{ $ent->proveedor->nombre ?? '' }}</td>
-                    <td class="text-center">{{ $ent->folio }}</td>
-                    <td class="text-center">{{ $ent->tipo }}</td>
-                    <td class="text-center">{{ $ent->fecha }}</td>
-                    <td class="text-center">{{ $ent->total_cantidad ?? 0 }}</td>
+                    @php
+                        // Compatible con DER por JOIN o por relación Eloquent (si existe)
+                        $proveedorNombre = $ent->proveedor_nombre
+                            ?? ($ent->proveedor->nombre ?? '');
 
-                    <td class="text-center col-actions">
+                        // Total idealmente viene del Controller: SUM(detalle_entrada.cantidad)
+                        $total = $ent->total_cantidad
+                            ?? ($ent->total ?? ($ent->cantidad_total ?? 0));
+                    @endphp
 
-                        {{-- EDITAR (modal) --}}
-                        <button class="btn"
-                            data-toggle="modal"
-                            data-target="#modalEditarEntrada"
-                            data-id="{{ $ent->id_entrada }}"
-                            data-idproveedor="{{ $ent->id_proveedor }}"
-                            data-folio="{{ $ent->folio }}"
-                            data-tipo="{{ $ent->tipo }}"
-                            data-fecha="{{ $ent->fecha }}"
-                            title="Editar">
-                            <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
-                        </button>
+                    <tr>
+                        <td class="text-center">{{ $ent->id_entrada }}</td>
+                        <td class="text-center">{{ $proveedorNombre }}</td>
+                        <td class="text-center">{{ $ent->folio }}</td>
+                        <td class="text-center">{{ $ent->tipo }}</td>
+                        <td class="text-center">{{ $ent->fecha }}</td>
+                        <td class="text-center">{{ $total }}</td>
 
-                        {{-- ELIMINAR (modal) --}}
-                        <button class="btn"
-                            data-toggle="modal"
-                            data-target="#modalEliminarEntrada"
-                            data-id="{{ $ent->id_entrada }}"
-                            data-proveedor="{{ $ent->proveedor->nombre ?? '' }}"
-                            title="Eliminar">
-                            <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
-                        </button>
+                        <td class="text-center col-actions">
 
-                    </td>
-                </tr>
+                            {{-- EDITAR (modal) --}}
+                            <button class="btn"
+                                data-toggle="modal"
+                                data-target="#modalEditarEntrada"
+                                data-id="{{ $ent->id_entrada }}"
+                                data-idproveedor="{{ $ent->id_proveedor }}"
+                                data-folio="{{ $ent->folio }}"
+                                data-tipo="{{ $ent->tipo }}"
+                                data-fecha="{{ $ent->fecha }}"
+                                title="Editar">
+                                <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
+                            </button>
+
+                            {{-- ELIMINAR (modal) --}}
+                            <button class="btn"
+                                data-toggle="modal"
+                                data-target="#modalEliminarEntrada"
+                                data-id="{{ $ent->id_entrada }}"
+                                data-proveedor="{{ $proveedorNombre }}"
+                                title="Eliminar">
+                                <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
+                            </button>
+
+                        </td>
+                    </tr>
                 @endforeach
             @else
                 <tr>
@@ -105,7 +115,6 @@
                 </tr>
             @endif
         </tbody>
-
     </table>
 </div>
 
@@ -121,7 +130,9 @@
             </div>
 
             <div class="modal-body">
-                <form method="POST" action="{{ route('entradas.crear') }}" id="formNuevaEntrada">
+                {{-- DER: tcentradas (id_proveedor, folio, tipo, fecha) --}}
+                {{-- DER: detalle_entrada (id_entrada, id_bien, cantidad) --}}
+                <form method="POST" action="{{ url('entradas/crear') }}" id="formNuevaEntrada">
                     @csrf
 
                     <div class="form-group">
@@ -149,20 +160,17 @@
                         <input type="date" name="fecha" class="form-control" required>
                     </div>
 
-                    <hr>
 
-                    {{-- DETALLE (porque tu controller lo exige) --}}
-                    <div class="form-group">
-                        <label><b>Año:</b></label>
-                        <input type="number" name="anio" class="form-control" min="2000" max="2100" required>
-                    </div>
+                    {{-- DETALLE (detalle_entrada) --}}
 
                     <div class="form-group">
                         <label><b>Bien:</b></label>
                         <select name="id_bien" class="form-control" required>
                             <option value="">Seleccione</option>
                             @foreach($bienes as $b)
-                                <option value="{{ $b->id_bien }}">{{ $b->codigo }} - {{ $b->nombre }}</option>
+                                <option value="{{ $b->id_bien }}">
+                                    {{ $b->codigo }} - {{ $b->nombre }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -203,7 +211,7 @@
             </div>
 
             <div class="modal-body">
-                <form method="POST" action="{{ route('entradas.actualizar') }}" id="formEditarEntrada">
+                <form method="POST" action="{{ url('entradas/actualizar') }}" id="formEditarEntrada">
                     @csrf
                     <input type="hidden" id="edit_id_entrada" name="id_entrada">
 

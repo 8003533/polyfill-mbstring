@@ -70,7 +70,7 @@ class TalleresController extends Controller
         $jsonAfter = json_encode($taller);
         self::bitacora($jsonBefore, $jsonAfter);
 
-        return redirect()->route('talleres.editar', $taller->iid_taller)
+        return redirect()->route('talleres.index', $taller->iid_taller)
             ->with('success', 'Taller guardado satisfactoriamente');
     }
 
