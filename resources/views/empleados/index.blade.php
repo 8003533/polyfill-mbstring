@@ -79,12 +79,12 @@
 </div>
 
 <!-- MODAL NUEVO -->
-<div class="modal fade" id="modalNuevoEmpleado">
+<div class="modal fade" id="modalNuevoEmpleado" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5>Nuevo Empleado de Taller</h5>
+        <h5 class="modal-title">Nuevo Empleado de Taller</h5>
         <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
       </div>
 
@@ -95,43 +95,77 @@
           <div class="form-row">
             <div class="form-group col-md-4">
               <label>Nombre</label>
-              <input type="text" name="cnombre_empleado_taller" class="form-control" required>
+              <input type="text" name="cnombre_empleado_taller" class="form-control"
+                     value="{{ old('cnombre_empleado_taller') }}" required>
             </div>
             <div class="form-group col-md-4">
               <label>Paterno</label>
-              <input type="text" name="cpaterno_empleado_taller" class="form-control" required>
+              <input type="text" name="cpaterno_empleado_taller" class="form-control"
+                     value="{{ old('cpaterno_empleado_taller') }}" required>
             </div>
             <div class="form-group col-md-4">
               <label>Materno</label>
-              <input type="text" name="cmaterno_empleado_taller" class="form-control">
+              <input type="text" name="cmaterno_empleado_taller" class="form-control"
+                     value="{{ old('cmaterno_empleado_taller') }}">
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label>Puesto (ID)</label>
-              <input type="number" name="iid_puesto" class="form-control">
+              <label>Puesto</label>
+              <select name="iid_puesto" class="form-control">
+                <option value="">-- Selecciona --</option>
+                @foreach($puestos as $p)
+                  <option value="{{ $p->iid_puesto }}" {{ old('iid_puesto') == $p->iid_puesto ? 'selected' : '' }}>
+                    {{ $p->cdescripcion_puesto }}
+                  </option>
+                @endforeach
+              </select>
             </div>
+
             <div class="form-group col-md-6">
-              <label>Adscripción (ID)</label>
-              <input type="number" name="iid_adscripcion" class="form-control">
+              <label>Adscripción</label>
+              <select name="iid_adscripcion" class="form-control">
+                <option value="">-- Selecciona --</option>
+                @foreach($adscripciones as $a)
+                  <option value="{{ $a->iid_adscripcion }}" {{ old('iid_adscripcion') == $a->iid_adscripcion ? 'selected' : '' }}>
+                    {{ $a->cdescripcion_adscripcion }}
+                  </option>
+                @endforeach
+              </select>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label>Taller (ID)</label>
-              <input type="number" name="iid_taller" class="form-control">
+              <label>Taller</label>
+              <select name="iid_taller" class="form-control">
+                <option value="">-- Selecciona --</option>
+                @foreach($talleres as $t)
+                  <option value="{{ $t->iid_taller }}" {{ old('iid_taller') == $t->iid_taller ? 'selected' : '' }}>
+                    {{ $t->cdescripcion_taller }}
+                  </option>
+                @endforeach
+              </select>
             </div>
+
             <div class="form-group col-md-6">
-              <label>Cuadrilla (ID)</label>
-              <input type="number" name="iid_cuadrilla" class="form-control">
+              <label>Cuadrilla</label>
+              <select name="iid_cuadrilla" class="form-control">
+                <option value="">-- Selecciona --</option>
+                @foreach($cuadrillas as $c)
+                  <option value="{{ $c->iid_cuadrilla }}" {{ old('iid_cuadrilla') == $c->iid_cuadrilla ? 'selected' : '' }}>
+                    {{ $c->cnombre_cuadrilla }}
+                  </option>
+                @endforeach
+              </select>
             </div>
           </div>
 
           <div class="form-group">
             <label>Correo</label>
-            <input type="email" name="ccorreo_electronico" class="form-control">
+            <input type="email" name="ccorreo_electronico" class="form-control"
+                   value="{{ old('ccorreo_electronico') }}">
           </div>
 
         </div>

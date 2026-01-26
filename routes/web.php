@@ -43,13 +43,27 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //Rutas de Talleres
-Route::get('talleres/index',                                [TalleresController::class, 'index'])->name('talleres.index');
-Route::get('talleres/nuevo',                                [TalleresController::class, 'nuevo_taller'])->name('talleres.nuevo');
-Route::post('talleres/guardar',                             [TalleresController::class, 'guardar_taller']);
-Route::get('talleres/editar/{id_taller}',                   [TalleresController::class, 'editar_taller'])->name('talleres.editar');
-Route::post('talleres/actualizar',                          [TalleresController::class, 'actualizar_taller']);
-Route::get('talleres/inhabilitar/{id_taller}',              [TalleresController::class, 'confirmainhabilitar_taller']);
 
+Route::prefix('talleres')->group(function () {
+
+    Route::get('index', [TalleresController::class, 'index'])
+        ->name('talleres.index');
+
+    Route::get('nuevo', [TalleresController::class, 'nuevo_taller'])
+        ->name('talleres.nuevo');
+
+    Route::post('guardar', [TalleresController::class, 'guardar_taller'])
+        ->name('talleres.guardar');
+
+    Route::get('editar/{id_taller}', [TalleresController::class, 'editar_taller'])
+        ->name('talleres.editar');
+
+    Route::post('actualizar', [TalleresController::class, 'actualizar_taller'])
+        ->name('talleres.actualizar');
+
+    Route::get('inhabilitar/{id_taller}', [TalleresController::class, 'confirmainhabilitar_taller'])
+        ->name('talleres.inhabilitar');
+});
 
 // Rutas de empleados
 Route::get('empleados/index', [EmpleadosController::class, 'index'])->name('empleados.index');
