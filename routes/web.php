@@ -83,13 +83,15 @@ Route::post('administraciones/actualizar',                  [AdministracionesCon
 Route::get('administraciones/inhabilitar/{id_administracion}', [AdministracionesController::class, 'confirmainhabilitar_administracion']);
 
 //Rutas de Edificios
-Route::get('edificios/index',                               [EdificiosController::class, 'index'])->name('edificios.index');
-Route::get('edificios/nuevo',                               [EdificiosController::class, 'nuevo_edificio'])->name('edificios.nuevo');
-Route::post('edificios/guardar',                            [EdificiosController::class, 'guardar_edificio']);
-Route::get('edificios/editar/{id_edificio}',                [EdificiosController::class, 'editar_edificio'])->name('edificios.editar');
-Route::post('edificios/actualizar',                         [EdificiosController::class, 'actualizar_edificio']);
-Route::get('edificios/inhabilitar/{id_edificio}',           [EdificiosController::class, 'confirmainhabilitar_edificio']);
-Route::post('buscaAlcaldiaColonia',                         [EdificiosController::class, 'buscaAlcaldiaColonia']);
+Route::get('edificios/index', [EdificiosController::class, 'index'])->name('edificios.index');
+Route::get('edificios/nuevo', [EdificiosController::class, 'nuevo_edificio'])->name('edificios.nuevo');
+Route::post('edificios/guardar', [EdificiosController::class, 'guardar_edificio'])->name('edificios.guardar');
+Route::get('edificios/editar/{id_edificio}', [EdificiosController::class, 'editar_edificio'])->name('edificios.editar');
+Route::post('edificios/actualizar', [EdificiosController::class, 'actualizar_edificio'])->name('edificios.actualizar');
+Route::get('edificios/inhabilitar/{id_edificio}', [EdificiosController::class, 'confirmainhabilitar_edificio'])->name('edificios.inhabilitar');
+Route::post('edificios/busca-alcaldia-colonia', [EdificiosController::class, 'buscaAlcaldiaColonia'])->name('edificios.buscaAlcaldiaColonia');
+Route::post('edificios/busca-direccion-admin', [EdificiosController::class, 'buscaDireccionAdministracion'])->name('edificios.buscaDireccionAdministracion');
+
 
 //Rutas de Puestos
 Route::get('puestos/index',                         [PuestosController::class, 'index'])->name('puestos.index');

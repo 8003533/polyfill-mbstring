@@ -57,7 +57,7 @@
             data-categoria="{{ $b->id_categoria }}"
             data-stokmin="{{ $b->stok_min }}"
             data-stokmax="{{ $b->stok_max }}">
-            ✏️
+            
         </button>
 
         <button class="btn"
@@ -65,7 +65,7 @@
             data-target="#modalEliminarBien"
             data-id="{{ $b->id_bien }}"
             data-nombre="{{ $b->nombre }}">
-            🗑️
+            
         </button>
     </td>
 </tr>
@@ -73,7 +73,6 @@
 </tbody>
 </table>
 
-{{ $bienes->links('pagination::bootstrap-4') }}
 
 </div>
 

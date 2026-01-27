@@ -209,9 +209,6 @@
                    maxlength="120"
                    required>
           </div>
-
-          {{-- IMPORTANTE: Para que tu controller sepa que ES EDICIÓN y no toggle,
-               mandamos noeditar vacío --}}
           <input type="hidden" name="noeditar" value="">
 
           <div class="row text-center mt-3">
@@ -237,7 +234,7 @@
 
 
 {{-- =========================
-    MODAL: INHABILITAR / RECUPERAR (AHORA SÍ SIN REDIRIGIR)
+    MODAL: INHABILITAR / RECUPERAR 
 ========================= --}}
 <div class="modal fade" id="confirmarInhabilitarModalAdministracion" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -257,7 +254,7 @@
 
       <div class="modal-footer justify-content-center">
 
-        {{-- ✅ FORM que llama a actualizar_administracion() para toggle estatus --}}
+        {{-- FORM que llama a actualizar_administracion() para toggle estatus --}}
         <form method="POST" action="{{ url('/administraciones/actualizar') }}" id="formAccionAdmin">
             @csrf
             <input type="hidden" name="id_administracion" id="accion_id_administracion">
@@ -288,14 +285,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Tooltips
     $('[data-toggle="tooltip"]').tooltip();
 
-    // ✅ Modal Editar: llenar campos
+    //  Modal Editar
     $('#modalEditarAdministracion').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         $('#edit_iid_administracion').val(button.data('id'));
         $('#edit_descripcion_administracion').val(button.data('descripcion'));
     });
 
-    // ✅ Modal Inhabilitar / Recuperar: llenar confirmación + id del FORM
+    // Modal Inhabilitar / Recuperar: llenar confirmación + id del FORM
     $('#confirmarInhabilitarModalAdministracion').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
 
@@ -303,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var nombre = button.data('nombre');
         var estatus = button.data('estatus'); // 1 activo / 0 inactivo
 
-        // ✅ ponemos el id en el form
+        // id en el form
         $('#accion_id_administracion').val(id);
 
         $('#nombreAccionAdmin').text(nombre);

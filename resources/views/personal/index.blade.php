@@ -27,7 +27,8 @@
 
         <div class="row">
             <div class="col col-form-label text-md-right">
-                <a href="{{ url('personal/nuevo') }}" data-toggle="tooltip" data-html="true" title="Nuevo">
+                {{-- BOTÓN (ANTES ERA LINK A /personal/nuevo) -> AHORA ABRE MODAL --}}
+                <a href="#" data-toggle="modal" data-target="#modalNuevoPersonal" data-html="true" title="Nuevo">
                     + Nuevo Personal
                 </a>
             </div>
@@ -50,13 +51,11 @@
                 @foreach($personal as $indice => $persona)
 
                     @php
-                        // ✅ ID robusto: toma el que exista en tu SELECT
                         $idPersonal = $persona->iid_personal
                             ?? $persona->id_personal
                             ?? $persona->iid_empleado_taller
                             ?? null;
 
-                        // ✅ Campos robustos: por si vienen sin "c" al inicio
                         $nombre   = $persona->cnombre_personal   ?? $persona->nombre_personal   ?? '';
                         $paterno  = $persona->cpaterno_personal  ?? $persona->cpaterno_personal  ?? '';
                         $materno  = $persona->cmaterno_personal  ?? $persona->cmaterno_personal  ?? '';
@@ -104,4 +103,118 @@
 
     </form>
 </div>
+
+{{-- =========================
+     MODAL: NUEVO PERSONAL
+     ========================= --}}
+<div class="modal fade" id="modalNuevoPersonal" tabindex="-1" role="dialog" aria-labelledby="modalNuevoPersonalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            {{-- IMPORTANTE:
+                 - Ajusta la ruta si en tu proyecto NO es /personal/guardar
+                 - Si tu POST real es /personal/nuevo, cámbialo aquí.
+            --}}
+            <form method="POST" action="{{ url('personal/guardar') }}">
+                @csrf
+                <input type="hidden" name="from_modal" value="1">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalNuevoPersonalLabel">
+                        <img src="{{ asset('bootstrap-icons-1.5.0/people.svg') }}" width="18" height="18">
+                        Nuevo Personal
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Nombre</label>
+                            <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Paterno</label>
+                            <input type="text" name="paterno" class="form-control" value="{{ old('paterno') }}" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Materno</label>
+                            <input type="text" name="materno" class="form-control" value="{{ old('materno') }}">
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label>Correo Electrónico</label>
+                            <input type="email" name="correo" class="form-control" value="{{ old('correo') }}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Puesto</label>
+                            <select name="id_puesto" class="form-control">
+                                <option value="">Seleccione…</option>
+                                @foreach(($puestos ?? []) as $p)
+                                    @php
+                                        $idPuesto = $p->id_puesto ?? $p->iid_puesto ?? null;
+                                        $descPuesto = $p->descripcion ?? $p->cdescripcion_puesto ?? $p->nombre ?? '';
+                                    @endphp
+                                    <option value="{{ $idPuesto }}" {{ old('id_puesto') == $idPuesto ? 'selected' : '' }}>
+                                        {{ $descPuesto }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            <label>Adscripción</label>
+                            <select name="id_adscripcion" class="form-control">
+                                <option value="">Seleccione…</option>
+                                @foreach(($adscripciones ?? []) as $a)
+                                    @php
+                                        $idAds = $a->id_adscripcion ?? $a->iid_adscripcion ?? null;
+                                        $descAds = $a->descripcion ?? $a->cdescripcion_adscripcion ?? $a->nombre ?? '';
+                                    @endphp
+                                    <option value="{{ $idAds }}" {{ old('id_adscripcion') == $idAds ? 'selected' : '' }}>
+                                        {{ $descAds }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Guardar
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{{-- Si vienes de un POST del modal con errores, reabre el modal --}}
+@if($errors->any() && old('from_modal') == '1')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.$ && $('#modalNuevoPersonal').length) {
+                $('#modalNuevoPersonal').modal('show');
+            }
+        });
+    </script>
+@endif
+
 @endsection
