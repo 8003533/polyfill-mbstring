@@ -27,7 +27,6 @@
 
         <div class="row">
             <div class="col col-form-label text-md-right">
-                {{-- BOTÓN (ANTES ERA LINK A /personal/nuevo) -> AHORA ABRE MODAL --}}
                 <a href="#" data-toggle="modal" data-target="#modalNuevoPersonal" data-html="true" title="Nuevo">
                     + Nuevo Personal
                 </a>
@@ -110,11 +109,6 @@
 <div class="modal fade" id="modalNuevoPersonal" tabindex="-1" role="dialog" aria-labelledby="modalNuevoPersonalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-
-            {{-- IMPORTANTE:
-                 - Ajusta la ruta si en tu proyecto NO es /personal/guardar
-                 - Si tu POST real es /personal/nuevo, cámbialo aquí.
-            --}}
             <form method="POST" action="{{ url('personal/guardar') }}">
                 @csrf
                 <input type="hidden" name="from_modal" value="1">
@@ -156,8 +150,8 @@
 
                         <div class="col-md-6">
                             <label>Puesto</label>
-                            <select name="id_puesto" class="form-control">
-                                <option value="">Seleccione…</option>
+                            <select name="id_puesto" id="id_puesto" class="form-control select2-personal">
+                                <option value=""></option>
                                 @foreach(($puestos ?? []) as $p)
                                     @php
                                         $idPuesto = $p->id_puesto ?? $p->iid_puesto ?? null;
@@ -174,8 +168,8 @@
                     <div class="row mt-2">
                         <div class="col-md-12">
                             <label>Adscripción</label>
-                            <select name="id_adscripcion" class="form-control">
-                                <option value="">Seleccione…</option>
+                            <select name="id_adscripcion" id="id_adscripcion" class="form-control select2-personal">
+                                <option value=""></option>
                                 @foreach(($adscripciones ?? []) as $a)
                                     @php
                                         $idAds = $a->id_adscripcion ?? $a->iid_adscripcion ?? null;
@@ -206,15 +200,51 @@
     </div>
 </div>
 
-{{-- Si vienes de un POST del modal con errores, reabre el modal --}}
-@if($errors->any() && old('from_modal') == '1')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            if (window.$ && $('#modalNuevoPersonal').length) {
-                $('#modalNuevoPersonal').modal('show');
-            }
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    function initSelect2Personal() {
+        if (!window.$) return;
+
+        $('.select2-personal').select2({
+            width: '100%',
+            dropdownParent: $('#modalNuevoPersonal'),
+            placeholder: 'Buscar...',
+            allowClear: true
         });
-    </script>
-@endif
+    }
+
+    // Inicializa cuando se abre el modal
+    if (window.$) {
+        $('#modalNuevoPersonal').on('shown.bs.modal', function () {
+            initSelect2Personal();
+        });
+    }
+
+    // Si vienes de POST con errores, reabre el modal y vuelve a init
+    @if($errors->any() && old('from_modal') == '1')
+        if (window.$ && $('#modalNuevoPersonal').length) {
+            $('#modalNuevoPersonal').modal('show');
+            setTimeout(initSelect2Personal, 200);
+        }
+    @endif
+
+});
+</script>
+
+<style>
+.select2-container { width: 100% !important; }
+.select2-container .select2-selection--single {
+    height: calc(2.25rem + 2px);
+    padding: .375rem .75rem;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 1.5 !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: calc(2.25rem + 2px);
+}
+</style>
 
 @endsection

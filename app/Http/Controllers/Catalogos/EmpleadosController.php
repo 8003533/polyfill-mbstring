@@ -31,8 +31,14 @@ class EmpleadosController extends Controller
             ->orderBy('cnombre_cuadrilla')
             ->get();
 
+        // ===== FILTROS (del select) =====
+        $f_adscripcion = $request->get('f_adscripcion');
+        $f_puesto      = $request->get('f_puesto');
+        $f_taller      = $request->get('f_taller');
+        $f_cuadrilla   = $request->get('f_cuadrilla');
+
         // ===== EMPLEADOS + JOINS =====
-        $empleados = DB::table('tcempleados_talleres as e')
+        $q = DB::table('tcempleados_talleres as e')
             ->leftJoin('tcpuestos as p', 'p.iid_puesto', '=', 'e.iid_puesto')
             ->leftJoin('tcadscripciones as a', 'a.iid_adscripcion', '=', 'e.iid_adscripcion')
             ->leftJoin('tctalleres as t', 't.iid_taller', '=', 'e.iid_taller')
@@ -44,16 +50,34 @@ class EmpleadosController extends Controller
                 DB::raw('IFNULL(t.cdescripcion_taller,"-") as cdescripcion_taller'),
                 DB::raw('IFNULL(c.cnombre_cuadrilla,"-") as cnombre_cuadrilla')
             )
-            ->where('e.iestatus', 1) // si quieres mostrar solo activos
-            ->orderBy('e.iid_empleado_taller', 'desc')
-            ->get();
+            ->where('e.iestatus', 1);
+
+        // ✅ aplicar filtros si vienen seleccionados
+        if (!empty($f_adscripcion)) {
+            $q->where('e.iid_adscripcion', $f_adscripcion);
+        }
+        if (!empty($f_puesto)) {
+            $q->where('e.iid_puesto', $f_puesto);
+        }
+        if (!empty($f_taller)) {
+            $q->where('e.iid_taller', $f_taller);
+        }
+        if (!empty($f_cuadrilla)) {
+            $q->where('e.iid_cuadrilla', $f_cuadrilla);
+        }
+
+        $empleados = $q->orderBy('e.iid_empleado_taller', 'desc')->get();
 
         return view('empleados.index', compact(
             'empleados',
             'adscripciones',
             'puestos',
             'talleres',
-            'cuadrillas'
+            'cuadrillas',
+            'f_adscripcion',
+            'f_puesto',
+            'f_taller',
+            'f_cuadrilla'
         ));
     }
 
@@ -82,7 +106,7 @@ class EmpleadosController extends Controller
             'iid_cuadrilla'             => $request->iid_cuadrilla,
             'ccorreo_electronico'       => $request->ccorreo_electronico,
             'iestatus'                  => 1,
-            'iid_usuario'               => null, // si luego lo manejas con auth lo ponemos
+            'iid_usuario'               => null,
             'created_at'                => now(),
             'updated_at'                => now(),
         ]);
