@@ -10,10 +10,10 @@ class Bien extends Model
     protected $primaryKey = 'id_bien';
     public $timestamps = false;
 
-    protected $fillable = ['codigo', 'unidad_de_medida', 'stock_min', 'stock_max'];
-
-    public function detallesEntrada()
-    {
-        return $this->hasMany(DetalleEntrada::class, 'id_bien', 'id_bien');
-    }
+    // ajusta fillable si quieres
+    protected $fillable = [
+        'codigo',
+        'stok_min',
+        'stok_max',
+    ];
 }

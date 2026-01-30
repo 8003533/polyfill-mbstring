@@ -197,17 +197,15 @@ Route::delete('entradas/{id}',        [EntradasController::class, 'inhabilitar']
 
 /** SALIDAS */
 
+
+
 Route::prefix('salidas')->group(function () {
 
     Route::get('/', [SalidasController::class, 'index'])->name('salidas.index');
 
-    Route::get('/nuevo', [SalidasController::class, 'create'])->name('salidas.nuevo');
+    Route::post('/guardar', [SalidasController::class, 'guardar'])->name('salidas.guardar');
 
-    Route::post('/guardar', [SalidasController::class, 'store'])->name('salidas.guardar');
+    Route::post('/actualizar', [SalidasController::class, 'actualizar'])->name('salidas.actualizar');
 
-    Route::get('/editar/{id_salida}', [SalidasController::class, 'edit'])->name('salidas.editar');
-
-    Route::put('/actualizar', [SalidasController::class, 'actualizar'])->name('salidas.actualizar');
-
-    Route::delete('/eliminar/{id_salida}', [SalidasController::class, 'destroy'])->name('salidas.eliminar');
+    Route::delete('/eliminar/{id_salida}', [SalidasController::class, 'eliminar'])->name('salidas.eliminar');
 });

@@ -8,15 +8,16 @@ class Salida extends Model
 {
     protected $table = 'tasalidas';
     protected $primaryKey = 'id_salida';
+    public $timestamps = false;
 
     protected $fillable = [
         'fecha',
         'folio',
-        'motivo'
+        'motivo',
     ];
 
     public function detalles()
     {
-        return $this->hasMany(DetalleSalida::class, 'id_salida');
+        return $this->hasMany(DetalleSalida::class, 'id_salida', 'id_salida');
     }
 }

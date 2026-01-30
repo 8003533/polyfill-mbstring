@@ -222,7 +222,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Si vienes de POST con errores, reabre el modal y vuelve a init
     @if($errors->any() && old('from_modal') == '1')
         if (window.$ && $('#modalNuevoPersonal').length) {
             $('#modalNuevoPersonal').modal('show');
