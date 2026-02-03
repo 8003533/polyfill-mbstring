@@ -71,7 +71,6 @@
                     <td class="text-center">{{ $admin->cdescripcion_administracion }}</td>
 
                     <td class="text-center col-actions">
-
                         @if($admin->iestatus == 1)
 
                             {{-- Editar (modal) --}}
@@ -115,7 +114,6 @@
                             {{--@endborraAdministracion--}}
 
                         @endif
-
                     </td>
                 </tr>
             @endforeach
@@ -125,7 +123,9 @@
 </div>
 
 
-    <!-- MODAL: NUEVA ADMINISTRACIÓN -->
+<!-- =========================
+    MODAL: NUEVA ADMINISTRACIÓN
+========================= -->
 <div class="modal fade" id="modalNuevaAdministracion" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
@@ -234,7 +234,7 @@
 
 
 {{-- =========================
-    MODAL: INHABILITAR / RECUPERAR 
+    MODAL: INHABILITAR / RECUPERAR
 ========================= --}}
 <div class="modal fade" id="confirmarInhabilitarModalAdministracion" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -253,8 +253,6 @@
       </div>
 
       <div class="modal-footer justify-content-center">
-
-        {{-- FORM que llama a actualizar_administracion() para toggle estatus --}}
         <form method="POST" action="{{ url('/administraciones/actualizar') }}" id="formAccionAdmin">
             @csrf
             <input type="hidden" name="id_administracion" id="accion_id_administracion">
@@ -278,12 +276,18 @@
 </div>
 
 
+
+
+
+
 {{-- Scripts --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
     // Tooltips
     $('[data-toggle="tooltip"]').tooltip();
+
+
 
     //  Modal Editar
     $('#modalEditarAdministracion').on('show.bs.modal', function (event) {
@@ -292,17 +296,15 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#edit_descripcion_administracion').val(button.data('descripcion'));
     });
 
-    // Modal Inhabilitar / Recuperar: llenar confirmación + id del FORM
+    // Modal Inhabilitar / Recuperar
     $('#confirmarInhabilitarModalAdministracion').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
 
         var id = button.data('id');
         var nombre = button.data('nombre');
-        var estatus = button.data('estatus'); // 1 activo / 0 inactivo
+        var estatus = button.data('estatus');
 
-        // id en el form
         $('#accion_id_administracion').val(id);
-
         $('#nombreAccionAdmin').text(nombre);
 
         if (estatus == 1) {

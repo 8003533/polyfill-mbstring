@@ -129,8 +129,9 @@ Route::post('buscaOtroNombre',                      [PersonalController::class, 
 
 
 //Rutas de Servicio
-Route::get('registro/index',                        [RegistroController::class, 'index'])->name('registro.index');
-Route::post('registro/guardar',                      [RegistroController::class, 'guardar'])->name('registro.guardar');
+
+Route::get('registro/index', [RegistroController::class, 'index'])->name('registro.index');
+Route::post('registro/guardar', [RegistroController::class, 'guardar'])->name('registro.guardar');
 
 
 
