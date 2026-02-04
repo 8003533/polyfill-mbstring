@@ -61,7 +61,8 @@
             <tr>
                 <th class="text-center">Número</th>
                 <th class="text-center">Descripción</th>
-                <th class="text-center">Acciones</th>
+                <th class="text-center no-export">Acciones</th>
+
             </tr>
         </thead>
         <tbody>
