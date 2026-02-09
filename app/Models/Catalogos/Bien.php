@@ -8,12 +8,8 @@ class Bien extends Model
 {
     protected $table = 'tcbienes';
     protected $primaryKey = 'id_bien';
-    public $timestamps = false;
 
-    // ajusta fillable si quieres
     protected $fillable = [
-        'codigo',
-        'stok_min',
-        'stok_max',
+        'codigo','nombre','id_unidad','id_categoria','stock_min','stock_max'
     ];
 }

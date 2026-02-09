@@ -4,71 +4,75 @@ namespace App\Http\Controllers\Catalogos;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 use App\Models\Catalogos\Proveedor;
 
 class ProveedoresController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $term = $request->get('nombre','');
+        // Igual a Áreas: paginado
+        $proveedores = Proveedor::orderByDesc('id_proveedor')->paginate(10);
 
-        $proveedores = DB::table('tcproveedores')
-            ->where('nombre', 'like', "%{$term}%")
-            ->orderBy('id_proveedor', 'desc')
-            ->paginate(10);
-
-        return view('proveedores.index', compact('proveedores', 'term'));
-    }
-
-    public function nuevo()
-    {
-        return view('proveedores.nuevo');
+        return view('proveedores.index', compact('proveedores'));
     }
 
     public function guardar(Request $request)
     {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'contacto' => 'nullable|email|max:255',
-            'telefono' => 'nullable|string|max:30',
-            'direccion' => 'nullable|string|max:500'
+        $data = $request->validate([
+            'nombre'    => ['required', 'string', 'max:255'],
+            'contacto'  => ['nullable', 'string', 'max:255'],
+            'direccion' => ['nullable', 'string', 'max:255'],
+            'telefono'  => ['nullable', 'string', 'max:50'],
+        ], [
+            'nombre.required' => 'El nombre del proveedor es obligatorio.',
         ]);
 
-        Proveedor::create($request->only(['nombre','contacto','telefono','direccion']));
+        // Igual Áreas: Activo al crear
+        $data['estatus'] = 1;
 
-        return redirect()->route('proveedores.index')->with('success', 'Proveedor creado correctamente.');
-    }
+        Proveedor::create($data);
 
-    public function editar($id_proveedor)
-    {
-        $proveedor = Proveedor::find($id_proveedor);
-        if (!$proveedor) return redirect()->route('proveedores.index')->with('error', 'Proveedor no encontrado.');
-
-        return view('proveedores.editar', compact('proveedor'));
+        return redirect()->route('proveedores.index')->with('success', 'Proveedor guardado correctamente.');
     }
 
     public function actualizar(Request $request)
     {
-        $request->validate([
-            'id_proveedor' => 'required|integer',
-            'nombre' => 'required|string|max:255',
-            'contacto' => 'nullable|email|max:255',
-            'telefono' => 'nullable|string|max:30',
-            'direccion' => 'nullable|string|max:500'
+        $data = $request->validate([
+            'id_proveedor' => ['required', 'integer'],
+            'nombre'       => ['required', 'string', 'max:255'],
+            'contacto'     => ['nullable', 'string', 'max:255'],
+            'direccion'    => ['nullable', 'string', 'max:255'],
+            'telefono'     => ['nullable', 'string', 'max:50'],
+        ], [
+            'id_proveedor.required' => 'Falta el ID del proveedor.',
+            'nombre.required'       => 'El nombre del proveedor es obligatorio.',
         ]);
 
-        $proveedor = Proveedor::find($request->id_proveedor);
-        if (!$proveedor) return redirect()->route('proveedores.index')->with('error', 'Proveedor no encontrado.');
+        $prov = Proveedor::findOrFail($data['id_proveedor']);
 
-        $proveedor->update($request->only(['nombre','contacto','telefono','direccion']));
+        $prov->update([
+            'nombre'    => $data['nombre'],
+            'contacto'  => $data['contacto'] ?? null,
+            'direccion' => $data['direccion'] ?? null,
+            'telefono'  => $data['telefono'] ?? null,
+        ]);
 
         return redirect()->route('proveedores.index')->with('success', 'Proveedor actualizado correctamente.');
     }
 
-    public function eliminar($id_proveedor)
+    public function eliminar($id)
     {
-        DB::table('tcproveedores')->where('id_proveedor', $id_proveedor)->delete();
-        return redirect()->route('proveedores.index')->with('success', 'Proveedor eliminado correctamente.');
+        $prov = Proveedor::findOrFail($id);
+
+        try {
+            $prov->delete();
+            return redirect()->route('proveedores.index')->with('success', 'Proveedor eliminado correctamente.');
+        } catch (\Throwable $e) {
+            return redirect()->route('proveedores.index')->with(
+                'danger',
+                'No se puede eliminar: el proveedor está relacionado con entradas u otros registros.'
+            );
+        }
     }
 }

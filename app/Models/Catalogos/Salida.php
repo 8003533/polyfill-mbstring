@@ -8,13 +8,8 @@ class Salida extends Model
 {
     protected $table = 'tasalidas';
     protected $primaryKey = 'id_salida';
-    public $timestamps = false;
 
-    protected $fillable = [
-        'fecha',
-        'folio',
-        'motivo',
-    ];
+    protected $fillable = ['fecha', 'folio', 'motivo'];
 
     public function detalles()
     {

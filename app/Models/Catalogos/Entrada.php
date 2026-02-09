@@ -15,15 +15,4 @@ class Entrada extends Model
         'tipo',
         'fecha',
     ];
-
-    // (Opcional) relación si después la ocupas
-    public function proveedor()
-    {
-        return $this->belongsTo(Proveedor::class, 'id_proveedor', 'id_proveedor');
-    }
-
-    public function detalles()
-    {
-        return $this->hasMany(DetalleEntrada::class, 'id_entrada', 'id_entrada');
-    }
 }

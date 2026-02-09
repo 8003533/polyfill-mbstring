@@ -105,22 +105,7 @@
         </tbody>
     </table>
 
-    {{-- Paginación --}}
-    <div class="d-flex justify-content-between align-items-center mt-3">
-
-        <div>
-            Mostrando registros del {{ $areas->firstItem() }} al {{ $areas->lastItem() }}
-            de un total de {{ $areas->total() }} registros
-        </div>
-
-        <div>
-            {{ $areas->appends(['area' => request('area')])->links('pagination::bootstrap-4') }}
-        </div>
-
-    </div>
-
-</div>
-
+    
 
 {{-- =========================
     MODAL: NUEVA ÁREA

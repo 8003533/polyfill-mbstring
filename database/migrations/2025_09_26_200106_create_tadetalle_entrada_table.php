@@ -5,9 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up()
+    public function up(): void
     {
-        Schema::create('detalle_entrada', function (Blueprint $table) {
+        Schema::create('tadetalle_entrada', function (Blueprint $table) {
             $table->id('id_detalle_entrada');
             $table->unsignedBigInteger('id_entrada');
             $table->unsignedBigInteger('id_bien');
@@ -26,8 +26,8 @@ return new class extends Migration {
         });
     }
 
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('detalle_entrada');
+        Schema::dropIfExists('tadetalle_entrada');
     }
 };

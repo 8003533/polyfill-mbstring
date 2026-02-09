@@ -164,7 +164,7 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item" href="{{ url('entradas') }}">
+                                <a class="dropdown-item" href="{{ url('entradas/index') }}">
                                     <img src="{{ asset('bootstrap-icons-1.5.0/box-arrow-in-down.svg') }}" width="18" height="18"> Entradas
                                 </a>
                             </li>
@@ -183,9 +183,9 @@
                         </ul>
                     </div>
                     
-                    <!-- AQUÍ SE VAN A VER LOS BOTONES (Copy/PDF/Print/Excel) 
+                    <!--  BOTONES (Copy/PDF/Print/Excel) 
                     <div id="dtButtonsTop" class="d-flex align-items-center ml-2"></div> -->
-                    
+
                 @endauth
 
                 <!-- Right Side Of Navbar -->

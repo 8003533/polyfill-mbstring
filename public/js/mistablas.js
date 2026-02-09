@@ -17,11 +17,11 @@ $(document).ready(function () {
             language: { url: idioma },
             responsive: true,
 
-            // Mostrar el "Mostrar X filas"
+            // Mostrar filas"
             lengthMenu: [numFilas, filas],
 
             // Botones
-            dom: 'lBfrtip', // normal (l length, B buttons, f filter...)
+            dom: 'lBfrtip', 
             buttons: [
                 { extend: 'copy',  text: 'Copy'  },
                 { extend: 'excel', text: 'Excel' },
@@ -30,26 +30,26 @@ $(document).ready(function () {
             ]
         });
 
-        // =========================================
+       
         // MOVER CONTROLES A LA BARRA PERSONALIZADA
-        // =========================================
+
         var $wrapper = $(selector).closest('.dataTables_wrapper');
 
-        // Si la barra personalizada existe en esta vista:
+       
         var $toolbar = $(selector).closest('.table-responsive').find('.dt-custom-toolbar').first();
         if (!$toolbar.length) return;
 
-        // Mover "Mostrar X registros" a la izquierda
+       
         $wrapper.find('.dataTables_length').appendTo($toolbar.find('.dt-slot-length'));
 
-        // Mover Botones a la izquierda
+  
         $wrapper.find('.dt-buttons').appendTo($toolbar.find('.dt-slot-buttons'));
 
-        // Mover "Buscar" a la derecha
+        
         $wrapper.find('.dataTables_filter').appendTo($toolbar.find('.dt-slot-search'));
     }
 
-    // ========= INICIALIZAR TODAS TUS TABLAS =========
+    // ========= INICIALIZAR LAS TABLAS =========
     initTabla('#MyTable', 'Reporte');
     initTabla('#MyTableServicios', 'Listado de Servicios');
     initTabla('#MyTableTalleres', 'Listado de Talleres');

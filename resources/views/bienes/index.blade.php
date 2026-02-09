@@ -112,24 +112,7 @@
         </tbody>
     </table>
 
-    {{-- Paginación --}}
-    <div class="d-flex justify-content-between align-items-center mt-3">
 
-        <div>
-            Mostrando registros del {{ $bienes->firstItem() }} al {{ $bienes->lastItem() }}
-            de un total de {{ $bienes->total() }} registros
-        </div>
-
-        <div>
-            {{ $bienes->appends([
-                'codigo' => request('codigo'),
-                'nombre' => request('nombre'),
-            ])->links('pagination::bootstrap-4') }}
-        </div>
-
-    </div>
-
-</div>
 
 
 {{-- =========================

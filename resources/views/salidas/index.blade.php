@@ -10,7 +10,7 @@
 @section('panel')
 <div class="table-responsive">
 
-    {{-- Mensajes --}}
+    {{-- Mensaje éxito --}}
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -18,6 +18,7 @@
         </div>
     @endif
 
+    {{-- Mensaje danger --}}
     @if(session('danger'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ session('danger') }}
@@ -25,6 +26,7 @@
         </div>
     @endif
 
+    {{-- Errores --}}
     @if($errors->any())
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <p>Corrige los errores para continuar</p>
@@ -37,302 +39,296 @@
         </div>
     @endif
 
-    {{-- Nueva Salida (modal) --}}
-    <div class="row mb-2">
+    <!-- Nueva Salida (MODAL) -->
+    <div class="row">
         <div class="col col-form-label text-md-right">
-            <a href="#" data-toggle="modal" data-target="#modalNuevaSalida" title="Nueva Salida">
+            <a href="#"
+               data-toggle="modal"
+               data-target="#modalNuevaSalida"
+               data-toggle="tooltip"
+               data-html="true"
+               title="Nueva Salida">
                 + Nueva Salida
             </a>
         </div>
     </div>
 
-    {{-- TABLA --}}
+    <!-- Tabla -->
     <table class="table table-striped shadow-lg" id="MyTableSalidas">
         <thead>
             <tr>
                 <th class="text-center">ID</th>
+                <th class="text-center">Fecha</th>
                 <th class="text-center">Folio</th>
                 <th class="text-center">Motivo</th>
-                <th class="text-center">Fecha</th>
-                <th class="text-center">Bien</th>
-                <th class="text-center">Disponible</th>
-                <th class="text-center">Utilizada</th>
+                <th class="text-center">Total utilizada</th>
+                <th class="text-center">Estatus</th>
                 <th class="text-center">Acciones</th>
             </tr>
         </thead>
-
         <tbody>
-            @if(isset($salidas) && $salidas->count())
-                @foreach($salidas as $sal)
-                    @php
-                        // DER: tasalidas 1:N detalle_salida
-                        $det = $sal->detalles->first();
-
-                        $idDetalle = $det->id_detalle_salida ?? '';
-                        $idBien    = $det->id_bien ?? '';
-
-                        $bienCodigo = $det->bien->codigo ?? '';
-                        $bienNombre = $det->bien->nombre ?? '';
-                        $bienTexto  = trim($bienCodigo . ' - ' . $bienNombre, ' -');
-
-                        $disp = $det->cantidad_disponible ?? '';
-                        $util = $det->cantidad_utilizada ?? '';
-                    @endphp
-
-                    <tr>
-                        <td class="text-center">{{ $sal->id_salida }}</td>
-                        <td class="text-center">{{ $sal->folio }}</td>
-                        <td class="text-center">{{ $sal->motivo }}</td>
-                        <td class="text-center">{{ $sal->fecha }}</td>
-                        <td class="text-center">{{ $bienTexto }}</td>
-                        <td class="text-center">{{ $disp }}</td>
-                        <td class="text-center">{{ $util }}</td>
-
-                        <td class="text-center col-actions">
-
-                            {{-- EDITAR (modal) --}}
-                            <button class="btn"
-                                data-toggle="modal"
-                                data-target="#modalEditarSalida"
-                                data-id="{{ $sal->id_salida }}"
-                                data-iddetalle="{{ $idDetalle }}"
-                                data-folio="{{ $sal->folio }}"
-                                data-motivo="{{ $sal->motivo }}"
-                                data-fecha="{{ $sal->fecha }}"
-                                data-idbien="{{ $idBien }}"
-                                data-utilizada="{{ $util }}"
-                                title="Editar">
-                                <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
-                            </button>
-
-                            {{-- ELIMINAR (modal) --}}
-                            <button class="btn"
-                                data-toggle="modal"
-                                data-target="#modalEliminarSalida"
-                                data-id="{{ $sal->id_salida }}"
-                                data-folio="{{ $sal->folio }}"
-                                title="Eliminar">
-                                <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
-                            </button>
-
-                        </td>
-                    </tr>
-                @endforeach
-            @else
+            @foreach($salidas as $s)
                 <tr>
-                    <td colspan="8" class="text-center text-muted">No hay salidas registradas</td>
+                    <td class="text-center">{{ $s->id_salida }}</td>
+                    <td class="text-center">{{ \Carbon\Carbon::parse($s->fecha)->format('Y-m-d') }}</td>
+                    <td class="text-center">{{ $s->folio ?? '-' }}</td>
+                    <td class="text-center">{{ $s->motivo ?? '-' }}</td>
+                    <td class="text-center">{{ $s->total_utilizada ?? 0 }}</td>
+
+                    <td class="text-center">
+                        @if(($s->estatus ?? 1) == 1)
+                            <span>Activo</span>
+                        @else
+                            <span>Inactivo</span>
+                        @endif
+                    </td>
+
+                    <td class="text-center col-actions">
+
+                        {{-- EDITAR (MODAL) --}}
+                        <button type="button" class="btn"
+                            data-toggle="modal"
+                            data-target="#modalEditarSalida"
+                            data-id="{{ $s->id_salida }}"
+                            data-fecha="{{ \Carbon\Carbon::parse($s->fecha)->format('Y-m-d') }}"
+                            data-folio="{{ $s->folio ?? '' }}"
+                            data-motivo="{{ $s->motivo ?? '' }}"
+                            data-estatus="{{ $s->estatus ?? 1 }}"
+                            title="Actualizar">
+                            <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
+                        </button>
+
+                        {{-- ELIMINAR (DELETE) (MODAL) --}}
+                        <button type="button" class="btn"
+                            data-toggle="modal"
+                            data-target="#modalEliminarSalida"
+                            data-id="{{ $s->id_salida }}"
+                            data-folio="{{ $s->folio ?? '' }}"
+                            title="Borrar">
+                            <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
+                        </button>
+
+                    </td>
                 </tr>
-            @endif
+            @endforeach
         </tbody>
     </table>
 
-    {{-- Paginación --}}
-    @if(isset($salidas))
-        <div class="mt-2">
-            {{ $salidas->links() }}
-        </div>
-    @endif
-</div>
 
 
-{{-- ================= MODAL: NUEVA SALIDA ================= --}}
+{{-- =========================
+    MODAL: NUEVA SALIDA
+========================= --}}
 <div class="modal fade" id="modalNuevaSalida" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
 
-            <div class="modal-header bg-light">
-                <h5 class="modal-title">Nueva Salida</h5>
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-            </div>
+      <div class="modal-header bg-light">
+        <h5 class="modal-title">
+            <img src="{{ asset('bootstrap-icons-1.5.0/box-arrow-up.svg') }}" width="18" height="18">
+            Nueva Salida
+        </h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
 
-            <div class="modal-body">
-                <form method="POST" action="{{ route('salidas.guardar') }}">
-                    @csrf
+      <div class="modal-body">
+        <form method="POST" action="{{ route('salidas.guardar') }}" id="formNuevaSalida">
+          @csrf
 
-                    <div class="form-group">
-                        <label><b>Fecha:</b></label>
-                        <input type="date" name="fecha" class="form-control" required>
-                    </div>
+          <div class="form-group">
+            <label><b>Fecha:</b></label>
+            <input type="date" name="fecha"
+                   class="form-control @error('fecha') is-invalid @enderror"
+                   value="{{ old('fecha') }}" required>
+            @error('fecha')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
 
-                    <div class="form-group">
-                        <label><b>Folio:</b></label>
-                        <input type="text" name="folio" class="form-control">
-                    </div>
+          <div class="form-group">
+            <label><b>Folio:</b></label>
+            <input type="text" name="folio"
+                   class="form-control @error('folio') is-invalid @enderror"
+                   value="{{ old('folio') }}" maxlength="100">
+            @error('folio')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
 
-                    <div class="form-group">
-                        <label><b>Motivo:</b></label>
-                        <input type="text" name="motivo" class="form-control">
-                    </div>
+          <div class="form-group">
+            <label><b>Motivo:</b></label>
+            <input type="text" name="motivo"
+                   class="form-control @error('motivo') is-invalid @enderror"
+                   value="{{ old('motivo') }}" maxlength="255" required>
+            @error('motivo')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
 
-                    <hr>
+          <div class="form-group">
+            <label><b>Estatus:</b></label>
+            <select name="estatus" class="form-control" required>
+                <option value="1" {{ old('estatus',1)==1 ? 'selected' : '' }}>Activo</option>
+                <option value="0" {{ old('estatus',1)==0 ? 'selected' : '' }}>Inactivo</option>
+            </select>
+          </div>
 
-                    <div class="form-group">
-                        <label><b>Bien:</b></label>
-                        <select name="id_bien" class="form-control" required>
-                            <option value="">Seleccione</option>
-                            @foreach($bienes as $b)
-                                <option value="{{ $b->id_bien }}">
-                                    {{ $b->codigo }} - {{ $b->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+          <div class="row text-center mt-3">
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">
+                    <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18" height="18">
+                    Guardar
+                </button>
 
-                    <div class="form-group">
-                        <label><b>Cantidad utilizada:</b></label>
-                        <input type="number" name="cantidad_utilizada" class="form-control" step="0.01" min="0.01" required>
-                    </div>
-
-                    <div class="row text-center mt-3">
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary">
-                                <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18"> Guardar
-                            </button>
-
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                Cancelar
-                            </button>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
-{{-- ================= MODAL: EDITAR SALIDA ================= --}}
-<div class="modal fade" id="modalEditarSalida" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-
-            <div class="modal-header bg-light">
-                <h5 class="modal-title">Editar Salida</h5>
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-            </div>
-
-            <div class="modal-body">
-                <form method="POST" action="{{ route('salidas.actualizar') }}">
-                    @csrf
-
-                    <input type="hidden" id="edit_id_salida" name="id_salida">
-                    <input type="hidden" id="edit_id_detalle_salida" name="id_detalle_salida">
-
-                    <div class="form-group">
-                        <label><b>Fecha:</b></label>
-                        <input type="date" id="edit_fecha" name="fecha" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label><b>Folio:</b></label>
-                        <input type="text" id="edit_folio" name="folio" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <label><b>Motivo:</b></label>
-                        <input type="text" id="edit_motivo" name="motivo" class="form-control">
-                    </div>
-
-                    <hr>
-
-                    <div class="form-group">
-                        <label><b>Bien:</b></label>
-                        <select id="edit_id_bien" name="id_bien" class="form-control" required>
-                            <option value="">Seleccione</option>
-                            @foreach($bienes as $b)
-                                <option value="{{ $b->id_bien }}">
-                                    {{ $b->codigo }} - {{ $b->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label><b>Cantidad utilizada:</b></label>
-                        <input type="number" id="edit_utilizada" name="cantidad_utilizada" class="form-control" step="0.01" min="0.01" required>
-                    </div>
-
-                    <div class="row text-center mt-3">
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary">
-                                <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18"> Guardar
-                            </button>
-
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                Cancelar
-                            </button>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
-{{-- ================= MODAL: ELIMINAR SALIDA ================= --}}
-<div class="modal fade" id="modalEliminarSalida" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-
-            <div class="modal-header bg-light">
-                <h5 class="modal-title">Eliminar Salida</h5>
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-            </div>
-
-            <div class="modal-body text-center">
-                <p>¿Deseas eliminar la salida con folio <strong id="folioEliminar"></strong>?</p>
-            </div>
-
-            <div class="modal-footer justify-content-center">
-                <form id="formEliminarSalida" method="POST" action="">
-                    @csrf
-                    @method('DELETE')
-
-                    <button type="submit" class="btn btn-primary">
-                        <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16">
-                        Sí, eliminar
-                    </button>
-                </form>
-
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    Cancelar
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">
+                    <span>&nbsp;Cancelar</span>
                 </button>
             </div>
+          </div>
 
-        </div>
+        </form>
+      </div>
+
     </div>
+  </div>
 </div>
 
 
+{{-- =========================
+    MODAL: EDITAR SALIDA
+========================= --}}
+<div class="modal fade" id="modalEditarSalida" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header bg-light">
+        <h5 class="modal-title">Editar Salida</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form method="POST" action="{{ route('salidas.actualizar') }}" id="formEditarSalida">
+          @csrf
+
+          <input type="hidden" id="edit_id_salida" name="id_salida">
+
+          <div class="form-group">
+            <label><b>Fecha:</b></label>
+            <input type="date" id="edit_fecha" name="fecha" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label><b>Folio:</b></label>
+            <input type="text" id="edit_folio" name="folio" class="form-control" maxlength="100">
+          </div>
+
+          <div class="form-group">
+            <label><b>Motivo:</b></label>
+            <input type="text" id="edit_motivo" name="motivo" class="form-control" maxlength="255" required>
+          </div>
+
+          <div class="form-group">
+            <label><b>Estatus:</b></label>
+            <select id="edit_estatus" name="estatus" class="form-control" required>
+                <option value="1">Activo</option>
+                <option value="0">Inactivo</option>
+            </select>
+          </div>
+
+          <div class="row text-center mt-3">
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">
+                    <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18" height="18">
+                    Guardar
+                </button>
+
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">
+                    <span>&nbsp;Cancelar</span>
+                </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+{{-- =========================
+    MODAL: ELIMINAR SALIDA (DELETE)
+========================= --}}
+<div class="modal fade" id="modalEliminarSalida" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header bg-light">
+        <h5 class="modal-title">Eliminar Salida</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body text-center">
+        <p>¿Deseas eliminar esta salida?</p>
+        <strong id="folioEliminarSalida"></strong>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+
+        <form id="formEliminarSalida" method="POST" action="">
+          @csrf
+          @method('DELETE')
+          <button type="submit" class="btn btn-primary">
+            <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
+            Sí, eliminar
+          </button>
+        </form>
+
+        <button type="button" class="btn btn-primary" data-dismiss="modal">
+          <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">
+          <span>&nbsp;Cancelar</span>
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+{{-- Scripts --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // EDITAR
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // Modal Editar: llenar campos
     $('#modalEditarSalida').on('show.bs.modal', function (event) {
-        var b = $(event.relatedTarget);
+        var button = $(event.relatedTarget);
 
-        $('#edit_id_salida').val(b.data('id'));
-        $('#edit_id_detalle_salida').val(b.data('iddetalle'));
-
-        $('#edit_folio').val(b.data('folio'));
-        $('#edit_motivo').val(b.data('motivo'));
-        $('#edit_fecha').val(b.data('fecha'));
-
-        $('#edit_id_bien').val(String(b.data('idbien')));
-        $('#edit_utilizada').val(b.data('utilizada'));
+        $('#edit_id_salida').val(button.data('id'));
+        $('#edit_fecha').val(button.data('fecha'));
+        $('#edit_folio').val(button.data('folio'));
+        $('#edit_motivo').val(button.data('motivo'));
+        $('#edit_estatus').val(String(button.data('estatus')));
     });
 
-    // ELIMINAR
+    // Modal Eliminar: set action DELETE
     $('#modalEliminarSalida').on('show.bs.modal', function (event) {
-        var b = $(event.relatedTarget);
+        var button = $(event.relatedTarget);
+        var id = button.data('id');
+        var folio = button.data('folio');
 
-        $('#folioEliminar').text(b.data('folio'));
-        $('#formEliminarSalida').attr('action', "{{ url('salidas/eliminar') }}/" + b.data('id'));
+        $('#folioEliminarSalida').text(folio ? folio : ('ID: ' + id));
+        $('#formEliminarSalida').attr('action', "{{ url('salidas') }}/" + id);
     });
 
 });

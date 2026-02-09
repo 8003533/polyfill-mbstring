@@ -7,18 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Catalogos\Entrada;
-use App\Models\Catalogos\DetalleEntrada;
 use App\Models\Catalogos\Proveedor;
 use App\Models\Catalogos\Bien;
 
 class EntradasController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        // ✅ Listado con proveedor (JOIN) + total (SUM cantidad detalle)
-        // Ajusta nombres de tablas si los tuyos cambian:
-        // tcentradas, tcproveedores, tadetalle_entrada
-
         $entradas = Entrada::query()
             ->leftJoin('tcproveedores as p', 'p.id_proveedor', '=', 'tcentradas.id_proveedor')
             ->leftJoin('tadetalle_entrada as d', 'd.id_entrada', '=', 'tcentradas.id_entrada')
@@ -46,17 +41,15 @@ class EntradasController extends Controller
         return view('entradas.index', compact('entradas', 'proveedores', 'bienes'));
     }
 
-    public function crear(Request $request)
+    public function guardar(Request $request)
     {
         $data = $request->validate([
             'id_proveedor' => ['required', 'integer'],
             'folio'        => ['nullable', 'string', 'max:100'],
             'tipo'         => ['required', 'string', 'max:100'],
             'fecha'        => ['required', 'date'],
-
-            // detalle (1 bien + 1 cantidad) como tu modal
             'id_bien'      => ['required', 'integer'],
-            'cantidad'     => ['required', 'numeric', 'min:1'],
+            'cantidad'     => ['required', 'integer', 'min:1'],
         ], [
             'id_proveedor.required' => 'Selecciona un proveedor.',
             'id_bien.required'      => 'Selecciona un bien.',
@@ -65,17 +58,21 @@ class EntradasController extends Controller
 
         DB::transaction(function () use ($data) {
 
-            $entrada = Entrada::create([
+            $idEntrada = DB::table('tcentradas')->insertGetId([
                 'id_proveedor' => $data['id_proveedor'],
                 'folio'        => $data['folio'] ?? null,
                 'tipo'         => $data['tipo'],
                 'fecha'        => $data['fecha'],
+                'created_at'   => now(),
+                'updated_at'   => now(),
             ]);
 
-            DetalleEntrada::create([
-                'id_entrada' => $entrada->id_entrada,
+            DB::table('tadetalle_entrada')->insert([
+                'id_entrada' => $idEntrada,
                 'id_bien'    => $data['id_bien'],
                 'cantidad'   => $data['cantidad'],
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         });
 
@@ -94,27 +91,24 @@ class EntradasController extends Controller
             'id_proveedor.required' => 'Selecciona un proveedor.',
         ]);
 
-        $entrada = Entrada::findOrFail($data['id_entrada']);
-
-        $entrada->update([
-            'id_proveedor' => $data['id_proveedor'],
-            'folio'        => $data['folio'] ?? null,
-            'tipo'         => $data['tipo'],
-            'fecha'        => $data['fecha'],
-        ]);
+        DB::table('tcentradas')
+            ->where('id_entrada', $data['id_entrada'])
+            ->update([
+                'id_proveedor' => $data['id_proveedor'],
+                'folio'        => $data['folio'] ?? null,
+                'tipo'         => $data['tipo'],
+                'fecha'        => $data['fecha'],
+                'updated_at'   => now(),
+            ]);
 
         return redirect()->route('entradas.index')->with('success', 'Entrada actualizada correctamente.');
     }
 
     public function eliminar($id)
     {
-        $entrada = Entrada::findOrFail($id);
-
-        DB::transaction(function () use ($entrada) {
-            // ✅ primero borras detalles para no romper FK
-            DetalleEntrada::where('id_entrada', $entrada->id_entrada)->delete();
-
-            $entrada->delete();
+        DB::transaction(function () use ($id) {
+            DB::table('tadetalle_entrada')->where('id_entrada', $id)->delete();
+            DB::table('tcentradas')->where('id_entrada', $id)->delete();
         });
 
         return redirect()->route('entradas.index')->with('success', 'Entrada eliminada correctamente.');
