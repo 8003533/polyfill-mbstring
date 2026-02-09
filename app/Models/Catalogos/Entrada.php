@@ -8,15 +8,15 @@ class Entrada extends Model
 {
     protected $table = 'tcentradas';
     protected $primaryKey = 'id_entrada';
-    public $timestamps = false;
 
     protected $fillable = [
-        'fecha',
         'id_proveedor',
-        'tipo',
         'folio',
+        'tipo',
+        'fecha',
     ];
 
+    // (Opcional) relación si después la ocupas
     public function proveedor()
     {
         return $this->belongsTo(Proveedor::class, 'id_proveedor', 'id_proveedor');

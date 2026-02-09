@@ -13,97 +13,108 @@ use App\Models\Catalogos\Bien;
 
 class EntradasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // DER:
-        // tcentradas (id_entrada, fecha, id_proveedor, tipo, folio)
-        // detalle_entrada (id_entrada, anio, id_bien, cantidad)
+        // ✅ Listado con proveedor (JOIN) + total (SUM cantidad detalle)
+        // Ajusta nombres de tablas si los tuyos cambian:
+        // tcentradas, tcproveedores, tadetalle_entrada
 
         $entradas = Entrada::query()
-            ->with(['proveedor']) // tcproveedores
-            ->withSum('detalles as total_cantidad', 'cantidad') // SUM(detalle_entrada.cantidad)
-            ->orderByDesc('id_entrada')
-            ->get();
+            ->leftJoin('tcproveedores as p', 'p.id_proveedor', '=', 'tcentradas.id_proveedor')
+            ->leftJoin('tadetalle_entrada as d', 'd.id_entrada', '=', 'tcentradas.id_entrada')
+            ->select(
+                'tcentradas.*',
+                'p.nombre as proveedor_nombre',
+                DB::raw('COALESCE(SUM(d.cantidad),0) as total_cantidad')
+            )
+            ->groupBy(
+                'tcentradas.id_entrada',
+                'tcentradas.id_proveedor',
+                'tcentradas.folio',
+                'tcentradas.tipo',
+                'tcentradas.fecha',
+                'tcentradas.created_at',
+                'tcentradas.updated_at',
+                'p.nombre'
+            )
+            ->orderByDesc('tcentradas.id_entrada')
+            ->paginate(10);
 
         $proveedores = Proveedor::orderBy('nombre')->get();
-        $bienes      = Bien::orderBy('codigo')->get();
+        $bienes = Bien::orderBy('codigo')->get();
 
         return view('entradas.index', compact('entradas', 'proveedores', 'bienes'));
     }
 
-    public function nuevo()
-    {
-        $proveedores = Proveedor::orderBy('nombre')->get();
-        $bienes      = Bien::orderBy('codigo')->get();
-
-        return view('entradas.nuevo', compact('proveedores', 'bienes'));
-    }
-
     public function crear(Request $request)
     {
-        $request->validate([
-            'id_proveedor' => 'required|integer|exists:tcproveedores,id_proveedor',
-            'fecha'        => 'required|date',
-            'tipo'         => 'required|string|max:100',
-            'folio'        => 'nullable|string|max:100',
+        $data = $request->validate([
+            'id_proveedor' => ['required', 'integer'],
+            'folio'        => ['nullable', 'string', 'max:100'],
+            'tipo'         => ['required', 'string', 'max:100'],
+            'fecha'        => ['required', 'date'],
 
-            // Detalle (detalle_entrada)
-            'anio'     => 'required|integer|min:2000|max:2100',
-            'id_bien'  => 'required|integer|exists:tcbienes,id_bien',
-            'cantidad' => 'required|integer|min:1',
+            // detalle (1 bien + 1 cantidad) como tu modal
+            'id_bien'      => ['required', 'integer'],
+            'cantidad'     => ['required', 'numeric', 'min:1'],
+        ], [
+            'id_proveedor.required' => 'Selecciona un proveedor.',
+            'id_bien.required'      => 'Selecciona un bien.',
+            'cantidad.min'          => 'La cantidad debe ser mayor a 0.',
         ]);
 
-        DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($data) {
 
             $entrada = Entrada::create([
-                'fecha'        => $request->fecha,
-                'id_proveedor' => $request->id_proveedor,
-                'tipo'         => $request->tipo,
-                'folio'        => $request->folio,
+                'id_proveedor' => $data['id_proveedor'],
+                'folio'        => $data['folio'] ?? null,
+                'tipo'         => $data['tipo'],
+                'fecha'        => $data['fecha'],
             ]);
 
             DetalleEntrada::create([
                 'id_entrada' => $entrada->id_entrada,
-                'anio'       => $request->anio,
-                'id_bien'    => $request->id_bien,
-                'cantidad'   => $request->cantidad,
+                'id_bien'    => $data['id_bien'],
+                'cantidad'   => $data['cantidad'],
             ]);
         });
 
-        return redirect()->route('entradas.index')->with('success', 'Entrada creada correctamente.');
+        return redirect()->route('entradas.index')->with('success', 'Entrada registrada correctamente.');
     }
 
     public function actualizar(Request $request)
     {
-        $request->validate([
-            'id_entrada'   => 'required|integer|exists:tcentradas,id_entrada',
-            'id_proveedor' => 'required|integer|exists:tcproveedores,id_proveedor',
-            'folio'        => 'nullable|string|max:100',
-            'fecha'        => 'required|date',
-            'tipo'         => 'required|string|max:100',
+        $data = $request->validate([
+            'id_entrada'   => ['required', 'integer'],
+            'id_proveedor' => ['required', 'integer'],
+            'folio'        => ['nullable', 'string', 'max:100'],
+            'tipo'         => ['required', 'string', 'max:100'],
+            'fecha'        => ['required', 'date'],
+        ], [
+            'id_proveedor.required' => 'Selecciona un proveedor.',
         ]);
 
-        $entrada = Entrada::where('id_entrada', $request->id_entrada)->firstOrFail();
+        $entrada = Entrada::findOrFail($data['id_entrada']);
 
         $entrada->update([
-            'id_proveedor' => $request->id_proveedor,
-            'folio'        => $request->folio,
-            'fecha'        => $request->fecha,
-            'tipo'         => $request->tipo,
+            'id_proveedor' => $data['id_proveedor'],
+            'folio'        => $data['folio'] ?? null,
+            'tipo'         => $data['tipo'],
+            'fecha'        => $data['fecha'],
         ]);
 
         return redirect()->route('entradas.index')->with('success', 'Entrada actualizada correctamente.');
     }
 
-    public function inhabilitar($id)
+    public function eliminar($id)
     {
-        DB::transaction(function () use ($id) {
+        $entrada = Entrada::findOrFail($id);
 
-            // borra detalle_entrada primero (FK)
-            DetalleEntrada::where('id_entrada', $id)->delete();
+        DB::transaction(function () use ($entrada) {
+            // ✅ primero borras detalles para no romper FK
+            DetalleEntrada::where('id_entrada', $entrada->id_entrada)->delete();
 
-            // borra tcentradas
-            Entrada::where('id_entrada', $id)->delete();
+            $entrada->delete();
         });
 
         return redirect()->route('entradas.index')->with('success', 'Entrada eliminada correctamente.');

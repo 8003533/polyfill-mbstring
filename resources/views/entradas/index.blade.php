@@ -91,7 +91,8 @@
                                 data-idproveedor="{{ $ent->id_proveedor }}"
                                 data-folio="{{ $ent->folio }}"
                                 data-tipo="{{ $ent->tipo }}"
-                                data-fecha="{{ $ent->fecha }}"
+                                data-fecha="{{ \Carbon\Carbon::parse($ent->fecha)->format('Y/m/d') }}"
+
                                 title="Editar">
                                 <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
                             </button>
