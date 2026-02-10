@@ -23,10 +23,10 @@ $(document).ready(function () {
             // Botones
             dom: 'lBfrtip', 
             buttons: [
-                { extend: 'copy',  text: 'Copy'  },
+                { extend: 'copy',  text: 'Copiar'  },
                 { extend: 'excel', text: 'Excel' },
                 { extend: 'pdf',   text: 'PDF',   title: titulo },
-                { extend: 'print', text: 'Print', title: titulo }
+                { extend: 'print', text: 'Imprimir', title: titulo }
             ]
         });
 

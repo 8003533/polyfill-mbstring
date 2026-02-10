@@ -84,14 +84,24 @@ Route::get('administraciones/inhabilitar/{id_administracion}', [Administraciones
 
 //Rutas de Edificios
 Route::get('edificios/index', [EdificiosController::class, 'index'])->name('edificios.index');
-Route::get('edificios/nuevo', [EdificiosController::class, 'nuevo_edificio'])->name('edificios.nuevo');
-Route::post('edificios/guardar', [EdificiosController::class, 'guardar_edificio'])->name('edificios.guardar');
-Route::get('edificios/editar/{id_edificio}', [EdificiosController::class, 'editar_edificio'])->name('edificios.editar');
-Route::post('edificios/actualizar', [EdificiosController::class, 'actualizar_edificio'])->name('edificios.actualizar');
-Route::get('edificios/inhabilitar/{id_edificio}', [EdificiosController::class, 'confirmainhabilitar_edificio'])->name('edificios.inhabilitar');
-Route::post('edificios/busca-alcaldia-colonia', [EdificiosController::class, 'buscaAlcaldiaColonia'])->name('edificios.buscaAlcaldiaColonia');
-Route::post('edificios/busca-direccion-admin', [EdificiosController::class, 'buscaDireccionAdministracion'])->name('edificios.buscaDireccionAdministracion');
 
+// Vistas clásicas (las de siempre)
+Route::get('edificios/nuevo', [EdificiosController::class, 'nuevo_edificio'])->name('edificios.nuevo');
+Route::post('edificios/guardar_edificio', [EdificiosController::class, 'guardar_edificio'])->name('edificios.guardar_edificio');
+
+Route::get('edificios/editar/{id}', [EdificiosController::class, 'editar_edificio'])->name('edificios.editar');
+Route::post('edificios/actualizar_edificio', [EdificiosController::class, 'actualizar_edificio'])->name('edificios.actualizar_edificio');
+
+Route::get('edificios/inhabilitar/{id}', [EdificiosController::class, 'confirmainhabilitar_edificio'])->name('edificios.inhabilitar');
+
+// ✅ MODALES tipo Entradas (index con CRUD)
+Route::post('edificios/guardar', [EdificiosController::class, 'guardar'])->name('edificios.guardar');
+Route::post('edificios/actualizar', [EdificiosController::class, 'actualizar'])->name('edificios.actualizar');
+Route::delete('edificios/{id}', [EdificiosController::class, 'destroy']); // usado por el modal eliminar
+
+// AJAX (si los usas en edificios)
+Route::get('edificios/busca-alcaldia-colonia', [EdificiosController::class, 'buscaAlcaldiaColonia'])->name('edificios.buscaAlcaldiaColonia');
+Route::get('edificios/busca-direccion-administracion', [EdificiosController::class, 'buscaDireccionAdministracion'])->name('edificios.buscaDireccionAdministracion');
 
 //Rutas de Puestos
 Route::get('puestos/index',                         [PuestosController::class, 'index'])->name('puestos.index');
@@ -130,10 +140,17 @@ Route::post('buscaOtroNombre',                      [PersonalController::class, 
 
 //Rutas de Servicio
 
-Route::get('registro/index', [RegistroController::class, 'index']);
-Route::get('registro/folio-actual', [RegistroController::class, 'folioActual']);
-Route::post('registro/guardar', [RegistroController::class, 'guardar']);
 
+Route::middleware(['auth'])->prefix('registro')->group(function () {
+
+    Route::get('/index', [RegistroController::class, 'index'])->name('registro.index');
+
+    // AJAX: trae el siguiente folio del año (YYYY/0001)
+    Route::get('/folio-actual', [RegistroController::class, 'folioActual'])->name('registro.folioActual');
+
+    // Guardar orden (POST del modal)
+    Route::post('/guardar', [RegistroController::class, 'guardar'])->name('registro.guardar');
+});
 // -------------------- ÁREAS --------------------
 
 Route::get('areas/index',           [AreasController::class, 'index'])->name('areas.index');
