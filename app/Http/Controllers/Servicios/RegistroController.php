@@ -4,117 +4,109 @@ namespace App\Http\Controllers\Servicios;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
+use App\Models\Servicios\OrdenesServicio; // <-- ASEGÚRATE que tu modelo exista con este namespace
 use App\Models\Catalogos\Taller;
 use App\Models\Catalogos\Administracion;
 use App\Models\Catalogos\Personal;
 use App\Models\Catalogos\Cuadrilla;
-use App\Models\Servicios\OrdenesServicio;
 
 class RegistroController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $administracion = Administracion::query()
-            ->when(
-                Schema::hasColumn((new Administracion)->getTable(), 'iestatus'),
-                fn ($q) => $q->where('iestatus', 1)
-            )
-            ->orderBy('cdescripcion_administracion')
-            ->get();
+        $administracion = Administracion::orderBy('cdescripcion_administracion')->get();
+        $personal_solicitante = Personal::orderBy('cnombre_personal')->get();
+        $talleres = Taller::orderBy('cdescripcion_taller')->get();
+        $cuadrilla = Cuadrilla::orderBy('cnombre_cuadrilla')->get();
 
-        $personal_solicitante = Personal::query()
-            ->when(
-                Schema::hasColumn((new Personal)->getTable(), 'iestatus'),
-                fn ($q) => $q->where('iestatus', 1)
-            )
-            ->orderBy('cnombre_personal')
-            ->get();
+        return view('registro.index', compact('administracion','personal_solicitante','talleres','cuadrilla'));
+    }
 
-        $talleres = Taller::query()
-            ->when(
-                Schema::hasColumn((new Taller)->getTable(), 'iestatus'),
-                fn ($q) => $q->where('iestatus', 1)
-            )
-            ->orderBy('cdescripcion_taller')
-            ->get();
+    public function folioActual()
+    {
+        $anio = (int) now()->format('Y');
 
-        $cuadrilla = Cuadrilla::query()
-            ->when(
-                Schema::hasColumn((new Cuadrilla)->getTable(), 'iestatus'),
-                fn ($q) => $q->where('iestatus', 1)
-            )
-            ->orderBy('cnombre_cuadrilla')
-            ->get();
+        $ultimo = OrdenesServicio::where('anio', $anio)->max('consecutivo');
+        $consecutivo = ($ultimo ?? 0) + 1;
 
-        $personal_catalogo = $personal_solicitante;
-
-        return view('registro.index', compact(
-            'administracion',
-            'personal_solicitante',
-            'personal_catalogo',
-            'talleres',
-            'cuadrilla'
-        ));
+        return response()->json(['folio' => $anio . '/' . $consecutivo]);
     }
 
     public function guardar(Request $request)
     {
         $request->validate([
-            'area' => 'required|integer',
-            'solicitante' => 'required|integer',
-            'taller' => 'required|integer',
-            'descripcion_servicio' => 'required|string|max:2000',
+            'area' => ['required'],
+            'solicitante' => ['required'],
+            'taller' => ['required'],
+            'descripcion_servicio' => ['required','string','max:500'],
 
-            'tipo_asignacion' => 'required|in:personal,cuadrilla',
-            'personal' => 'required|array|min:1',
-            'personal.*' => 'required|integer',
+            'conclusion' => ['nullable','string','max:50'],
+            'observaciones' => ['nullable','string','max:255'],
 
-            'folio' => 'required|string|max:20',
-            'anio_folio' => 'required|integer',
-            'consecutivo_folio' => 'required|integer',
-            'fecha_solicitud' => 'required|string|max:30',
+            'personal_ids' => ['nullable','array'],
+            'personal_ids.*' => ['integer'],
 
-            'conclusion' => 'nullable',
-            'observaciones' => 'nullable|string|max:255',
+            'cuadrilla' => ['nullable','integer'],
+        ], [
+            'area.required' => 'Selecciona un área.',
+            'solicitante.required' => 'Selecciona un solicitante.',
+            'taller.required' => 'Selecciona un taller.',
+            'descripcion_servicio.required' => 'Agrega la descripción del servicio.',
         ]);
 
-        $orden = new OrdenesServicio();
+        return DB::transaction(function () use ($request) {
 
-        $orden->folio = $request->folio;
-        $orden->anio_folio = (int) $request->anio_folio;
-        $orden->consecutivo_folio = (int) $request->consecutivo_folio;
+            $anio = (int) now()->format('Y');
+            $ultimo = OrdenesServicio::where('anio', $anio)->max('consecutivo');
+            $consecutivo = ($ultimo ?? 0) + 1;
+            $folio = $anio . '/' . $consecutivo;
 
-        $orden->fecha_solicitud = $request->fecha_solicitud;
-        $orden->conclusion = $request->conclusion;
+            // "dd/mm/yy, HH:MM hrs" -> datetime
+            $fechaConclusion = null;
+            if ($request->filled('conclusion')) {
+                $raw = str_replace(' hrs', '', $request->conclusion);
+                $fechaConclusion = Carbon::createFromFormat('d/m/y, H:i', $raw);
+            }
 
-        $orden->iid_area = (int) $request->area;
-        $orden->iid_solicitante = (int) $request->solicitante;
-        $orden->iid_taller = (int) $request->taller;
+            $serv = new OrdenesServicio();
 
-        $orden->descripcion_servicio = $request->descripcion_servicio;
-        $orden->observaciones = $request->observaciones;
-        $orden->tipo_asignacion = $request->tipo_asignacion;
+            // Ajusta nombres de columnas según tu tabla taservicios
+            $serv->anio = $anio;
+            $serv->consecutivo = $consecutivo;
+            $serv->cfolio = $folio;
 
-        if (Schema::hasColumn($orden->getTable(), 'asignados')) {
-            $orden->asignados = json_encode(array_values($request->personal));
-        }
+            $serv->dfecha_solicitud = now();
+            $serv->dfecha_conclusion = $fechaConclusion;
 
-        if (Schema::hasColumn($orden->getTable(), 'iestatus')) {
-            $orden->iestatus = 1;
-        }
+            $serv->iid_administracion = $request->area;
+            $serv->iid_personal_solicitante = $request->solicitante;
+            $serv->iid_taller = $request->taller;
 
-        if (Schema::hasColumn($orden->getTable(), 'iid_usuario')) {
-            $orden->iid_usuario = auth()->id();
-        }
+            $serv->cdescripcion_servicio = $request->descripcion_servicio;
+            $serv->cobservaciones = $request->observaciones;
 
-        $orden->save();
+            $serv->iid_cuadrilla = $request->cuadrilla;
 
-        return response()->json([
-            'ok' => true,
-            'id' => $orden->getKey(),
-            'folio' => $orden->folio
-        ], 200);
+            $serv->save();
+
+            // Si tienes pivote taservicio_personal, descomenta:
+            /*
+            if ($request->filled('personal_ids')) {
+                foreach ($request->personal_ids as $pid) {
+                    DB::table('taservicio_personal')->insert([
+                        'iid_servicio' => $serv->iid_servicio,
+                        'iid_personal' => $pid,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+            */
+
+            return redirect()->back()->with('success', "Orden creada con folio: {$folio}");
+        });
     }
 }
