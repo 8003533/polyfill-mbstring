@@ -171,7 +171,7 @@
 </div>
 
 <!-- Select -->
-<script>
+<scrip>
 $(document).ready(function () {
 
   function initSelect2() {
@@ -184,6 +184,11 @@ $(document).ready(function () {
   }
 
   $('#modalNuevoEmpleado').on('shown.bs.modal', function () {
+    initSelect2();
+  });
+
+  // Pasar errores de PHP a JS correctamente
+$('#modalNuevoEmpleado').on('shown.bs.modal', function () {
     initSelect2();
   });
 
