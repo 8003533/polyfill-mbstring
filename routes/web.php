@@ -94,12 +94,10 @@ Route::post('edificios/actualizar_edificio', [EdificiosController::class, 'actua
 
 Route::get('edificios/inhabilitar/{id}', [EdificiosController::class, 'confirmainhabilitar_edificio'])->name('edificios.inhabilitar');
 
-// ✅ MODALES tipo Entradas (index con CRUD)
+// edificios
 Route::post('edificios/guardar', [EdificiosController::class, 'guardar'])->name('edificios.guardar');
 Route::post('edificios/actualizar', [EdificiosController::class, 'actualizar'])->name('edificios.actualizar');
-Route::delete('edificios/{id}', [EdificiosController::class, 'destroy']); // usado por el modal eliminar
-
-// AJAX (si los usas en edificios)
+Route::delete('edificios/{id}', [EdificiosController::class, 'destroy']); 
 Route::get('edificios/busca-alcaldia-colonia', [EdificiosController::class, 'buscaAlcaldiaColonia'])->name('edificios.buscaAlcaldiaColonia');
 Route::get('edificios/busca-direccion-administracion', [EdificiosController::class, 'buscaDireccionAdministracion'])->name('edificios.buscaDireccionAdministracion');
 
@@ -140,17 +138,18 @@ Route::post('buscaOtroNombre',                      [PersonalController::class, 
 
 //Rutas de Servicio
 
-
 Route::middleware(['auth'])->prefix('registro')->group(function () {
 
     Route::get('/index', [RegistroController::class, 'index'])->name('registro.index');
 
-    // AJAX: trae el siguiente folio del año (YYYY/0001)
+    // AJAX: siguiente folio del año
     Route::get('/folio-actual', [RegistroController::class, 'folioActual'])->name('registro.folioActual');
 
-    // Guardar orden (POST del modal)
+    // Guardar desde modal
     Route::post('/guardar', [RegistroController::class, 'guardar'])->name('registro.guardar');
 });
+
+
 // -------------------- ÁREAS --------------------
 
 Route::get('areas/index',           [AreasController::class, 'index'])->name('areas.index');

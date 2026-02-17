@@ -30,10 +30,11 @@ class UnidadesController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
+            'abreviatura' => 'nullable|string|max:50',
             'descripcion' => 'nullable|string|max:1000'
         ]);
 
-        Unidad::create($request->only(['nombre','descripcion']));
+        Unidad::create($request->only(['nombre','abreviatura','descripcion']));
 
         return redirect()->route('unidades.index')->with('success','Unidad creada.');
     }
@@ -50,13 +51,14 @@ class UnidadesController extends Controller
         $request->validate([
             'id_unidad' => 'required|integer',
             'nombre' => 'required|string|max:255',
+            'abreviatura' => 'nullable|string|max:50',
             'descripcion' => 'nullable|string|max:1000'
         ]);
 
         $unidad = Unidad::find($request->id_unidad);
         if (!$unidad) return redirect()->route('unidades.index')->with('error','No existe.');
 
-        $unidad->update($request->only(['nombre','descripcion']));
+        $unidad->update($request->only(['nombre','abreviatura','descripcion']));
 
         return redirect()->route('unidades.index')->with('success','Unidad actualizada.');
     }

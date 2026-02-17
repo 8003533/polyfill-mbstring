@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.min.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <!-- Buttons CSS (para que se vean los botones) -->
+    <!-- Buttons CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
 
     <!-- Select2 CSS -->
@@ -26,14 +26,12 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <style>
-        /* Botones en la barra (junto a Catálogos/Servicios) */
         #dtButtonsTop .dt-button {
             border-radius: .2rem;
             margin-left: .25rem;
             padding: .25rem .5rem;
             font-size: .875rem;
         }
-        /* En pantallas pequeñas, que no se encimen */
         @media (max-width: 991.98px) {
             #dtButtonsTop {
                 margin-top: .5rem;
@@ -42,7 +40,6 @@
             }
         }
     </style>
-
 </head>
 
 <body>
@@ -61,7 +58,6 @@
 
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
-
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                 <span class="navbar-toggler-icon"></span>
@@ -69,10 +65,8 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                <!-- Left Side Of Navbar -->
                 @auth
                     <div class="dropdown mr-2">
-                        {{--@consultaServicio--}}
                         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuServicios"
                            data-toggle="dropdown" aria-expanded="false">
                             <img src="{{ asset('bootstrap-icons-1.5.0/file-text.svg') }}" width="18" height="18">
@@ -86,7 +80,6 @@
                                 </a>
                             </li>
                         </ul>
-                        {{--@endconsultaServicio--}}
                     </div>
 
                     <div class="dropdown mr-2">
@@ -97,109 +90,31 @@
                         </a>
 
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuCatalogos">
-                            <li>
-                                <a class="dropdown-item" href="{{ url('talleres/index')}}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/wrench-adjustable.svg') }}" width="18" height="18"> Talleres
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('empleados/index')}}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Empleados
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('cuadrillas/index')}}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/people-fill.svg') }}" width="18" height="18"> Cuadrillas
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('administraciones/index')}}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/folder-fill.svg') }}" width="18" height="18"> Administraciones
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('edificios/index')}}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/buildings-fill.svg') }}" width="18" height="18"> Edificios
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('puestos/index')}}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/diagram-3.svg') }}" width="18" height="18"> Puestos
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('adscripciones/index')}}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Adscripciones
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('personal/index')}}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/people.svg') }}" width="18" height="18"> Personal
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('areas/index') }}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Áreas
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('bienes/index') }}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/box-seam.svg') }}" width="18" height="18"> Bienes
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('proveedores/index') }}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/truck.svg') }}" width="18" height="18"> Proveedores
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('entradas/index') }}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/box-arrow-in-down.svg') }}" width="18" height="18"> Entradas
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('salidas/index') }}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/box-arrow-up.svg') }}" width="18" height="18"> Salidas
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="{{ url('unidades/index') }}">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/bounding-box-circles.svg') }}" width="18" height="18"> Unidades
-                                </a>
-                            </li>
+                            <li><a class="dropdown-item" href="{{ url('talleres/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/wrench-adjustable.svg') }}" width="18" height="18"> Talleres</a></li>
+                            <li><a class="dropdown-item" href="{{ url('empleados/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Empleados</a></li>
+                            <li><a class="dropdown-item" href="{{ url('cuadrillas/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/people-fill.svg') }}" width="18" height="18"> Cuadrillas</a></li>
+                            <li><a class="dropdown-item" href="{{ url('administraciones/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/folder-fill.svg') }}" width="18" height="18"> Administraciones</a></li>
+                            <li><a class="dropdown-item" href="{{ url('edificios/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/buildings-fill.svg') }}" width="18" height="18"> Edificios</a></li>
+                            <li><a class="dropdown-item" href="{{ url('puestos/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/diagram-3.svg') }}" width="18" height="18"> Puestos</a></li>
+                            <li><a class="dropdown-item" href="{{ url('adscripciones/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Adscripciones</a></li>
+                            <li><a class="dropdown-item" href="{{ url('personal/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/people.svg') }}" width="18" height="18"> Personal</a></li>
+                            <li><a class="dropdown-item" href="{{ url('areas/index') }}"><img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Áreas</a></li>
+                            <li><a class="dropdown-item" href="{{ url('bienes/index') }}"><img src="{{ asset('bootstrap-icons-1.5.0/box-seam.svg') }}" width="18" height="18"> Bienes</a></li>
+                            <li><a class="dropdown-item" href="{{ url('proveedores/index') }}"><img src="{{ asset('bootstrap-icons-1.5.0/truck.svg') }}" width="18" height="18"> Proveedores</a></li>
+                            <li><a class="dropdown-item" href="{{ url('entradas/index') }}"><img src="{{ asset('bootstrap-icons-1.5.0/box-arrow-in-down.svg') }}" width="18" height="18"> Entradas</a></li>
+                            <li><a class="dropdown-item" href="{{ url('salidas/index') }}"><img src="{{ asset('bootstrap-icons-1.5.0/box-arrow-up.svg') }}" width="18" height="18"> Salidas</a></li>
+                            <li><a class="dropdown-item" href="{{ url('unidades/index') }}"><img src="{{ asset('bootstrap-icons-1.5.0/bounding-box-circles.svg') }}" width="18" height="18"> Unidades</a></li>
                         </ul>
                     </div>
-                    
-                    <!--  BOTONES (Copy/PDF/Print/Excel) 
-                    <div id="dtButtonsTop" class="d-flex align-items-center ml-2"></div> -->
-
                 @endauth
 
-                <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     @guest
                         @if (Route::has('login'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                         @endif
                         @if (Route::has('register'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                         @endif
                     @else
                         <li class="nav-item dropdown">
@@ -270,20 +185,17 @@
     <img src="{{URL::asset('/images/footer.png')}}" width="900" align="center" style="width: 100%; height: 60px;" />
 </footer>
 
-{{-- =========================
-    SCRIPTS (ORDEN CORRECTO)
-========================= --}}
 
-<!-- jQuery -->
+<!-- jQuery (solo una vez) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Bootstrap -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Bootstrap BUNDLE (incluye Popper) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
-<!-- DataTables (tu local) -->
+<!-- DataTables (local) -->
 <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
 
-<!-- ✅ Buttons JS + dependencias -->
+<!-- Buttons + dependencias -->
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
@@ -298,7 +210,7 @@
 <!-- Select2 -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<!-- Tus scripts -->
+
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ secure_asset('js/scripts.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/captura-domicilio.js') }}"></script>
@@ -306,12 +218,12 @@
 <script type="text/javascript" src="{{ asset('js/captura-adscrip.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/modales.js') }}"></script>
 
-<!-- ✅ Tu archivo que inicializa TODAS las tablas -->
+<!-- tablas -->
 <script type="text/javascript" src="{{ asset('js/mistablas.js') }}"></script>
 
 <script>
-    // Inicializar Select2 (como ya lo tenías)
     $(document).ready(function() {
+        // Select2 general
         $('.select2').select2();
     });
 </script>
