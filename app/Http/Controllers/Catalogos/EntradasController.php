@@ -4,76 +4,113 @@ namespace App\Http\Controllers\Catalogos;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Catalogos\Entrada;
-use App\Models\Catalogos\DetalleEntrada;
-use App\Models\Catalogos\Bien;
 use App\Models\Catalogos\Proveedor;
+use App\Models\Catalogos\Bien;
 
 class EntradasController extends Controller
 {
     public function index()
     {
-        $entradas = Entrada::with(['proveedor'])
-            ->orderByDesc('id_entrada')
-            ->get();
+        $entradas = Entrada::query()
+            ->leftJoin('tcproveedores as p', 'p.id_proveedor', '=', 'tcentradas.id_proveedor')
+            ->leftJoin('tadetalle_entrada as d', 'd.id_entrada', '=', 'tcentradas.id_entrada')
+            ->select(
+                'tcentradas.*',
+                'p.nombre as proveedor_nombre',
+                DB::raw('COALESCE(SUM(d.cantidad),0) as total_cantidad')
+            )
+            ->groupBy(
+                'tcentradas.id_entrada',
+                'tcentradas.id_proveedor',
+                'tcentradas.folio',
+                'tcentradas.tipo',
+                'tcentradas.fecha',
+                'tcentradas.created_at',
+                'tcentradas.updated_at',
+                'p.nombre'
+            )
+            ->orderByDesc('tcentradas.id_entrada')
+            ->paginate(10);
 
-        return view('entradas/index', compact('entradas'));
-    }
+        $proveedores = Proveedor::orderBy('nombre')->get();
+        $bienes = Bien::orderBy('codigo')->get();
 
-    public function nuevo()
-    {
-        $proveedores = Proveedor::all();
-        $bienes = Bien::all();
-
-        return view('entradas.nuevo', compact('proveedores', 'bienes'));
+        return view('entradas.index', compact('entradas', 'proveedores', 'bienes'));
     }
 
     public function guardar(Request $request)
     {
-        $request->validate([
-            'id_proveedor' => 'required',
-            'fecha_entrada' => 'required|date'
+        $data = $request->validate([
+            'id_proveedor' => ['required', 'integer'],
+            'folio'        => ['nullable', 'string', 'max:100'],
+            'tipo'         => ['required', 'string', 'max:100'],
+            'fecha'        => ['required', 'date'],
+            'id_bien'      => ['required', 'integer'],
+            'cantidad'     => ['required', 'integer', 'min:1'],
+        ], [
+            'id_proveedor.required' => 'Selecciona un proveedor.',
+            'id_bien.required'      => 'Selecciona un bien.',
+            'cantidad.min'          => 'La cantidad debe ser mayor a 0.',
         ]);
 
-        $entrada = Entrada::create([
-            'id_proveedor' => $request->id_proveedor,
-            'fecha_entrada' => $request->fecha_entrada
+        DB::transaction(function () use ($data) {
 
-        ]);
+            $idEntrada = DB::table('tcentradas')->insertGetId([
+                'id_proveedor' => $data['id_proveedor'],
+                'folio'        => $data['folio'] ?? null,
+                'tipo'         => $data['tipo'],
+                'fecha'        => $data['fecha'],
+                'created_at'   => now(),
+                'updated_at'   => now(),
+            ]);
 
-        if ($request->bienes) {
-            foreach ($request->bienes as $bien) {
-                if ($bien['cantidad'] > 0) {
-                    DetalleEntrada::create([
-                        'id_entrada' => $entrada->id_entrada,
-                        'id_bien' => $bien['id_bien'],
-                        'cantidad' => $bien['cantidad']
-                    ]);
+            DB::table('tadetalle_entrada')->insert([
+                'id_entrada' => $idEntrada,
+                'id_bien'    => $data['id_bien'],
+                'cantidad'   => $data['cantidad'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        });
 
-                    Bien::where('id_bien', $bien['id_bien'])
-                        ->increment('stock', $bien['cantidad']);
-                }
-            }
-        }
-
-        return redirect()->route('entradas.index');
+        return redirect()->route('entradas.index')->with('success', 'Entrada registrada correctamente.');
     }
 
     public function actualizar(Request $request)
     {
-        Entrada::where('id_entrada', $request->id_entrada)
+        $data = $request->validate([
+            'id_entrada'   => ['required', 'integer'],
+            'id_proveedor' => ['required', 'integer'],
+            'folio'        => ['nullable', 'string', 'max:100'],
+            'tipo'         => ['required', 'string', 'max:100'],
+            'fecha'        => ['required', 'date'],
+        ], [
+            'id_proveedor.required' => 'Selecciona un proveedor.',
+        ]);
+
+        DB::table('tcentradas')
+            ->where('id_entrada', $data['id_entrada'])
             ->update([
-                'fecha_entrada' => $request->fecha_entrada
+                'id_proveedor' => $data['id_proveedor'],
+                'folio'        => $data['folio'] ?? null,
+                'tipo'         => $data['tipo'],
+                'fecha'        => $data['fecha'],
+                'updated_at'   => now(),
             ]);
 
-        return redirect()->route('entradas.index');
+        return redirect()->route('entradas.index')->with('success', 'Entrada actualizada correctamente.');
     }
 
     public function eliminar($id)
     {
-        DetalleEntrada::where('id_entrada', $id)->delete();
-        Entrada::where('id_entrada', $id)->delete();
+        DB::transaction(function () use ($id) {
+            DB::table('tadetalle_entrada')->where('id_entrada', $id)->delete();
+            DB::table('tcentradas')->where('id_entrada', $id)->delete();
+        });
 
-        return redirect()->route('entradas.index');
+        return redirect()->route('entradas.index')->with('success', 'Entrada eliminada correctamente.');
     }
 }

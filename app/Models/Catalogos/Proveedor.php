@@ -9,10 +9,5 @@ class Proveedor extends Model
     protected $table = 'tcproveedores';
     protected $primaryKey = 'id_proveedor';
 
-    protected $fillable = [
-        'nombre',
-        'contacto',
-        'direccion',
-        'telefono'
-    ];
+    protected $fillable = ['nombre','contacto','direccion','telefono','estatus'];
 }

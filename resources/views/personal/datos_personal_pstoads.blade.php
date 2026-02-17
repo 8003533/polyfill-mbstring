@@ -13,16 +13,7 @@
                     </div>
                 </div>
                 <br>
-                <div class="row">
-                    <div class="col" id="divbuscarpuesto">
-                        <label for="busca_puesto" class="col-form-label text-md-right">Buscar Puesto:</label>
-                        <input type="text" onkeypress="return textnumber(event);" id="busca_puesto" name="busca_puesto" class="form-control" data-target="#busca_puesto" value="" maxlength="200" {{ $noeditar }}/>
-                    </div>
-                    <div class="col" id="divbuscaradscripcion">
-                        <label for="busca_adscripcion" class="col-form-label text-md-right">Buscar Adscripción:</label>
-                        <input type="text" onkeypress="return textnumber(event);" id="busca_adscripcion" name="busca_adscripcion" class="form-control" data-target="#busca_adscripcion" value="" maxlength="300" {{ $noeditar }}/>
-                    </div>
-                </div>
+                
                 <br>
                 <div class="row">
                     <div class="col" id="divpuesto">
@@ -53,16 +44,7 @@
                     </div>
                 </div>
                 <br>
-                <div class="row">
-                    <div class="col" id="divnuevopuesto">
-                        <label for="nuevo_puesto" class="col-form-label text-md-right">Nuevo Puesto:</label>
-                        <input type="text" onkeypress="return textnumber(event);" id="nuevo_puesto" name="nuevo_puesto" class="form-control" data-target="#nuevo_puesto" value="" maxlength="200" {{ $noeditar }}/>
-                    </div>
-                    <div class="col" id="divnuevaadscripcion">
-                        <label for="nueva_adscripcion" class="col-form-label text-md-right">Nueva Adscripción:</label>
-                        <input type="text" onkeypress="return textnumber(event);" id="nueva_adscripcion" name="nueva_adscripcion" class="form-control" data-target="#nueva_adscripcion" value="" maxlength="300" {{ $noeditar }}/>
-                    </div>
-                </div>
+               
                 <br>
                 <div class="row">
                     <div class="col-md-6">

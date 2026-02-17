@@ -15,13 +15,16 @@
             <a href="{{ route('proveedores.index') }}" class="btn btn-primary btn-block mb-3">Proveedores</a>
         </div>
         <div class="col-md-3">
-            <a href="{{ route('entradas') }}" class="btn btn-primary btn-block mb-3">Entradas</a>
+            <a href="{{ route('entradas.index') }}" class="btn btn-primary btn-block mb-3">Entradas</a>
         </div>
         <div class="col-md-3">
             <a href="{{ route('salidas.index') }}" class="btn btn-primary btn-block mb-3">Salidas</a>
         </div>
         <div class="col-md-3">
             <a href="{{ route('unidades.index') }}" class="btn btn-primary btn-block mb-3">Unidades</a>
+        </div>
+        <div class="col-md-3">
+            <a href="{{route('administraciones.index') }}" class="btn btn-primary btn-block md-3">Administraciones</a>
         </div>
     </div>
 </div>

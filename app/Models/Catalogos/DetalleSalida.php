@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DetalleSalida extends Model
 {
-    protected $table = 'detalle_salida';
+    protected $table = 'tadetalle_salida';
     protected $primaryKey = 'id_detalle_salida';
 
     protected $fillable = [
@@ -16,13 +16,13 @@ class DetalleSalida extends Model
         'cantidad_utilizada'
     ];
 
-    public function salida()
-    {
-        return $this->belongsTo(Salida::class, 'id_salida');
-    }
-
     public function bien()
     {
-        return $this->belongsTo(Bien::class, 'id_bien');
+        return $this->belongsTo(Bien::class, 'id_bien', 'id_bien');
+    }
+
+    public function salida()
+    {
+        return $this->belongsTo(Salida::class, 'id_salida', 'id_salida');
     }
 }

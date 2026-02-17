@@ -9,14 +9,10 @@ class Salida extends Model
     protected $table = 'tasalidas';
     protected $primaryKey = 'id_salida';
 
-    protected $fillable = [
-        'fecha',
-        'folio',
-        'motivo'
-    ];
+    protected $fillable = ['fecha', 'folio', 'motivo'];
 
     public function detalles()
     {
-        return $this->hasMany(DetalleSalida::class, 'id_salida');
+        return $this->hasMany(DetalleSalida::class, 'id_salida', 'id_salida');
     }
 }

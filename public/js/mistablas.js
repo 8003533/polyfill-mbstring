@@ -1,226 +1,69 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
-    var numFilas = [ 10, 15, 20, 25, 50, -1 ];
-    var filas    = [ '10 filas','15 filas','20 filas','25 filas','50 filas','Todas' ];
-    var botones  = ['pageLength','copy', 'excel', 'pdf', 'print'];
+    var numFilas = [10, 15, 20, 25, 50, -1];
+    var filas    = ['10 filas','15 filas','20 filas','25 filas','50 filas','Todas'];
     var idioma   = "/js/Spanish.json";
 
-//Plantilla general para cualquier tabla
-    $('#MyTable').DataTable( {
-        language: {
-             //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-             "url": idioma
-             },
-        responsive: "true",
-        //dom: 'Bfrtip',
-        lengthMenu: [
-        numFilas,
-        filas
-       ],
-        buttons: botones
-    } );
+    function initTabla(selector, titulo) {
 
-    $('#MyTableServicios').DataTable( {
-        language: {
-             //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-             "url": idioma
-             },
-        responsive: "true",
-        //dom: 'Bfrtip',
-        lengthMenu: [
-        numFilas,
-        filas
-       ],
-        buttons: botones,
-        //order: [1, 'asc']
-    } );
+        // Si no existe en esta vista, no hacer nada
+        if (!$(selector).length) return;
 
-    $('#MyTableTalleres').DataTable( {
-        language: {
-             //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-             "url": idioma
-             },
-        responsive: "true",
-        //dom: 'Bfrtip',
-        lengthMenu: [
-        numFilas,
-        filas
-       ],
-        buttons: botones,
-    } );
+        // Evitar reinicialización
+        if ($.fn.DataTable.isDataTable(selector)) return;
 
-    $('#MyTableEmpleados').DataTable( {
-        language: {
-             //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-             "url": idioma
-             },
-        responsive: "true",
-        //dom: 'Bfrtip',
-        lengthMenu: [
-        numFilas,
-        filas
-       ],
-        buttons: botones,
-    } );
+        // Inicializar DataTable
+        var dt = $(selector).DataTable({
+            language: { url: idioma },
+            responsive: true,
 
-    $('#MyTableCuadrillas').DataTable( {
-        language: {
-             //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-             "url": idioma
-             },
-        responsive: "true",
-        //dom: 'Bfrtip',
-        lengthMenu: [
-        numFilas,
-        filas
-       ],
-        buttons: botones
-    } );
+            // Mostrar filas"
+            lengthMenu: [numFilas, filas],
 
-    $('#MyTableAdministraciones').DataTable( {
-        language: {
-             //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-             "url": idioma
-             },
-        responsive: "true",
-        //dom: 'Bfrtip',
-        lengthMenu: [
-        numFilas,
-        filas
-       ],
-        buttons: botones
-    } );
+            // Botones
+            dom: 'lBfrtip', 
+            buttons: [
+                { extend: 'copy',  text: 'Copiar'  },
+                { extend: 'excel', text: 'Excel' },
+                { extend: 'pdf',   text: 'PDF',   title: titulo },
+                { extend: 'print', text: 'Imprimir', title: titulo }
+            ]
+        });
 
-    $('#MyTableEdificios').DataTable( {
-        language: {
-             //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-             "url": idioma
-             },
-        responsive: "true",
-        //dom: 'Bfrtip',
-        lengthMenu: [
-        numFilas,
-        filas
-       ],
-        buttons: botones
-    } );
+       
+        // MOVER CONTROLES A LA BARRA PERSONALIZADA
 
-    $('#MyTablePuestos').DataTable( {
-        language: {
-             //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-             "url": idioma
-             },
-        responsive: "true",
-        //dom: 'Bfrtip',
-        lengthMenu: [
-        numFilas,
-        filas
-       ],
-        buttons: botones
-    } );
+        var $wrapper = $(selector).closest('.dataTables_wrapper');
 
-    $('#MyTableAdscripciones').DataTable( {
-        language: {
-             //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-             "url": idioma
-             },
-        responsive: "true",
-        //dom: 'Bfrtip',
-        lengthMenu: [
-        numFilas,
-        filas
-       ],
-        buttons: botones
-    } );
+       
+        var $toolbar = $(selector).closest('.table-responsive').find('.dt-custom-toolbar').first();
+        if (!$toolbar.length) return;
 
-    $('#MyTablePersonal').DataTable( {
-        language: {
-             //"url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-             "url": idioma
-             },
-        responsive: "true",
-        //dom: 'Bfrtip',
-        lengthMenu: [
-        numFilas,
-        filas
-       ],
-        buttons: botones
-    } );
-    $('#MyTableAreas').DataTable( {
-        language: {
-            // "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
-            "url": idioma
-        },
-        responsive: true,
-        lengthMenu: [
-        numFilas,
-        filas
-        ],
-        buttons: botones
-    });
-        $('#MyTableProveedores').DataTable( {
-        language: {
-            // "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
-            "url": idioma
-        },
-        responsive: true,
-        lengthMenu: [
-        numFilas,
-        filas
-        ],
-        buttons: botones
-    });
+       
+        $wrapper.find('.dataTables_length').appendTo($toolbar.find('.dt-slot-length'));
 
-            $('#MyTableBienes').DataTable( {
-        language: {
-            // "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
-            "url": idioma
-        },
-        responsive: true,
-        lengthMenu: [
-        numFilas,
-        filas
-        ],
-        buttons: botones
-    });
+  
+        $wrapper.find('.dt-buttons').appendTo($toolbar.find('.dt-slot-buttons'));
 
-    
-            $('#MyTableEntradas').DataTable( {
-        language: {
-            // "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
-            "url": idioma
-        },
-        responsive: true,
-        lengthMenu: [
-        numFilas,
-        filas
-        ],
-        buttons: botones
-    });
+        
+        $wrapper.find('.dataTables_filter').appendTo($toolbar.find('.dt-slot-search'));
+    }
 
-                $('#MyTableSalidas').DataTable( {
-        language: {
-            // "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
-            "url": idioma
-        },
-        responsive: true,
-        lengthMenu: [
-        numFilas,
-        filas
-        ],
-        buttons: botones
-    });
-
-                    $('#MyTableUnidades').DataTable( {
-        language: {
-            // "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json"
-            "url": idioma
-        },
-        responsive: true,
-        lengthMenu: [
-        numFilas,
-        filas
-        ],
-        buttons: botones
-    });
-} );
+    // ========= INICIALIZAR LAS TABLAS =========
+    initTabla('#MyTable', 'Reporte');
+    initTabla('#MyTableServicios', 'Listado de Servicios');
+    initTabla('#MyTableTalleres', 'Listado de Talleres');
+    initTabla('#MyTableEmpleados', 'Listado de Empleados');
+    initTabla('#MyTableCuadrillas', 'Listado de Cuadrillas');
+    initTabla('#MyTableAdministraciones', 'Listado de Administraciones');
+    initTabla('#MyTableEdificios', 'Listado de Edificios');
+    initTabla('#MyTablePuestos', 'Listado de Puestos');
+    initTabla('#MyTableAdscripciones', 'Listado de Adscripciones');
+    initTabla('#MyTablePersonal', 'Listado de Personal');
+    initTabla('#MyTableAreas', 'Listado de Áreas');
+    initTabla('#MyTableProveedores', 'Listado de Proveedores');
+    initTabla('#MyTableBienes', 'Listado de Bienes');
+    initTabla('#MyTableEntradas', 'Listado de Entradas');
+    initTabla('#MyTableSalidas', 'Listado de Salidas');
+    initTabla('#MyTableUnidades', 'Listado de Unidades');
+});

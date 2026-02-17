@@ -1,4 +1,4 @@
- <!doctype html>
+<!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -9,349 +9,224 @@
 
     <title>Órdenes de Servicio</title>
 
-    <!-- Scripts -->
-    <!--@vite(['resources/sass/app.scss', 'resources/js/app.js']) -->
-    <script src="{{asset('js/app.js')}}" defer></script>
-    <scriptrc="{{ secure_asset('js/scripts.js') }}"></script>
-    <!--<script src="{{asset('js/scripts.js')}}"></script>-->
-    <!--<script type="text/javascript" src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="{{ asset('js/captura-domicilio.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/captura-puesto.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/captura-adscrip.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/datatables.min.js') }}" defer></script>
-    <script type="text/javascript" src="{{ asset('js/mistablas.js') }}" ></script>
-    
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
-    <!-- Luego cargamos Select2 -->
-      <!-- Select2 CSS -->
+    <!-- Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/customize-navbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.min.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+
+    <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script type="text/javascript" src="{{ asset('js/modales.js') }}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{{asset('css/customize-navbar.css')}}}">
-    <link rel="stylesheet" type="text/css" href="{{{asset('css/datatables.min.css')}}}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Select2 CSS 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />-->
-     <!-- Luego tu script -->
-        <script>
-            $(document).ready(function() {
-                // Inicializar Select2
-                $('.select2').select2();
-            });
-        </script>
-
+    <style>
+        #dtButtonsTop .dt-button {
+            border-radius: .2rem;
+            margin-left: .25rem;
+            padding: .25rem .5rem;
+            font-size: .875rem;
+        }
+        @media (max-width: 991.98px) {
+            #dtButtonsTop {
+                margin-top: .5rem;
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+    </style>
 </head>
-<body>
-    <div id="app">
-        <div>
-            <header>
-                <img src="{{asset('/images/LOGO_PJ.jpg')}}" srcset="{{asset('/images/LOGO_PJ.jpg')}} 1920w, {{asset('/images/LOGO_PJ.jpg')}} 1600w,  {{asset('/images/LOGO_PJ.jpg')}} 800w, {{asset('/images/LOGO_PJ.jpg')}} 650w, {{asset('/images/LOGO_PJ.jpg')}} 450w" sizes="(min-width: 1920px)" alt="Ejemplo" height="110px" align="left">
-                <img src="{{asset('/images/LOGO_GESTIONTEC_extendido.png')}}" srcset="{{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 1920w, {{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 1600w,  {{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 800w, {{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 650w, {{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 450w" sizes="(min-width: 1920px)" alt="Ejemplo" height="110px" align="right">
-            </header>
-        </div>
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    @auth
-                        <div class="dropdown">
-                            {{--@consultaServicio--}}
-                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ asset('bootstrap-icons-1.5.0/file-text.svg') }}" width="18" height="18">
-                                    Servicios
+<body>
+<div id="app">
+    <div>
+        <header>
+            <img src="{{asset('/images/LOGO_PJ.jpg')}}"
+                 srcset="{{asset('/images/LOGO_PJ.jpg')}} 1920w, {{asset('/images/LOGO_PJ.jpg')}} 1600w,  {{asset('/images/LOGO_PJ.jpg')}} 800w, {{asset('/images/LOGO_PJ.jpg')}} 650w, {{asset('/images/LOGO_PJ.jpg')}} 450w"
+                 sizes="(min-width: 1920px)" alt="Ejemplo" height="110px" align="left">
+
+            <img src="{{asset('/images/LOGO_GESTIONTEC_extendido.png')}}"
+                 srcset="{{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 1920w, {{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 1600w,  {{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 800w, {{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 650w, {{asset('/images/LOGO_GESTIONTEC_extendido.png')}} 450w"
+                 sizes="(min-width: 1920px)" alt="Ejemplo" height="110px" align="right">
+        </header>
+    </div>
+
+    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                @auth
+                    <div class="dropdown mr-2">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuServicios"
+                           data-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ asset('bootstrap-icons-1.5.0/file-text.svg') }}" width="18" height="18">
+                            Servicios
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuServicios">
+                            <li>
+                                <a class="dropdown-item" href="{{ url('registro/index') }}">
+                                    <img src="{{ asset('bootstrap-icons-1.5.0/search.svg') }}" width="18" height="18">
+                                    Lista de Servicios
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <li><a class="dropdown-item" href="{{ url('registro/index') }}">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/search.svg') }}" width="18" height="18"> Lista de Servicios
-                                        </a>
-                                    </li>
-                                </ul>
-                            {{--@endconsultaServicio--}}
-                        </div>
-                        <div class="dropdown">
-                          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown mr-2">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuCatalogos"
+                           data-toggle="dropdown" aria-expanded="false">
                             <img src="{{ asset('bootstrap-icons-1.5.0/file-text-fill.svg') }}" width="18" height="18">
                             Catálogos
-                          </a>
-                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            {{--@consultaTaller--}}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/wrench-adjustable.svg') }}" width="18" height="18"> Talleres <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('talleres/index') }}" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/wrench-adjustable.svg') }}" width="18" height="18"> Lista de Talleres
-                                            </a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="{{ url('talleres/nuevo') }}" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/tools.svg') }}" width="18" height="18"> Nuevo Taller
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            {{--@endconsultaTaller
-                            @consultaEmpleado--}}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Empleados <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('empleados/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Lista de Empleados de Talleres
-                                            </a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="{{ url('empleados/nuevo') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-vcard-fill.svg') }}" width="18" height="18"> Nuevo Empleado de Taller
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            {{--@endconsultaEmpleado
-                            @consultaCuadrilla--}}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/people-fill.svg') }}" width="18" height="18"> Cuadrillas <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('cuadrillas/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/people-fill.svg') }}" width="18" height="18"> Lista de Cuadrillas
-                                            </a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="{{ url('cuadrillas/nueva') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/person-fill-add.svg') }}" width="18" height="18"> Nueva Cuadrilla
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            {{--@endconsultaCuadrilla
-                            @consultaAdministracion--}}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/folder-fill.svg') }}" width="18" height="18"> Administraciones <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('administraciones/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/folder-fill.svg') }}" width="18" height="18"> Lista de Administraciones
-                                            </a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="{{ url('administraciones/nueva') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/folder-plus.svg') }}" width="18" height="18"> Nueva Administración
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            {{--@enconsultaAdministracion
-                            @consultaEdificio--}}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/buildings-fill.svg') }}" width="18" height="18"> Edificios <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                            <li><a class="dropdown-item" href="{{ url('edificios/index') }}">
-                                                <img src="{{ asset('bootstrap-icons-1.5.0/buildings-fill.svg') }}" width="18" height="18"> Lista de Edificios
-                                                </a>
-                                            </li>
-                                            <li><a class="dropdown-item" href="{{ url('edificios/nuevo') }}">
-                                                <img src="{{ asset('bootstrap-icons-1.5.0/building-fill-add.svg') }}" width="18" height="18"> Nuevo Edificio
-                                                </a>
-                                            </li>
-                                        </ul>
-                                </li>
-                            {{--@endconsultaEdificio
-                            @consultaPuesto--}}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/diagram-3.svg') }}" width="18" height="18"> Puestos <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('puestos/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/diagram-3.svg') }}" width="18" height="18"> Lista de Puestos
-                                            </a>
-                                        </li>
-                                        {{--@altaPuesto--}}
-                                            <li><a class="dropdown-item" href="{{ url('puestos/nuevo') }}">
-                                                <img src="{{ asset('bootstrap-icons-1.5.0/person-vcard.svg') }}" width="18" height="18"> Nuevo Puesto
-                                                </a>
-                                            </li>
-                                        {{--@endaltaPuesto--}}
-                                    </ul>
-                                </li>
-                            {{--@endconsultaPuesto
-                            @consultaAdscripcion--}}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Adscripciones <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('adscripciones/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Lista de Adscripciones
-                                            </a>
-                                        </li>
-                                        {{--@altaAdscripcion--}}
-                                            <li><a class="dropdown-item" href="{{ url('adscripciones/nueva') }}">
-                                                <img src="{{ asset('bootstrap-icons-1.5.0/building-add.svg') }}" width="18" height="18"> Nueva Adscripción
-                                                </a>
-                                            </li>
-                                        {{--@endaltaAdscripcion--}}
-                                    </ul>
-                                </li>
-                            {{--@endconsultaAdscripcion
-                            @consultaPersonal--}}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <img src="{{ asset('bootstrap-icons-1.5.0/people.svg') }}" width="18" height="18"> Personal <span class="caret"></span></a>
-                                    <ul class="dropdown-menu sub-menu">
-                                        <li><a class="dropdown-item" href="{{ url('personal/index') }}">
-                                            <img src="{{ asset('bootstrap-icons-1.5.0/people.svg') }}" width="18" height="18"> Lista de Personal
-                                            </a>
-                                        </li>
-                                        {{--@altaPersonal--}}
-                                            <li><a class="dropdown-item" href="{{ url('personal/nuevo') }}">
-                                                <img src="{{ asset('bootstrap-icons-1.5.0/person-add.svg') }}" width="18" height="18"> Nuevo Personal
-                                                </a>
-                                            </li>
-                                        {{--@endaltaPersonal--}}
-                                    </ul>
-                                </li>
-                                {{--@consultaArea--}}
+                        </a>
 
-<li>
-    <a class="dropdown-item" href="{{ url('areas/index') }}">
-        <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Áreas
-    </a>
-</li>
-{{--@endconsultaArea--}}
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuCatalogos">
+                            <li><a class="dropdown-item" href="{{ url('talleres/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/wrench-adjustable.svg') }}" width="18" height="18"> Talleres</a></li>
+                            <li><a class="dropdown-item" href="{{ url('empleados/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/person-lines-fill.svg') }}" width="18" height="18"> Empleados</a></li>
+                            <li><a class="dropdown-item" href="{{ url('cuadrillas/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/people-fill.svg') }}" width="18" height="18"> Cuadrillas</a></li>
+                            <li><a class="dropdown-item" href="{{ url('administraciones/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/folder-fill.svg') }}" width="18" height="18"> Administraciones</a></li>
+                            <li><a class="dropdown-item" href="{{ url('edificios/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/buildings-fill.svg') }}" width="18" height="18"> Edificios</a></li>
+                            <li><a class="dropdown-item" href="{{ url('puestos/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/diagram-3.svg') }}" width="18" height="18"> Puestos</a></li>
+                            <li><a class="dropdown-item" href="{{ url('adscripciones/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Adscripciones</a></li>
+                            <li><a class="dropdown-item" href="{{ url('personal/index')}}"><img src="{{ asset('bootstrap-icons-1.5.0/people.svg') }}" width="18" height="18"> Personal</a></li>
+                            <li><a class="dropdown-item" href="{{ url('areas/index') }}"><img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> Áreas</a></li>
+                            <li><a class="dropdown-item" href="{{ url('bienes/index') }}"><img src="{{ asset('bootstrap-icons-1.5.0/box-seam.svg') }}" width="18" height="18"> Bienes</a></li>
+                            <li><a class="dropdown-item" href="{{ url('proveedores/index') }}"><img src="{{ asset('bootstrap-icons-1.5.0/truck.svg') }}" width="18" height="18"> Proveedores</a></li>
+                            <li><a class="dropdown-item" href="{{ url('entradas/index') }}"><img src="{{ asset('bootstrap-icons-1.5.0/box-arrow-in-down.svg') }}" width="18" height="18"> Entradas</a></li>
+                            <li><a class="dropdown-item" href="{{ url('salidas/index') }}"><img src="{{ asset('bootstrap-icons-1.5.0/box-arrow-up.svg') }}" width="18" height="18"> Salidas</a></li>
+                            <li><a class="dropdown-item" href="{{ url('unidades/index') }}"><img src="{{ asset('bootstrap-icons-1.5.0/bounding-box-circles.svg') }}" width="18" height="18"> Unidades</a></li>
+                        </ul>
+                    </div>
+                @endauth
 
-{{--@consultaBien--}}
-<li>
-    <a class="dropdown-item" href="{{ url('bienes/index') }}">
-        <img src="{{ asset('bootstrap-icons-1.5.0/box-seam.svg') }}" width="18" height="18"> Bienes
-    </a>
-</li>
-{{--@endconsultaBien--}}
+                <ul class="navbar-nav ml-auto">
+                    @guest
+                        @if (Route::has('login'))
+                            <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+                        @endif
+                        @if (Route::has('register'))
+                            <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                        @endif
+                    @else
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ Auth::user()->name }}
+                            </a>
 
-{{--@consultaProveedor--}}
-<li>
-    <a class="dropdown-item" href="{{ url('proveedores/index') }}">
-        <img src="{{ asset('bootstrap-icons-1.5.0/truck.svg') }}" width="18" height="18"> Proveedores
-    </a>
-</li>
-{{--@endconsultaProveedor--}}
-
-{{--@consultaEntrada--}}
-<li>
-    <a class="dropdown-item" href="{{ url('entradas') }}">
-        <img src="{{ asset('bootstrap-icons-1.5.0/box-arrow-in-down.svg') }}" width="18" height="18"> Entradas
-    </a>
-</li>
-{{--@endconsultaEntrada--}}
-
-{{--@consultaSalida--}}
-<li>
-    <a class="dropdown-item" href="{{ url('salidas/index') }}">
-        <img src="{{ asset('bootstrap-icons-1.5.0/box-arrow-up.svg') }}" width="18" height="18"> Salidas
-    </a>
-</li>
-
-{{--@consultaUnidad--}}
-<li>
-    <a class="dropdown-item" href="{{ url('unidades/index') }}">
-        <img src="{{ asset('bootstrap-icons-1.5.0/bounding-box-circles.svg') }}" width="18" height="18"> Unidades
-    </a>
-</li>
-{{--@endconsultaUnidad--}}
-
-
-                            {{--@endconsultaPersonal--}}
-                          </ul>
-                        </div>
-                    @endauth
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
                                 </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                    @endguest
+                </ul>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li> 
-                        @endguest
-                    </ul>
-                </div>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <br>
-        <div class="container col-md-10">
-            <div class="container container-fluid h-100">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="text-primary-sin text-center">@yield('titulo')</h4>
-                    </div>
-                    <div class="card-body">
-                        @if ($message = Session::get('success'))
-                            <div class="alert alert-success">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <p>{{ $message }}</p>
-                            </div>
-                        @endif
-                        @if ($message = Session::get('warning'))
-                            <div class="alert alert-warning">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <p>{{ $message }}</p>
-                            </div>
-                        @endif
-                        @if ($message = Session::get('danger'))
-                            <div class="alert alert-danger">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <p>{{ $message }}</p>
-                            </div>
-                        @endif
-                        @yield('panel')
-                    </div>
+    <br>
+
+    <div class="container col-md-10">
+        <div class="container container-fluid h-100">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="text-primary-sin text-center">@yield('titulo')</h4>
+                </div>
+                <div class="card-body">
+
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
+
+                    @if ($message = Session::get('warning'))
+                        <div class="alert alert-warning">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
+
+                    @if ($message = Session::get('danger'))
+                        <div class="alert alert-danger">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
+
+                    @yield('panel')
                 </div>
             </div>
         </div>
     </div>
-    <br>
-    <footer class="footer">
-        <img src="{{URL::asset('/images/footer.png')}}"width="900" align="center" style="width: 100%; height: 60px;" />
-        <!--
-        <img src="{{asset('/images/footer1920.jpg')}}" srcset="{{asset('/images/footer1920.jpg')}} 1920w, {{asset('/images/footer1600.jpg')}} 1600w, {{asset('/images/footer800.jpg')}} 800w, {{asset('/images/footer650.jpg')}} 650w, {{asset('/images/footer450.jpg')}} 450w" sizes="(min-width: 1920px)" alt="Ejemplo">
-        -->
-    </footer>
+
+</div>
+
+<br>
+
+<footer class="footer">
+    <img src="{{URL::asset('/images/footer.png')}}" width="900" align="center" style="width: 100%; height: 60px;" />
+</footer>
+
+
+<!-- jQuery (solo una vez) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap BUNDLE (incluye Popper) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<!-- DataTables (local) -->
+<script type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
+
+<!-- Buttons + dependencias -->
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+<!-- Excel -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<!-- PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+<!-- Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+<script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ secure_asset('js/scripts.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/captura-domicilio.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/captura-puesto.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/captura-adscrip.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/modales.js') }}"></script>
+
+<!-- tablas -->
+<script type="text/javascript" src="{{ asset('js/mistablas.js') }}"></script>
+
+<script>
+    $(document).ready(function() {
+        // Select2 general
+        $('.select2').select2();
+    });
+</script>
+
 </body>
 </html>

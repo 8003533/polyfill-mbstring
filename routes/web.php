@@ -34,8 +34,7 @@ Route::get('/catalogos', [CatalogosController::class, 'index'])->name('catalogos
 |
 */
 
-Route::get('/', function () {
-    return view('auth/login');
+Route::get('/', function () {return view('auth/login');
 });
 
 Auth::routes();
@@ -43,22 +42,29 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //Rutas de Talleres
-Route::get('talleres/index',                                [TalleresController::class, 'index'])->name('talleres.index');
-Route::get('talleres/nuevo',                                [TalleresController::class, 'nuevo_taller'])->name('talleres.nuevo');
-Route::post('talleres/guardar',                             [TalleresController::class, 'guardar_taller']);
-Route::get('talleres/editar/{id_taller}',                   [TalleresController::class, 'editar_taller'])->name('talleres.editar');
-Route::post('talleres/actualizar',                          [TalleresController::class, 'actualizar_taller']);
-Route::get('talleres/inhabilitar/{id_taller}',              [TalleresController::class, 'confirmainhabilitar_taller']);
 
-//Rutas de Empleados Talleres
-Route::get('empleados/index',                               [EmpleadosController::class, 'index'])->name('empleados.index');
-Route::get('empleados/nuevo',                               [EmpleadosController::class, 'nuevo_empleado'])->name('empleados.nuevo');
-Route::post('empleados/guardar',                            [EmpleadosController::class, 'guardar_empleado']);
-//CORRECCIÓN DE DATOS
-Route::get('empleados/editar/{id_empleado}',                [EmpleadosController::class, 'editar_empleado'])->name('empleados.editar');
-Route::post('empleados/actualizar',                         [EmpleadosController::class, 'actualizar_empleado']);
-//BORRAR / RECUPERAR
-Route::get('empleados/inhabilitar/{id_empleado}',           [EmpleadosController::class, 'confirmainhabilitar_empleado']);
+Route::prefix('talleres')->group(function () {
+
+    Route::get('index', [TalleresController::class, 'index'])->name('talleres.index');
+
+    Route::get('nuevo', [TalleresController::class, 'nuevo_taller'])->name('talleres.nuevo');
+
+    Route::post('guardar', [TalleresController::class, 'guardar_taller'])->name('talleres.guardar');
+
+    Route::get('editar/{id_taller}', [TalleresController::class, 'editar_taller'])->name('talleres.editar');
+
+    Route::post('actualizar', [TalleresController::class, 'actualizar_taller'])->name('talleres.actualizar');
+
+    Route::get('inhabilitar/{id_taller}', [TalleresController::class, 'confirmainhabilitar_taller'])->name('talleres.inhabilitar');
+});
+
+// Rutas de empleados
+Route::get('empleados/index', [EmpleadosController::class, 'index'])->name('empleados.index');
+Route::get('empleados/nuevo', [EmpleadosController::class, 'nuevo_empleado'])->name('empleados.nuevo');
+Route::post('empleados/guardar', [EmpleadosController::class, 'guardar_empleado'])->name('empleados.guardar');
+Route::get('empleados/editar/{id_empleado}', [EmpleadosController::class, 'editar_empleado'])->name('empleados.editar');
+Route::post('empleados/actualizar', [EmpleadosController::class, 'actualizar_empleado'])->name('empleados.actualizar');
+Route::get('empleados/inhabilitar/{id_empleado}', [EmpleadosController::class, 'confirmainhabilitar_empleado'])->name('empleados.inhabilitar');
 
 //Rutas de Cuadrillas
 Route::get('cuadrillas/index',                              [CuadrillasController::class, 'index'])->name('cuadrillas.index');
@@ -77,13 +83,23 @@ Route::post('administraciones/actualizar',                  [AdministracionesCon
 Route::get('administraciones/inhabilitar/{id_administracion}', [AdministracionesController::class, 'confirmainhabilitar_administracion']);
 
 //Rutas de Edificios
-Route::get('edificios/index',                               [EdificiosController::class, 'index'])->name('edificios.index');
-Route::get('edificios/nuevo',                               [EdificiosController::class, 'nuevo_edificio'])->name('edificios.nuevo');
-Route::post('edificios/guardar',                            [EdificiosController::class, 'guardar_edificio']);
-Route::get('edificios/editar/{id_edificio}',                [EdificiosController::class, 'editar_edificio'])->name('edificios.editar');
-Route::post('edificios/actualizar',                         [EdificiosController::class, 'actualizar_edificio']);
-Route::get('edificios/inhabilitar/{id_edificio}',           [EdificiosController::class, 'confirmainhabilitar_edificio']);
-Route::post('buscaAlcaldiaColonia',                         [EdificiosController::class, 'buscaAlcaldiaColonia']);
+Route::get('edificios/index', [EdificiosController::class, 'index'])->name('edificios.index');
+
+// Vistas clásicas (las de siempre)
+Route::get('edificios/nuevo', [EdificiosController::class, 'nuevo_edificio'])->name('edificios.nuevo');
+Route::post('edificios/guardar_edificio', [EdificiosController::class, 'guardar_edificio'])->name('edificios.guardar_edificio');
+
+Route::get('edificios/editar/{id}', [EdificiosController::class, 'editar_edificio'])->name('edificios.editar');
+Route::post('edificios/actualizar_edificio', [EdificiosController::class, 'actualizar_edificio'])->name('edificios.actualizar_edificio');
+
+Route::get('edificios/inhabilitar/{id}', [EdificiosController::class, 'confirmainhabilitar_edificio'])->name('edificios.inhabilitar');
+
+// edificios
+Route::post('edificios/guardar', [EdificiosController::class, 'guardar'])->name('edificios.guardar');
+Route::post('edificios/actualizar', [EdificiosController::class, 'actualizar'])->name('edificios.actualizar');
+Route::delete('edificios/{id}', [EdificiosController::class, 'destroy']); 
+Route::get('edificios/busca-alcaldia-colonia', [EdificiosController::class, 'buscaAlcaldiaColonia'])->name('edificios.buscaAlcaldiaColonia');
+Route::get('edificios/busca-direccion-administracion', [EdificiosController::class, 'buscaDireccionAdministracion'])->name('edificios.buscaDireccionAdministracion');
 
 //Rutas de Puestos
 Route::get('puestos/index',                         [PuestosController::class, 'index'])->name('puestos.index');
@@ -94,14 +110,13 @@ Route::post('puestos/actualizar',                   [PuestosController::class, '
 Route::get('puestos/inhabilitar/{id_puesto}',       [PuestosController::class, 'confirmainhabilitar_puesto']);
 Route::post('buscaPuestos',                         [PuestosController::class, 'buscaPuestos']);
 
-//Rutas de Adscripciones
-Route::get('adscripciones/index',                   [AdscripcionesController::class, 'index'])->name('adscripciones.index');
-Route::get('adscripciones/nueva',                   [AdscripcionesController::class, 'nueva_adscripcion'])->name('adscripciones.nueva');
-Route::post('adscripciones/guardar',                [AdscripcionesController::class, 'guardar_adscripcion']);
-Route::get('adscripciones/editar/{id_adsc}',        [AdscripcionesController::class, 'editar_adscripcion'])->name('adscripciones.editar');
-Route::post('adscripciones/actualizar',             [AdscripcionesController::class, 'actualizar_adscripcion']);
-Route::get('adscripciones/inhabilitar/{id_adsc}',   [AdscripcionesController::class, 'confirmainhabilitar_adscripcion']);
-Route::post('buscaAdscripciones',                   [AdscripcionesController::class, 'buscaAdscripciones']);
+
+// Rutas de adscripciones
+Route::get('adscripciones/index', [AdscripcionesController::class, 'index'])->name('adscripciones.index');
+Route::post('adscripciones/guardar', [AdscripcionesController::class, 'guardar'])->name('adscripciones.guardar');
+Route::get('adscripciones/editar/{id_adscripcion}', [AdscripcionesController::class, 'editar'])->name('adscripciones.editar');
+Route::post('adscripciones/actualizar', [AdscripcionesController::class, 'actualizar'])->name('adscripciones.actualizar');
+Route::get('adscripciones/inhabilitar/{id_adscripcion}', [AdscripcionesController::class, 'inhabilitar'])->name('adscripciones.inhabilitar');
 
 //Rutas de Personal
 Route::get('personal/index',                        [PersonalController::class, 'index'])->name('personal.index');
@@ -122,9 +137,17 @@ Route::post('buscaOtroNombre',                      [PersonalController::class, 
 
 
 //Rutas de Servicio
-Route::get('registro/index',                        [RegistroController::class, 'index'])->name('registro.index');
-Route::post('registro/guardar',                      [RegistroController::class, 'guardar'])->name('registro.guardar');
 
+Route::middleware(['auth'])->prefix('registro')->group(function () {
+
+    Route::get('/index', [RegistroController::class, 'index'])->name('registro.index');
+
+    // AJAX: siguiente folio del año
+    Route::get('/folio-actual', [RegistroController::class, 'folioActual'])->name('registro.folioActual');
+
+    // Guardar desde modal
+    Route::post('/guardar', [RegistroController::class, 'guardar'])->name('registro.guardar');
+});
 
 
 // -------------------- ÁREAS --------------------
@@ -145,77 +168,47 @@ Route::delete('areas/{id_areas}', [AreasController::class, 'eliminar'])->name('a
 
 // -------------------- BIENES --------------------
 
-Route::get('bienes/index',
-    [BienesController::class, 'index']
-)->name('bienes.index');
-
-Route::get('bienes/nuevo',
-    [BienesController::class, 'nuevo_bien']
-)->name('bienes.nuevo');
-
-Route::post('bienes/guardar',
-    [BienesController::class, 'guardar']
-)->name('bienes.guardar');
-
-Route::get('bienes/editar/{id}',
-    [BienesController::class, 'editar']
-)->name('bienes.editar');
-
-Route::post('bienes/actualizar',
-    [BienesController::class, 'actualizar']
-)->name('bienes.actualizar');
-
-Route::delete('bienes/{id}',
-    [BienesController::class, 'eliminar']
-)->name('bienes.eliminar');
+Route::get('bienes/index',        [BienesController::class, 'index'])->name('bienes.index');
+Route::post('bienes/guardar',     [BienesController::class, 'guardar'])->name('bienes.guardar');
+Route::post('bienes/actualizar',  [BienesController::class, 'actualizar'])->name('bienes.actualizar');
+Route::delete('bienes/{id_bien}', [BienesController::class, 'eliminar'])->name('bienes.eliminar');
 
 
 /** PROVEEDORES */
-
-Route::get('proveedores/index',           [ProveedoresController::class, 'index'])->name('proveedores.index');
-Route::get('proveedores/nuevo',           [ProveedoresController::class, 'nuevo'])->name('proveedores.nuevo');
-Route::post('proveedores/guardar',        [ProveedoresController::class, 'guardar'])->name('proveedores.guardar');
-
-Route::get('proveedores/editar/{id_proveedor}', [ProveedoresController::class, 'editar'])->name('proveedores.editar');
-Route::post('proveedores/actualizar',     [ProveedoresController::class, 'actualizar'])->name('proveedores.actualizar');
-
-Route::delete('proveedores/{id_proveedor}', [ProveedoresController::class, 'eliminar'])->name('proveedores.eliminar');
+Route::get('/proveedores/index', [ProveedoresController::class, 'index'])->name('proveedores.index');
+Route::post('/proveedores/guardar', [ProveedoresController::class, 'guardar'])->name('proveedores.guardar');
+Route::post('/proveedores/actualizar', [ProveedoresController::class, 'actualizar'])->name('proveedores.actualizar');
+Route::delete('/proveedores/{id}', [ProveedoresController::class, 'eliminar'])->name('proveedores.eliminar');
 
 
 /** UNIDADES */
-Route::get('unidades', [UnidadesController::class, 'index'])->name('unidades.index');
-Route::get('unidades/nuevo', [UnidadesController::class, 'nuevo'])->name('unidades.nuevo');
-Route::post('unidades/guardar', [UnidadesController::class, 'guardar'])->name('unidades.guardar');
-Route::get('unidades/editar/{id_unidad}', [UnidadesController::class, 'editar'])->name('unidades.editar');
-Route::post('unidades/actualizar', [UnidadesController::class, 'actualizar'])->name('unidades.actualizar');
+Route::get('unidades/index',        [UnidadesController::class, 'index'])->name('unidades.index');
+Route::get('unidades/nuevo',        [UnidadesController::class, 'nuevo'])->name('unidades.nuevo');
+Route::post('unidades/guardar',     [UnidadesController::class, 'guardar'])->name('unidades.guardar');
+Route::post('unidades/actualizar',  [UnidadesController::class, 'actualizar'])->name('unidades.actualizar');
 Route::delete('unidades/{id_unidad}', [UnidadesController::class, 'eliminar'])->name('unidades.eliminar');
-
 /** ENTRADAS */
 
+Route::get('/entradas', function () {return redirect()->route('entradas.index');});
 
-Route::prefix('entradas')->group(function () {
-    Route::get('/', [EntradasController::class, 'index'])->name('entradas.index');
-    Route::get('/nuevo', [EntradasController::class, 'nuevo'])->name('entradas.nuevo');
-    Route::post('/crear', [EntradasController::class, 'crear'])->name('crear.index');
-    Route::post('/actualizar', [EntradasController::class, 'actualizar'])->name('entradas.actualizar');
-    Route::delete('/{id}', [EntradasController::class, 'inhabilitar'])->name('entradas.inhabilitar');
-});
+Route::get('/entradas/index', [EntradasController::class, 'index'])->name('entradas.index');
 
+Route::post('/entradas/guardar', [EntradasController::class, 'guardar'])->name('entradas.guardar');
 
+Route::post('/entradas/actualizar', [EntradasController::class, 'actualizar'])->name('entradas.actualizar');
+
+Route::delete('/entradas/{id}', [EntradasController::class, 'eliminar'])->name('entradas.eliminar');
 
 /** SALIDAS */
 
-Route::prefix('salidas')->group(function () {
+Route::get('/salidas/index', [SalidasController::class, 'index'])
+    ->name('salidas.index');
 
-    Route::get('/', [SalidasController::class, 'index'])->name('salidas.index');
+Route::post('/salidas/guardar', [SalidasController::class, 'guardar'])
+    ->name('salidas.guardar');
 
-    Route::get('/nuevo', [SalidasController::class, 'create'])->name('salidas.nuevo');
+Route::post('/salidas/actualizar', [SalidasController::class, 'actualizar'])
+    ->name('salidas.actualizar');
 
-    Route::post('/guardar', [SalidasController::class, 'store'])->name('salidas.guardar');
-
-    Route::get('/editar/{id_salida}', [SalidasController::class, 'edit'])->name('salidas.editar');
-
-    Route::put('/actualizar', [SalidasController::class, 'actualizar'])->name('salidas.actualizar');
-
-    Route::delete('/eliminar/{id_salida}', [SalidasController::class, 'destroy'])->name('salidas.eliminar');
-});
+Route::delete('/salidas/{id}', [SalidasController::class, 'eliminar'])
+    ->name('salidas.eliminar');

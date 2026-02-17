@@ -2,21 +2,52 @@
 
 @section('titulo')
 <h3 class="text-primary-sin text-center">
-  {{-- Insertar imagen o icono --}}
-    <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18"> 
+    <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18">
     Listado de Áreas
-    
 </h3>
 @endsection
 
 @section('panel')
 <div class="table-responsive">
 
+    {{-- Mensaje éxito --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        </div>
+    @endif
 
-    <!-- Crear una Nueva Área -->
+    {{-- Mensaje danger --}}
+    @if(session('danger'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('danger') }}
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        </div>
+    @endif
+
+    {{-- Errores --}}
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <p>Corrige los errores para continuar</p>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        </div>
+    @endif
+
+    <!-- Nueva Área (MODAL) -->
     <div class="row">
         <div class="col col-form-label text-md-right">
-            <a href="{{ url('areas/nuevo') }}" data-toggle="tooltip" data-html="true" title="Nueva Área">
+            <a href="#"
+               data-toggle="modal"
+               data-target="#modalNuevaArea"
+               data-toggle="tooltip"
+               data-html="true"
+               title="Nueva Área">
                 + Nueva Área
             </a>
         </div>
@@ -38,56 +69,106 @@
                     <td class="text-center">{{ $area->id_areas }}</td>
                     <td class="text-center">{{ $area->nombre }}</td>
                     <td class="text-center">
-                        @if ($area->estatus == 1)
+                        @if($area->estatus == 1)
                             <span>Activo</span>
                         @else
                             <span>Inactivo</span>
                         @endif
                     </td>
+
                     <td class="text-center col-actions">
-                        
-                        <!-- Botón Editar -->
+
+                        {{-- EDITAR (MODAL) --}}
                         <button class="btn"
                             data-toggle="modal"
-                            data-target="#editarModal"
+                            data-target="#modalEditarArea"
                             data-id="{{ $area->id_areas }}"
                             data-nombre="{{ $area->nombre }}"
-                            data-estatus="{{ $area->estatus }}">
+                            title="Actualizar">
                             <img src="{{ asset('bootstrap-icons-1.5.0/pencil-fill.svg') }}" width="18" height="18">
                         </button>
-                        
-                        <!-- Botón Eliminar -->
+
+                        {{-- ELIMINAR (DELETE) (MODAL) --}}
                         <button class="btn"
                             data-toggle="modal"
-                            data-target="#confirmarEliminarModal"
+                            data-target="#modalEliminarArea"
                             data-id="{{ $area->id_areas }}"
-                            data-nombre="{{ $area->nombre }}">
+                            data-nombre="{{ $area->nombre }}"
+                            title="Borrar">
                             <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
                         </button>
+
+
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
-    {{-- Paginación  --}}
-<div class="d-flex justify-content-between align-items-center mt-3">
+    
 
-    {{-- Texto de registros --}}
-    <div>
-        Mostrando registros del {{ $areas->firstItem() }} al {{ $areas->lastItem() }}
-        de un total de {{ $areas->total() }} registros
+{{-- =========================
+    MODAL: NUEVA ÁREA
+========================= --}}
+<div class="modal fade" id="modalNuevaArea" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header bg-light">
+        <h5 class="modal-title">
+            <img src="{{ asset('bootstrap-icons-1.5.0/building.svg') }}" width="18" height="18">
+            Nueva Área
+        </h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form method="POST" action="{{ route('areas.guardar') }}" id="formNuevaArea">
+          @csrf
+
+          <div class="form-group">
+            <label for="new_nombre"><b>Área:</b></label>
+            <input type="text"
+                   id="new_nombre"
+                   name="nombre"
+                   class="form-control @error('nombre') is-invalid @enderror"
+                   value="{{ old('nombre') }}"
+                   maxlength="255"
+                   required>
+            @error('nombre')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
+
+          <div class="row text-center mt-3">
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">
+                    <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18" height="18">
+                    Guardar
+                </button>
+
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">
+                    <span>&nbsp;Cancelar</span>
+                </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
     </div>
-
-    {{-- Paginación --}}
-    <div>
-        {{ $areas->appends(['area' => request('area')])->links('pagination::bootstrap-4') }}
-    </div>
-
+  </div>
 </div>
-<!-- MODAL EDITAR ÁREA -->
-<div class="modal fade" id="editarModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-dialog-centered" role="document"> 
+
+
+{{-- =========================
+    MODAL: EDITAR ÁREA
+========================= --}}
+<div class="modal fade" id="modalEditarArea" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
 
       <div class="modal-header bg-light">
@@ -98,13 +179,19 @@
       </div>
 
       <div class="modal-body">
-        <form method="POST" action="{{ route('areas.actualizar') }}">
+        <form method="POST" action="{{ route('areas.actualizar') }}" id="formEditarArea">
           @csrf
-          <input type="hidden" id="id_areas" name="id_areas">
+
+          <input type="hidden" id="edit_id_areas" name="id_areas">
 
           <div class="form-group">
-            <label for="nombre">Área:</label>
-            <input type="text" id="nombre" name="nombre" class="form-control" required>
+            <label for="edit_nombre"><b>Área:</b></label>
+            <input type="text"
+                   id="edit_nombre"
+                   name="nombre"
+                   class="form-control"
+                   maxlength="255"
+                   required>
           </div>
 
           <div class="row text-center mt-3">
@@ -113,13 +200,14 @@
                     <img src="{{ asset('bootstrap-icons-1.5.0/save.svg') }}" width="18" height="18">
                     Guardar
                 </button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
-                  <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">
-                  <span>&nbsp;Cancelar</span>
 
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">
+                    <span>&nbsp;Cancelar</span>
                 </button>
             </div>
           </div>
+
         </form>
       </div>
 
@@ -127,8 +215,11 @@
   </div>
 </div>
 
-<!-- MODAL ELIMINAR -->
-<div class="modal fade" id="confirmarEliminarModal" tabindex="-1" role="dialog">
+
+{{-- =========================
+    MODAL: ELIMINAR ÁREA (DELETE)
+========================= --}}
+<div class="modal fade" id="modalEliminarArea" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
 
@@ -140,44 +231,54 @@
       </div>
 
       <div class="modal-body text-center">
-        <p>¿Deseas eliminar esta área <strong id="nombreEliminar"></strong>?</p>
+        <p>¿Deseas eliminar esta área?</p>
+        <strong id="nombreEliminarArea"></strong>
       </div>
 
       <div class="modal-footer justify-content-center">
-        <form id="formEliminar" method="POST" action="">
+
+        <form id="formEliminarArea" method="POST" action="">
           @csrf
           @method('DELETE')
-          <button type="submit" class="btn btn-primary"><img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
-            Sí, eliminar</button>
-
+          <button type="submit" class="btn btn-primary">
+            <img src="{{ asset('bootstrap-icons-1.5.0/trash-fill.svg') }}" width="16" height="16">
+            Sí, eliminar
+          </button>
         </form>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
-                  <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">
-                  <span>&nbsp;Cancelar</span>
 
-                </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">
+          <img src="{{ asset('bootstrap-icons-1.5.0/x-lg.svg') }}" width="18" height="18">
+          <span>&nbsp;Cancelar</span>
+        </button>
+
+      </div>
 
     </div>
   </div>
 </div>
 
-<!-- Scripts -->
+
+{{-- Scripts --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Modal Editar
-    $('#editarModal').on('show.bs.modal', function (event) {
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // Modal Editar: llenar campos
+    $('#modalEditarArea').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
-        $('#id_areas').val(button.data('id'));
-        $('#nombre').val(button.data('nombre'));
-        $('#estatus').val(button.data('estatus'));
+        $('#edit_id_areas').val(button.data('id'));
+        $('#edit_nombre').val(button.data('nombre'));
     });
 
-    // Modal Eliminar
-    $('#confirmarEliminarModal').on('show.bs.modal', function (event) {
+    // Modal Eliminar: set action DELETE
+    $('#modalEliminarArea').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
-        $('#nombreEliminar').text(button.data('nombre'));
-        $('#formEliminar').attr('action', '/areas/' + button.data('id'));
+        var id = button.data('id');
+        var nombre = button.data('nombre');
+
+        $('#nombreEliminarArea').text(nombre);
+        $('#formEliminarArea').attr('action', "{{ url('areas') }}/" + id);
     });
 
 });

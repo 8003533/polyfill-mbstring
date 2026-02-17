@@ -6,18 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class DetalleEntrada extends Model
 {
-    protected $table = 'tcdetalle_entrada';
-    protected $primaryKey = 'id_detalle';
-    public $timestamps = false;
+    protected $table = 'tadetalle_entrada';
+    protected $primaryKey = 'id_detalle_entrada'; // si tu PK se llama distinto, cámbialo
 
     protected $fillable = [
         'id_entrada',
         'id_bien',
-        'cantidad'
+        'cantidad',
     ];
+
+    // (Opcional)
+    public function entrada()
+    {
+        return $this->belongsTo(Entrada::class, 'id_entrada', 'id_entrada');
+    }
 
     public function bien()
     {
-        return $this->belongsTo(Bien::class, 'id_bien');
+        return $this->belongsTo(Bien::class, 'id_bien', 'id_bien');
     }
 }
