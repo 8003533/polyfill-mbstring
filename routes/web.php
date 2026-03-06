@@ -19,6 +19,8 @@ use App\Http\Controllers\Catalogos\ProveedoresController;
 use App\Http\Controllers\Catalogos\EntradasController;
 use App\Http\Controllers\Catalogos\SalidasController;
 use App\Http\Controllers\Catalogos\UnidadesController;
+use App\Http\Controllers\Suministros\SuministrosController;
+
 
 Route::get('/catalogos', [CatalogosController::class, 'index'])->name('catalogos.index');
 
@@ -97,7 +99,7 @@ Route::get('edificios/inhabilitar/{id}', [EdificiosController::class, 'confirmai
 // edificios
 Route::post('edificios/guardar', [EdificiosController::class, 'guardar'])->name('edificios.guardar');
 Route::post('edificios/actualizar', [EdificiosController::class, 'actualizar'])->name('edificios.actualizar');
-Route::delete('edificios/{id}', [EdificiosController::class, 'destroy']); 
+Route::delete('edificios/{id}', [EdificiosController::class, 'destroy']);
 Route::get('edificios/busca-alcaldia-colonia', [EdificiosController::class, 'buscaAlcaldiaColonia'])->name('edificios.buscaAlcaldiaColonia');
 Route::get('edificios/busca-direccion-administracion', [EdificiosController::class, 'buscaDireccionAdministracion'])->name('edificios.buscaDireccionAdministracion');
 
@@ -143,10 +145,10 @@ Route::middleware(['auth'])->prefix('registro')->group(function () {
     Route::get('/index', [RegistroController::class, 'index'])->name('registro.index');
 
     // AJAX: siguiente folio del año
-    Route::get('/folio-actual', [RegistroController::class, 'folioActual'])->name('registro.folioActual');
+    Route::get('/folio-actual', action: [RegistroController::class, 'folioActual'])->name('registro.folioActual');
 
     // Guardar desde modal
-    Route::post('/guardar', [RegistroController::class, 'guardar'])->name('registro.guardar');
+    Route::post('/guardar', action: [RegistroController::class, 'guardar'])->name('registro.guardar');
 });
 
 
@@ -212,3 +214,16 @@ Route::post('/salidas/actualizar', [SalidasController::class, 'actualizar'])
 
 Route::delete('/salidas/{id}', [SalidasController::class, 'eliminar'])
     ->name('salidas.eliminar');
+
+
+//RUTA SUMINISTROS --sofia
+
+/*Route::get('suministros/create',
+    [SuministrosController::class, 'create'])
+    ->name('suministros.create');
+
+Route::post('suministros',
+    [SuministrosController::class, 'store'])
+    ->name('suministros.store'); */
+
+    Route::resource('suministros', SuministrosController::class);

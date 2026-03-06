@@ -261,7 +261,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Reabrir modal nuevo si hay errores
     @if($errors->any())
+
         $('#modalNuevoTaller').modal('show');
+
     @endif
 
 });

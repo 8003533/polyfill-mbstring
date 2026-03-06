@@ -13,8 +13,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('iid_personal');
             $table->timestamps();
 
-            $table->foreign('iid_servicio')->references('iid_servicio')->on('taservicios')->onDelete('cascade');
-            $table->foreign('iid_personal')->references('iid_personal')->on('tcpersonal')->onDelete('cascade');
+           $table->foreign('iid_servicio')->references('iid_servicio')->on('taservicios')->onDelete('cascade');
+           $table->foreign('iid_personal')->references('iid_personal')->on('tcpersonal')->onDelete('cascade'); //modificación id
 
             $table->unique(['iid_servicio', 'iid_personal']);
         });
@@ -22,6 +22,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('taservicio_empleados');
+        Schema::dropIfExists('taservicio_empleados'); //TASERVICIO_EMPLEADOS
     }
 };

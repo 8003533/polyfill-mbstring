@@ -9,13 +9,20 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tcbienes', function (Blueprint $table) {
-            $table->id('id_bien');
-            $table->string('codigo')->unique();
-            $table->string('nombre');
+            $table->id ('id_bien'); // EDITADO ALFANUMERICO
+            $table->string('codigo')->unique(); //clave
+            $table->string('descripcion'); //descripción
             $table->unsignedBigInteger('id_unidad');
             $table->unsignedBigInteger('id_categoria');
             $table->integer('stock_minimo')->default(0);
             $table->integer('stock_maximo')->default(0);
+
+
+            //Agregados
+            $table ->integer('existencia_local')->default(0);
+            $table->date('ultima_entrada')->nullable();
+            $table->date('ultima_salida')->nullable();
+
             $table->timestamps();
 
             $table->foreign('id_unidad')->references('id_unidad')->on('tcunidades');

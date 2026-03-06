@@ -105,7 +105,7 @@
         </tbody>
     </table>
 
-    
+
 
 {{-- =========================
     MODAL: NUEVA ÁREA
@@ -225,6 +225,7 @@
 
       <div class="modal-header bg-light">
         <h5 class="modal-title">Eliminar Área</h5>
+        {{-- botones --}}
         <button type="button" class="close" data-dismiss="modal">
           <span>&times;</span>
         </button>

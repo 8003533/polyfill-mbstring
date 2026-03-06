@@ -62,7 +62,7 @@ class TalleresController extends Controller
         $taller->cdescripcion_taller = $request->descripcion_taller;
         $taller->iestatus            = 1;
 
-        // ✅ SIN ERROR: si no hay sesión, Auth::id() regresa null
+        //  SIN ERROR: si no hay sesión, Auth::id() regresa null
         $taller->iid_usuario         = Auth::id();
 
         $taller->save();
@@ -124,7 +124,7 @@ class TalleresController extends Controller
             $taller->iestatus = 1;
         }
 
-        // ✅ SIN ERROR
+        //  SIN ERROR
         $taller->iid_usuario = Auth::id();
         $taller->save();
 
@@ -154,7 +154,7 @@ class TalleresController extends Controller
         $bitacora->cjson_antes   = ($jsonBefore == null ? 'NEW INSERT' : $jsonBefore);
         $bitacora->cjson_despues = $jsonAfter;
 
-        // ✅ SIN ERROR
+        //  SIN ERROR
         $bitacora->iid_usuario   = Auth::id();
 
         $bitacora->save();

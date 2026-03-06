@@ -10,7 +10,11 @@ return new class extends Migration
     {
         Schema::create('tcunidades', function (Blueprint $table) {
             $table->id('id_unidad');
-            $table->string('nombre');
+
+      /*      Schema::table('tcunidades', function (Blueprint $table) {
+    $table->renameColumn('nombre', 'unidad_nombre');
+});*/
+            $table->string('nombre'); //cambiar nombre a nombre Unidad
             $table->string('abreviatura')->nullable();
             $table->string('descripcion')->nullable();
             $table->timestamps();

@@ -4,7 +4,7 @@ namespace App\Models\Servicios;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OrdenesServicio extends Model
+class Servicios extends Model
 {
     protected $table = 'taservicios';
     protected $primaryKey = 'iid_servicio';

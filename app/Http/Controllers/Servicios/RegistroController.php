@@ -89,7 +89,7 @@ class RegistroController extends Controller
 
             $anio = (int) $request->anio;
 
-            // ✅ Evita colisiones si dos usuarios abren modal al mismo tiempo
+            // Evita colisiones si dos usuarios abren modal al mismo tiempo
             $ultimo = OrdenesServicio::where('anio', $anio)->lockForUpdate()->max('consecutivo');
             $consecutivo = ($ultimo ?? 0) + 1;
             $folio = $consecutivo . '/' . $anio;
@@ -110,7 +110,7 @@ class RegistroController extends Controller
             $serv->anio = $anio;
             $serv->consecutivo = $consecutivo;
 
-            // ✅ Debe existir columna "folio" en taservicios (string)
+            //  Debe existir columna "folio" en taservicios (string)
             $serv->folio = $folio;
 
             $serv->dfecha_solicitud = $fechaSolicitud;

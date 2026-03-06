@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             TiposAreasTableSeeder::class,
             ParametrosTableSeeder::class,
             UsersTableSeeder::class,
+            BienesTableSeeder::class, //Bienes agregado
         ]);
 
         Model::reguard(); // Este va afuera del array

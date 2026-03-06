@@ -30,8 +30,8 @@ class UnidadesController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'abreviatura' => 'nullable|string|max:50',
-            'descripcion' => 'nullable|string|max:1000'
+         //   'abreviatura' => 'nullable|string|max:50',
+          //  'descripcion' => 'nullable|string|max:1000'
         ]);
 
         Unidad::create($request->only(['nombre','abreviatura','descripcion']));
